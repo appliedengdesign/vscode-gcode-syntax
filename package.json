@@ -1,0 +1,107 @@
+{
+    "name": "vscode-gcode",
+    "displayName": "G-Code Syntax",
+    "description": "G-Code Syntax Langauge",
+    "version": "0.0.1",
+    "license": "MIT",
+    "publisher": "appliedengdesign",
+    "author": {
+        "name": "Mike Centola",
+        "url": "https://mikecentola.com"
+    },
+    "engines": {
+        "vscode": "^1.30.2"
+    },
+    "categories": [
+        "Programming Languages",
+        "Snippets",
+        "Other"
+    ],
+    "icon": "images/icon.png",
+    "galleryBanner": {
+        "color": "#C80000",
+        "theme": "dark"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/appliedengdesign/vscode-gcode-syntax.git"
+    },
+    "homepage": "https://github.com/appliedengdesign/vscode-gcode-syntax",
+    "bugs": {
+        "url": "https://github.com/appliedengdesign/vscode-gcode-syntax/issues"
+    },
+    "main": "./out/extension",
+    "activationEvents": [
+        "onLanguage:gcode"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "gcode",
+                "aliases": [
+                    "gcode",
+                    "GCODE",
+                    "nc",
+                    "syntax",
+                    "highlighter",
+                    "language"
+                ],
+                "extensions": [
+                    ".nc",
+                    ".gcode",
+                    ".tap",
+                    ".cls",
+                    ".apt",
+                    ".mpt",
+                    ".fnc",
+                    ".gc",
+                    ".dnc",
+                    ".cnc",
+                    ".ncf",
+                    ".ncc",
+                    ".maz",
+                    ".hnc",
+                    ".knc",
+                    ".g00"
+                ],
+                "configuration": "./language/gcode-language.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "gcode",
+                "scopeName": "source.gcode",
+                "path": "./syntaxes/gcode.tmLanguage.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "gcode",
+                "path": "./snippets/gcode-snippets.json"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "G-Code",
+            "properties": {
+                "gcode.colorization": {
+                    "type": "boolean",
+                    "description": "Enable G-Code Colorization",
+                    "default": true
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install"
+    },
+    "devDependencies": {
+        "@types/node": "^10.12.18",
+        "tslint": "^5.12.1",
+        "typescript": "^3.2.2",
+        "vscode": "^1.1.26"
+    }
+}

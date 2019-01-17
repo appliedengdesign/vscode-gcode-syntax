@@ -1,0 +1,49 @@
+{
+    "scopeName": "source.gcode",
+    "name": "VSCode GCode Syntax",
+    "patterns": [
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#keywords"
+        },
+        {
+            "include": "#constants"
+        }
+    ],
+    "repository": {
+        "comments": {
+            "patterns": [
+                {
+                    "name": "comment.gcode",
+                    "match": "(\\(.+\\))"
+                },
+                {
+                    "name": "comment.gcode",
+                    "begin": ";",
+                    "end": "\n"
+                }
+            ]
+        },
+        "keywords": {
+            "patterns": [
+                {
+                    "include": "#gcodes"
+                },
+                {
+                    "include": "#mcodes"
+                }
+            ]
+        },
+        "gcodes": {
+            "match": "[gG][ \\t]*[0-9][0-9\\.]*",
+            "name": "gcodes.gcode"
+        },
+        "mcodes": {
+            "match": "[mM][ \\t]*[0-9][0-9\\.]*",
+            "name": "support.function.mcode.gcode"
+        }
+    }
+
+}
