@@ -9,7 +9,22 @@
             "include": "#keywords"
         },
         {
-            "include": "#constants"
+            "include": "#speedsfeeds"
+        },
+        {
+            "include": "#prognumbers"
+        },
+        {
+            "include": "#coords"
+        },
+        {
+            "include": "#tools"
+        },
+        {
+            "include": "#modifiers"
+        },
+        {
+            "include": "#macrovars"
         }
     ],
     "repository": {
@@ -23,26 +38,112 @@
                     "name": "comment.gcode",
                     "begin": ";",
                     "end": "\n"
+                },
+                {
+                    "begin": "[\\/].*",
+                    "end": "\n"
                 }
             ]
         },
         "keywords": {
             "patterns": [
                 {
-                    "include": "#gcodes"
+                    "match": "[gG][0-9]{1,3}",
+                    "name": "markup.bold.gcode"
                 },
                 {
-                    "include": "#mcodes"
+                    "match": "[mM][0-9]{1,3}",
+                    "name": "keyword.operator.quantifier.regexp.gcode"
+                },
+                {
+                    "match": "([\\%])",
+                    "name": "string.gcode"
+                },
+                {
+                    "match": "(GOTO)|(IF)|(EQ)|(NE)|(LT)|(GT)",
+                    "name": "keyword.control.gcode"
                 }
             ]
         },
-        "gcodes": {
-            "match": "[gG][ \\t]*[0-9][0-9\\.]*",
-            "name": "gcodes.gcode"
+        "speedsfeeds": {
+            "patterns": [
+                {
+                    "match": "([sS][0-9]+)|([sS])",
+                    "name": "constant.language.gcode"
+                },
+                {
+                    "match": "([fF][0-9]+\\.?[0-9]*)|([fF])",
+                    "name": "constant.language.gcode"
+                }
+            ]
         },
-        "mcodes": {
-            "match": "[mM][ \\t]*[0-9][0-9\\.]*",
-            "name": "support.function.mcode.gcode"
+        "prognumbers": {
+            "patterns": [
+                {
+                    "match": "[nN][0-9]+",
+                    "name": "constant.numeric.gcode"
+                },
+                {
+                    "match": "[oO][0-9]{1,5}",
+                    "name": "string.regexp.gcode"
+                },
+                {
+                    "match": "[pP][0-9]{1,5}",
+                    "name": "string.regexp.gcode"
+                }
+            ]
+        },
+        "coords": {
+            "patterns": [
+                {
+                    "match": "([xXyY]-?[0-9]+\\.?[0-9]*)|([xXyY])",
+                    "name": "string.gcode"
+                },
+                {
+                    "match": "([zZ]-?[0-9]+\\.?[0-9]*)|([zZ])",
+                    "name": "invalid.gcode"
+                },
+                {
+                    "match": "([aAbBcC]-?[0-9]+\\.?[0-9]*)|([aAbBcC])",
+                    "name": "constant.character.escape.gcode"
+                }
+            ]
+        },
+        "tools": {
+            "patterns": [
+                {
+                    "match": "([dD][0-9]+)|([dD])",
+                    "name": "constant.character.gcode"
+                },
+                {
+                    "match": "([hH][0-9]+\\.?[0-9]*)|(hH)",
+                    "name": "constant.character.gcode"
+                },
+                {
+                    "match": "([tT][0-9]+\\.?[0-9]*)|([tT])",
+                    "name": "constant.character.gcode"
+                }
+            ]
+        },
+        "modifiers": {
+            "patterns": [
+                {
+                    "match": "([iIjJkK]-?[0-9]+\\.?[0-9]*)|([iIjJkK])",
+                    "name": "constant.character.escape.gcode"
+                },
+                {
+                    "match": "([qQrR]-?[0-9]+\\.?[0-9]*)|([qQrR])",
+                    "name": "support.constant.math.gcode"
+                }
+            ]
+        },
+        "macrovars": {
+            "patterns": [
+                {
+                    "match": "[#][0-9]+",
+                    "name": "variable.other.gcode"
+                }
+            ]
         }
     }
 
