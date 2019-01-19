@@ -1,7 +1,7 @@
 {
     "name": "vscode-gcode",
     "displayName": "G-Code Syntax",
-    "description": "G-Code Syntax Langauge",
+    "description": "CNC G-Code Syntax Langauge",
     "version": "0.0.1",
     "license": "MIT",
     "publisher": "appliedengdesign",
@@ -84,11 +84,7 @@
             "type": "object",
             "title": "G-Code",
             "properties": {
-                "gcode.colorization": {
-                    "type": "boolean",
-                    "description": "Enable G-Code Colorization",
-                    "default": true
-                }
+               
             }
         }
     },
