@@ -1,0 +1,25 @@
+{
+    "O0000": {
+        "prefix": "O",
+        "body": [
+            "O${0:NNNN}"
+        ],
+        "description": "Add Program Number"
+    },
+    "GOTO": {
+        "prefix": "GOTO",
+        "body": [
+            "GOTO ${0:NNNN}"
+        ],
+        "description": "GOTO Number"
+    },
+    "NXXXX": {
+        "prefix": "N",
+        "body": [
+            "N{1:NNNN}",
+            " $0",
+            "M99"
+        ],
+        "description": "Local Subprogram"
+    }
+}

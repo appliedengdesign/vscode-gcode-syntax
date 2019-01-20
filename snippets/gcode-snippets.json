@@ -1,16 +1,12 @@
 {
-    "O0000": {
-        "prefix": "O",
+    "G81": {
+        "prefix": "G81",
+        "scope": "gcode",
         "body": [
-            "O${0:NNNN}"
+            "G81 Z${1:Depth} R${2:RetractPlane} F${3:FeedRate}",
+            " $0",
+            "G80"
         ],
-        "description": "Add Program Number"
-    },
-    "GOTO": {
-        "prefix": "GOTO",
-        "body": [
-            "GOTO ${0:NNNN}"
-        ],
-        "description": "GOTO Number"
+        "description": "G81 Canned Drill Cycle"
     }
 }

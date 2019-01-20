@@ -1,0 +1,16 @@
+{
+    "M97": {
+        "scope": "gcode",
+        "body": [
+            "M97 P${2:0000} L${0:1}"
+        ],
+        "description": "M97 Local Subprogram Call"
+    },
+    "M98": {
+        "scope": "gcode",
+        "body": [
+            "M98 P${1:0000} L${0:1}"
+        ],
+        "description": "M98 Subprogram Call"
+    }
+}
