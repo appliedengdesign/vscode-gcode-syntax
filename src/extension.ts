@@ -1,8 +1,14 @@
+import * as manifest from '../package.json';
 import * as vscode from 'vscode';
 //import * as util from './util';
 //import { getColorization } from './colorization';
 
+const name = manifest.name;
+const version = manifest.version;
+
 export function activate(context: vscode.ExtensionContext) {
+
+    console.info(`[${name}] v${version} activated!`);
     /*
     // Get Configuration
     let gcodeconf: vscode.WorkspaceConfiguration = util.getConfig();

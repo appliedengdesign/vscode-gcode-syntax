@@ -1,5 +1,5 @@
 {
-    "name": "vscode-gcode",
+    "name": "vscode-gcode-syntax",
     "displayName": "G-Code Syntax",
     "description": "CNC G-Code Syntax Langauge",
     "version": "0.0.1",
@@ -17,9 +17,9 @@
         "Snippets",
         "Other"
     ],
-    "icon": "images/icon.png",
+    "icon": "images/logo.png",
     "galleryBanner": {
-        "color": "#C80000",
+        "color": "#666666",
         "theme": "dark"
     },
     "repository": {
@@ -78,6 +78,14 @@
             {
                 "language": "gcode",
                 "path": "./snippets/gcode-snippets.json"
+            },
+            {
+                "language": "gcode",
+                "path": "./snippets/mcode-snippets.json"
+            },
+            {
+                "language": "gcode",
+                "path": "./snippets/general-snippets.json"
             }
         ],
         "configuration": {
@@ -92,12 +100,15 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install"
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "vscode-linter",
+        "precommit": "npm run test"
     },
     "devDependencies": {
         "@types/node": "^10.12.18",
         "tslint": "^5.12.1",
         "typescript": "^3.2.2",
-        "vscode": "^1.1.26"
+        "vscode": "^1.1.26",
+        "vscode-linter": "^0.2.1"
     }
 }
