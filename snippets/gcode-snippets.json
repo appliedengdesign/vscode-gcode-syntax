@@ -3,7 +3,7 @@
         "prefix": "G81",
         "scope": "gcode",
         "body": [
-            "G81 Z${1:Depth} R${2:RetractPlane} F${3:FeedRate}",
+            "G81 Z${1:[Depth]} R${2:[Retract Plate]} F${3:[Feed Rate]}",
             " $0",
             "G80"
         ],
