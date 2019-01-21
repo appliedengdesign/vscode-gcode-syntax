@@ -91,24 +91,19 @@
         "configuration": {
             "type": "object",
             "title": "G-Code",
-            "properties": {
-               
-            }
+            "properties": {}
         }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "vscode-linter",
-        "precommit": "npm run test"
+        "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "devDependencies": {
         "@types/node": "^10.12.18",
         "tslint": "^5.12.1",
-        "typescript": "^3.2.2",
-        "vscode": "^1.1.26",
-        "vscode-linter": "^0.2.1"
+        "typescript": "^3.2.4",
+        "vscode": "^1.1.26"
     }
 }
