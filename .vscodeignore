@@ -9,3 +9,4 @@ tsconfig.json
 tslint.json
 package-lock.json
 vsc-extension-quickstart.md
+images/*.ai
