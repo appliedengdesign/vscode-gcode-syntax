@@ -10,3 +10,4 @@ tslint.json
 package-lock.json
 vsc-extension-quickstart.md
 images/*.ai
+images/*.svg
