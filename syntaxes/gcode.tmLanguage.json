@@ -71,7 +71,11 @@
         "operators": {
             "patterns": [
                 {
+<<<<<<< HEAD
                     "match": "(SIN)|(COS)|(TAN)|(ASIN)|(ACOS)|(ATAN)|(LN)|(SQRT)|(MOD)|(EXP)",
+=======
+                    "match": "(SIN)|(COS)|(TAN)|(ASIN)|(ACOS)|(ATAN)|(FIX)|(FUP)|(LN)|(ROUND)|(SQRT)",
+>>>>>>> added snippets
                     "name": "support.constant.math.gcode"
                 },
                 {
