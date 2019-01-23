@@ -1,4 +1,28 @@
 {
+    "Spindle": {
+        "scope": "gcode",
+        "prefix": "S",
+        "body": [
+            "S${1:[RPM]} M0${0|3,4|}"
+        ],
+        "description": "Spindle Speed"
+    },
+    "M06": {
+        "scope": "gcode",
+        "prefix": "M06",
+        "body": [
+            "M06 T${0:[Tool Num]}"
+        ],
+        "description": "M06 Tool Change"
+    },
+    "M19": {
+        "scope": "gcode",
+        "prefix": "M19",
+        "body": [
+            "M19 ${1|P,S|${0:[Angle]}}"
+        ],
+        "description": "M19 Spindle Orient"
+    },
     "M97": {
         "scope": "gcode",
         "body": [

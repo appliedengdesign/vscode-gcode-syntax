@@ -14,7 +14,7 @@
         "description": "GOTO Number"
     },
     "NXXXX": {
-        "prefix": "N",
+        "prefix": "sub",
         "body": [
             "N{1:NNNN}",
             " $0",

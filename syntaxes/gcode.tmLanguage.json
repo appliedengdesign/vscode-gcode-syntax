@@ -68,7 +68,7 @@
         "operators": {
             "patterns": [
                 {
-                    "match": "(SIN)|(COS)|(TAN)",
+                    "match": "(SIN)|(COS)|(TAN)|(ASIN)|(ACOS)|(ATAN)|(FIX)|(FUP)|(LN)|(ROUND)|(SQRT)",
                     "name": "support.constant.math.gcode"
                 }
             ]

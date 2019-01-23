@@ -1,12 +1,58 @@
 {
+    "G04": {
+        "scope": "gcode",
+        "prefix": "G04",
+        "body": [
+            "G04 P${0:[Dwell]"
+        ],
+        "description": "G04 Dwell"
+    },
+    "G43": {
+        "scope": "gcode",
+        "prefix": "G43",
+        "body": [
+            "G43 Z${1:[Z Loc]} H${0:[Tool Num]}"
+        ],
+        "description": ""
+    },
     "G81": {
         "prefix": "G81",
         "scope": "gcode",
         "body": [
-            "G81 Z${1:[Depth]} R${2:[Retract Plate]} F${3:[Feed Rate]}",
+            "G81 X${1:[X Loc]} Y${2:[Y Loc]} Z${4:[Depth]} R${5:[Retract Plane]} F${5:[Feed Rate]}",
             " $0",
             "G80"
         ],
-        "description": "G81 Canned Drill Cycle"
+        "description": "G81 Drill Cycle"
+    },
+    "G82": {
+        "prefix": "G82",
+        "scope": "gcode",
+        "body": [
+            "G81 X${1:[X Loc]} Y${2:[Y Loc]} Z${3:[Depth]} R${4:[Retract Plane]} F${5:[Feed Rate]} P${6:[Dwell]}",
+            " $0",
+            "G80"
+        ],
+        "description": "G82 Drill Cycle w/ Dwell"
+    },
+    "G83": {
+        "prefix": "G83",
+        "scope": "gcode",
+        "body": [
+            "G83 X${1:[X Loc]} Y${2:[Y Loc]} Z${3:[Depth]} R${4:[Retract Plane]} Q${5:[Peck Incr]} F${6:[Feed Rate]}",
+            " $0",
+            "G80"
+        ],
+        "description": "G83 Deep Hole Peck Cycle"
+    },
+    "G84": {
+        "scope": "gcode",
+        "prefix": "G84",
+        "body": [
+            "G84 X${1:[X Loc]} Y${2:[Y Loc]} Z${3:[Depth]} R${4:[Retract Plane]} F${5:[Feed Rate]}",
+            " $0",
+            "G80"
+        ],
+        "description": "G84 Tapping cycle"
     }
 }
