@@ -3,7 +3,7 @@
         "scope": "gcode",
         "prefix": "S",
         "body": [
-            "S${1:[RPM]} M0${0|3,4|}"
+            "S${1:[RPM]} M0${2|3,4|}"
         ],
         "description": "Spindle Speed"
     },
@@ -19,12 +19,13 @@
         "scope": "gcode",
         "prefix": "M19",
         "body": [
-            "M19 ${1|P,S|${0:[Angle]}}"
+            "M19 ${1|P,S|}${0:[Angle]}"
         ],
         "description": "M19 Spindle Orient"
     },
     "M97": {
         "scope": "gcode",
+        "prefix": "M97",
         "body": [
             "M97 P${2:0000} L${0:1}"
         ],
@@ -32,6 +33,7 @@
     },
     "M98": {
         "scope": "gcode",
+        "prefix": "M98",
         "body": [
             "M98 P${1:0000} L${0:1}"
         ],

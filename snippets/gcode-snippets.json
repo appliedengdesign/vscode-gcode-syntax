@@ -3,7 +3,7 @@
         "scope": "gcode",
         "prefix": "G04",
         "body": [
-            "G04 P${0:[Dwell]"
+            "G04 P${0:[Dwell]}"
         ],
         "description": "G04 Dwell"
     },
@@ -19,7 +19,7 @@
         "prefix": "G81",
         "scope": "gcode",
         "body": [
-            "G81 X${1:[X Loc]} Y${2:[Y Loc]} Z${4:[Depth]} R${5:[Retract Plane]} F${5:[Feed Rate]}",
+            "G81 X${1:[X Loc]} Y${2:[Y Loc]} Z${3:[Depth]} R${4:[Retract Plane]} F${5:[Feed Rate]}",
             " $0",
             "G80"
         ],
@@ -29,7 +29,7 @@
         "prefix": "G82",
         "scope": "gcode",
         "body": [
-            "G81 X${1:[X Loc]} Y${2:[Y Loc]} Z${3:[Depth]} R${4:[Retract Plane]} F${5:[Feed Rate]} P${6:[Dwell]}",
+            "G82 X${1:[X Loc]} Y${2:[Y Loc]} Z${3:[Depth]} R${4:[Retract Plane]} F${5:[Feed Rate]} P${6:[Dwell]}",
             " $0",
             "G80"
         ],
