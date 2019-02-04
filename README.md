@@ -25,7 +25,7 @@ Install & activate extension. Extension activates when you open a file marked fo
 
 ## Known Issues
 
-No known issues at this time.
+Please visit our [GitHub Issues](https://github.com/appliedengdesign/vscode-gcode-syntax/issues) page for any open issues.
 
 ## TODO
 
