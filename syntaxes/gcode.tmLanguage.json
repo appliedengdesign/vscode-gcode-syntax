@@ -6,9 +6,6 @@
             "include": "#comments"
         },
         {
-            "include": "#keywords"
-        },
-        {
             "include": "#speedsfeeds"
         },
         {
@@ -25,6 +22,12 @@
         },
         {
             "include": "#macrovars"
+        },
+        {
+            "include": "#keywords"
+        },
+        {
+            "include": "#operators"
         }
     ],
     "repository": {
@@ -60,7 +63,7 @@
                     "name": "string.gcode"
                 },
                 {
-                    "match": "(GOTO)|(IF)|(EQ)|(NE)|(LT)|(GT)",
+                    "match": "(GOTO)|(IF)|(EQ)|(NE)|(LT)|(GT)|(LE)|(GE)|(DO)|(WHILE)|(END)|(AND)|(OR)|(XOR)",
                     "name": "keyword.control.gcode"
                 }
             ]
@@ -68,8 +71,20 @@
         "operators": {
             "patterns": [
                 {
-                    "match": "(SIN)|(COS)|(TAN)",
+                    "match": "(SIN)|(COS)|(TAN)|(ASIN)|(ACOS)|(ATAN)|(LN)|(SQRT)|(MOD)|(EXP)",
                     "name": "support.constant.math.gcode"
+                },
+                {
+                    "match": "(FIX)|(FUP)|(ROUND)|(ABS)",
+                    "name": "support.constant.math.gcode"
+                },
+                {
+                    "match": "(\\+)|(\\*)|(\\/)|(\\*\\*)",
+                    "name": "support.constant.math.gcode"
+                },
+                {
+                    "match": "(\\-)",
+                    "name": "invalid.gcode"
                 }
             ]
         },
