@@ -2,7 +2,7 @@
     "name": "vscode-gcode-syntax",
     "displayName": "G-Code Syntax",
     "description": "CNC G-Code Syntax Langauge",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "license": "MIT",
     "publisher": "appliedengdesign",
     "author": {
@@ -10,7 +10,7 @@
         "url": "https://mikecentola.com"
     },
     "engines": {
-        "vscode": "^1.30.2"
+        "vscode": "^1.37.1"
     },
     "categories": [
         "Programming Languages",
