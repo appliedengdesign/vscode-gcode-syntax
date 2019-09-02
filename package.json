@@ -101,9 +101,9 @@
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "devDependencies": {
-        "@types/node": "^10.14.17",
-        "tslint": "^5.19.0",
-        "typescript": "^3.6.2",
-        "vscode": "^1.1.36"
+        "@types/node": "^10.12.18",
+        "tslint": "^5.12.1",
+        "typescript": "^3.2.4",
+        "vscode": "^1.1.26"
     }
 }

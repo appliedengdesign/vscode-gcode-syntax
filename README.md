@@ -2,7 +2,7 @@
 
 [![MIT License](https://badgen.net/badge/license/MIT)](https://opensource.org/licenses/MIT)
 [![GitHub](https://badgen.net/github/release/appliedengdesign/vscode-gcode-syntax)](https://github.com/appliedengdesign/vscode-gcode-syntax)
-[![GitHub Issues](https://badgen.net/github/open-issues/appliedengdesign/vscode-gcode-syntax)](https://github.com/appliedengdesign/vscode-gcode-syntax/issues)
+[![GitHub Issues](https://badgen.net/github/issues/appliedengdesign/vscode-gcode-syntax)](https://github.com/appliedengdesign/serial-number-macro/issues)
 ![Gihub Stars](https://badgen.net/github/stars/appliedengdesign/vscode-gcode-syntax)
 [![VS Marketplace Installs](https://badgen.net/vs-marketplace/i/appliedengdesign.vscode-gcode-syntax)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
 [![Follow @appliedengdesign](https://badgen.net/twitter/follow/appliedengdes)](https://twitter.com/appliedengdes)
