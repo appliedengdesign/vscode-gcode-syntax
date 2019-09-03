@@ -1,0 +1,19 @@
+{
+	// Snippets for developing extensions
+
+	"Create Snippet": {
+		"scope": "json",
+		"prefix": "snip",
+		"body": [
+			"\"$1\": {",
+				"\t\"scope\": \"gcode\",",
+				"\t\"prefix\": \"$2\",",
+					"\t\"body\": [",
+						"\t\t\"$0\"",
+					"\t],",
+				"\t\"description\": \"$3\"",
+			"}"
+		],
+		"description": "Create Snippet"
+	}
+}
