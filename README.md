@@ -15,6 +15,40 @@ Language synax, IntelliSense, code snippits & more for writing G-Code for CNC ma
 
 This extension adds language syntax for CNC G-Code, code snippets, and colorization.
 
+### Current Supported Extensions
+
+- .m
+- .apt
+- .nc
+- .cnc
+- .ncc
+- .ecs
+- .tap
+- .fnc
+- .ncg
+- .gc
+- .fan
+- .fgc
+- .din
+- .xpi
+- .hnc
+- .ncp
+- .min
+- .gcd
+- .rol
+- .mpr
+- .ply
+- .out
+- .eia
+- .plt
+- .sbp
+- .mpf
+- .gcode
+- .g00
+- .cls
+- .dnc
+- .knc
+
 ## Installation
 
 Install from Extensions Marketplace
