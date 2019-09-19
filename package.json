@@ -106,7 +106,24 @@
         "configuration": {
             "type": "object",
             "title": "G-Code",
-            "properties": {}
+            "properties": {
+                "gcode.colorization.enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable G-Code specific colorization options",
+                    "scope": "window"
+                },
+                "gcode.machineType": {
+                    "type": "string",
+                    "default": "mill",
+                    "enum": ["mill", "lathe"],
+                    "enumDescriptions": [
+                        "Loads specific snippets for CNC Mill G-Code",
+                        "Loads specific snippets for CNC Lathe G-Code"
+                    ],
+                    "scope": "window"
+                }
+            }
         }
     },
     "scripts": {
