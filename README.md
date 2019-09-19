@@ -65,6 +65,7 @@ Please visit our [GitHub Issues](https://github.com/appliedengdesign/vscode-gcod
 
 - Add more snippets
 - Add tree view feature for machining blocks
+- G-Code Debugging
 - Backplotting?
 
 ## Changelog

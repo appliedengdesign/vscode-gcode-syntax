@@ -10,8 +10,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     console.info(`[${name}] v${version} activated!`);
     /*
-    // Get Configuration
-    let gcodeconf: vscode.WorkspaceConfiguration = util.getConfig();
 
 
     if (gcodeconf.colorization) {

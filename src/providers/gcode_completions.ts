@@ -9,15 +9,15 @@ export class GcodeCompletionItemProvider implements vscode.CompletionItemProvide
     private completions = new vscode.CompletionList();
 
     constructor(filename: string) {
-        const snippets = require(path.join("../..", filename));
+        const snippets = require(path.join("../../snippets/", filename));
 
         for (const snippetType of Object.keys(snippets)) {
             for (const snippetName of Object.keys(snippets[snippetType])) {
                 const snippet = snippets[snippetType][snippetName];
-                const completionItem = new vscode.CompletionItem(snippetName, CompletionItemKind.Snippet);
+                const completionItem = new vscode.CompletionItem(snippetName, vscode.CompletionItemKind.Snippet);
                 completionItem.filterText = snippet.prefix;
                 completionItem.insertText = new vscode.SnippetString(
-                    isArray(snippet.body)
+                    Array.isArray(snippet.body)
                         ? snippet.body.join("\n")
                         : snippet.body,
                 );
@@ -30,7 +30,7 @@ export class GcodeCompletionItemProvider implements vscode.CompletionItemProvide
     }
 
     public provideCompletionItems(
-        document: vscode.TextDocument, position: Position, token: vscode.CancellationToken,
+        document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken,
     ): vscode.CompletionList {
         return this.completions;
     }
