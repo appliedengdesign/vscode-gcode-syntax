@@ -1,14 +1,19 @@
-import * as manifest from '../package.json';
 import * as vscode from 'vscode';
-//import * as util from './util';
+import * as util from './util';
+import * as manifest from './manifest.json';
 //import { getColorization } from './colorization';
 
 const name = manifest.name;
 const version = manifest.version;
 
+// Create output channel
+const conout = vscode.window.createOutputChannel("G-Code");
+
 export function activate(context: vscode.ExtensionContext) {
 
-    console.info(`[${name}] v${version} activated!`);
+    conout.show(true);
+    conout.appendLine(name + " v" + version + " activated.");
+
     /*
 
 
@@ -74,4 +79,5 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
 
+    conout.dispose();
 }
