@@ -5,8 +5,8 @@ All changes to vscode-code-syntax will be documented here.
 ## v0.2.0 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.2.0)
 
 - Refactor extension code for new vscode extension syntax
-- Added ```.eia``` file extension
-- Fixed compound macro variable syntax highlighting
+- Added ```.eia``` file extension [4](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/4)
+- Fixed compound macro variable syntax highlighting [3](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/4)
 - Updated dependencies & dev dependencies
 - Added standard vscode testing to source code
 - Added dedicated output channel "G-Code" when activated
