@@ -71,11 +71,8 @@
         "operators": {
             "patterns": [
                 {
-<<<<<<< HEAD
-                    "match": "(SIN)|(COS)|(TAN)|(ASIN)|(ACOS)|(ATAN)|(LN)|(SQRT)|(MOD)|(EXP)",
-=======
                     "match": "(SIN)|(COS)|(TAN)|(ASIN)|(ACOS)|(ATAN)|(FIX)|(FUP)|(LN)|(ROUND)|(SQRT)",
->>>>>>> added snippets
+
                     "name": "support.constant.math.gcode"
                 },
                 {
@@ -172,6 +169,10 @@
             "patterns": [
                 {
                     "match": "[#][0-9]+",
+                    "name": "variable.other.gcode"
+                },
+                {
+                    "match": "[#][\\[].+[\\]]",
                     "name": "variable.other.gcode"
                 }
             ]

@@ -7,6 +7,11 @@
         ],
         "description": "Spindle Speed"
     },
+    "M05": {
+        "scope": "gcode",
+        "prefix": "M05",
+        "description": "Spindle Off"
+    },
     "M06": {
         "scope": "gcode",
         "prefix": "M06",
