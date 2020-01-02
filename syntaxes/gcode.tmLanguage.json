@@ -170,6 +170,10 @@
                 {
                     "match": "[#][0-9]+",
                     "name": "variable.other.gcode"
+                },
+                {
+                    "match": "[#][\\[].+[\\]]",
+                    "name": "variable.other.gcode"
                 }
             ]
         }
