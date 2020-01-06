@@ -14,6 +14,16 @@ export function activate(context: vscode.ExtensionContext) {
     conout.show(true);
     conout.appendLine(name + " v" + version + " activated.");
 
+    // Set Context for Tree View
+    if (vscode.window.activeTextEditor) {
+        if (vscode.window.activeTextEditor.document.uri.scheme === 'file') {
+            const enabled = vscode.window.activeTextEditor.document.languageId === 'gcode';
+            vscode.commands.executeCommand('setContext', 'gcodeTreeEnabled', enabled);
+        } else {
+            vscode.commands.executeCommand('setContext', 'gcodeTreeEnabled', false);
+        }
+    }
+
     /*
 
 

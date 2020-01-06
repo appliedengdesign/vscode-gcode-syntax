@@ -127,7 +127,26 @@
                     "scope": "window"
                 }
             }
+        },
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "gcode",
+                    "title": "G-Code",
+                    "icon": "images/vscode-gcode-syntax-icon.svg"
+                }
+            ]
+        },
+        "views": {
+            "gcode": [
+                {
+                    "id": "gcodeTree",
+                    "name": "G-Code Tree",
+                    "when": "gcodeTreeEnabled"
+                }
+            ]
         }
+      
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
