@@ -7,6 +7,7 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
     readonly onDidChangeTreeData: vscode.Event<GCodeTreeNode | undefined> = this._onDidChnageTreeData.event;
 
     private text: string = '';
+    private tree: Array<GCodeTreeNode> = [];
     private autoRefresh: boolean = true;
 
     constructor(context: vscode.ExtensionContext) {
@@ -18,6 +19,9 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
     }
 
     refresh(): void {
+        
+        this.parseTree();
+
         this._onDidChnageTreeData.fire();
     }
 
@@ -38,14 +42,20 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
 
     private parseTree(): GCodeTreeNode[] {
 
-        this.text = '';
+        console.log('Parsing Tree...');
+
+        //this.text = '';
+        this.tree = [];
         let editor = vscode.window.activeTextEditor;
 
         if (editor && editor.document) {
             this.text = editor.document.getText();
 
-            
             // TODO PARSE GCODE
+
+            this.tree.push(
+                new GCodeTreeNode('test', vscode.TreeItemCollapsibleState.None)
+            );
         } else {
             return [];
         }
@@ -54,7 +64,10 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
     }
 
     getChildren(element?: GCodeTreeNode): Thenable<GCodeTreeNode[]> {
-        return Promise.resolve([]);
+
+        return Promise.resolve(this.tree);
+
+        
     }
 
     getTreeItem(element: GCodeTreeNode): vscode.TreeItem {
@@ -66,7 +79,8 @@ export class GCodeTreeNode extends vscode.TreeItem {
 
     constructor(
         public readonly label: string,
-        public readonly collapsibleState: vscode.TreeItemCollapsibleState
+        public readonly collapsibleState: vscode.TreeItemCollapsibleState,
+        public readonly command?: vscode.Command
     ) {
         super(label, collapsibleState);
     }
