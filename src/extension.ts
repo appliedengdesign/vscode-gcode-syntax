@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { config } from './config';
+import { config } from './util/config';
 import * as consts from './util/constants';
 
 import { GCodeTreeProvider } from './providers/gcodeTree';

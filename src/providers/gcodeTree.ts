@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { config } from '../config';
+import { config } from '../util/config';
 import * as gcodeparser from './gcodeParser';
 import { iconsPath } from '../util/constants';
 
