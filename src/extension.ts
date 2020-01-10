@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-
+import { config } from './config';
 import * as util from './util';
 import * as manifest from './manifest.json';
 
@@ -17,9 +17,11 @@ export function activate(context: vscode.ExtensionContext) {
     conout.show(true);
     conout.appendLine(name + " v" + version + " activated.");
 
-    // Enable Tree View
+    // G-Code Tree View
     const gcodeTree = new GCodeTreeProvider(context);
     vscode.window.registerTreeDataProvider('gcodeTree', gcodeTree);
+
+    vscode.commands.registerCommand('gcodeTree.refreshEntry', () => gcodeTree.refresh());
 
     conout.appendLine("G-Code Tree View Enabled");
 

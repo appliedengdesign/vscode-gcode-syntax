@@ -30,7 +30,7 @@
     "bugs": {
         "url": "https://github.com/appliedengdesign/vscode-gcode-syntax/issues"
     },
-    "main": "./out/extension",
+    "main": "./out/extension.js",
     "activationEvents": [
         "onLanguage:gcode"
     ],
@@ -125,6 +125,12 @@
                         "Loads specific snippets for CNC Lathe G-Code"
                     ],
                     "scope": "window"
+                },
+                "gcode.treeAutoRefresh": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable G-Code Tree Auto Refresh",
+                    "scope": "window"
                 }
             }
         },
@@ -145,8 +151,26 @@
                     "when": "gcodeTreeEnabled"
                 }
             ]
-        }
-      
+        },
+        "menus": {
+            "view/title": [
+                {
+                    "command": "gcodeTree.refreshEntry",
+                    "when": "view == gcodeTree",
+                    "group": "navigation"
+                }
+            ]
+        },
+        "commands": [
+            {
+                "command": "gcodeTree.refreshEntry",
+                "title": "Refresh",
+                "icon": {
+                    "light": "resources/icons/light/refresh.svg",
+                    "dark": "resources/icons/dark/refresh.svg"
+                }
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",

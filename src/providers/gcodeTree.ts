@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import { config } from '../config';
+import * as gcodeparser from './gcodeParser';
 
 export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode> {
 
@@ -7,15 +9,22 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
     readonly onDidChangeTreeData: vscode.Event<GCodeTreeNode | undefined> = this._onDidChnageTreeData.event;
 
     private text: string = '';
-    private tree: Array<GCodeTreeNode> = [];
+    private tree: Array<GCodeTreeNode>;
+    private editor: vscode.TextEditor | undefined;
     private autoRefresh: boolean = true;
 
-    constructor(context: vscode.ExtensionContext) {
-        
+    constructor(private context: vscode.ExtensionContext) {
+        this.tree = [];
+        this.editor = vscode.window.activeTextEditor;
         vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
-        
+        vscode.workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
+
+        this.parseTree();
+
+        this.autoRefresh = config.getParam('treeAutoRefresh');
 
         this.onActiveEditorChanged();
+
     }
 
     refresh(): void {
@@ -40,62 +49,82 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
         }
     }
 
-    private parseTree(): GCodeTreeNode[] {
-
-        console.log('Parsing Tree...');
-
-        //this.text = '';
-        this.tree = [];
-        let editor = vscode.window.activeTextEditor;
-
-        if (editor && editor.document) {
-            this.text = editor.document.getText();
-
-            // TODO PARSE GCODE
-
-            this.tree.push(
-                new GCodeTreeNode('test', vscode.TreeItemCollapsibleState.None)
-            );
-        } else {
-            return [];
+    private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent): void {
+        if (this.editor) {
+            if (this.autoRefresh && changeEvent.document.uri.toString() === this.editor.document.uri.toString()) {
+                this.refresh();
+            }
         }
+    }
 
-        return [];
+
+    getTreeItem(element: any): vscode.TreeItem {
+        return element[0];
     }
 
     getChildren(element?: GCodeTreeNode): Thenable<GCodeTreeNode[]> {
 
-        return Promise.resolve(this.tree);
+        return Promise.resolve(this.parseTree());
 
         
     }
 
-    getTreeItem(element: GCodeTreeNode): vscode.TreeItem {
-        return element;
+
+    private parseTree(): GCodeTreeNode[] {
+
+        this.text = '';
+        this.tree = [];
+        let editor = vscode.window.activeTextEditor;
+    
+        if (editor && editor.document) {
+            this.text = editor.document.getText();
+    
+            let parsed = new gcodeparser.GCodeParser(this.text);
+            return parsed.getTree();
+    
+        } else {
+            return [];
+        }
+    
+        return [];
     }
+    
 }
+
 
 export class GCodeTreeNode extends vscode.TreeItem {
 
     constructor(
         public readonly label: string,
         public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-        public readonly command?: vscode.Command
     ) {
         super(label, collapsibleState);
     }
 
-    // TOOL TIP
-    get tooltip(): string {
-        return "tooltip";
+    setIcon(type: string): void {
+
+        switch (type) {
+            case "toolchange":
+                this.iconPath = {
+                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'boolean.svg'),
+                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'boolean.svg')
+                };
+                break;
+            
+            case "cwcutting":
+                this.iconPath = {
+                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'cwcutting.svg'),
+                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'cwcutting.svg')
+                };
+                break;
+
+            default:
+                this.iconPath = {
+                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'gcode.svg'),
+                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'gcode.svg')
+                };
+        }
+
     }
 
-    get description(): string {
-        return "description";
-    }
-
-    iconPath = {
-        light: path.join(__filename, '..', '..', 'resources', 'light', 'gcode.svg'),
-        dark: path.join(__filename, '..', '..', 'resources', 'dark', 'gcoode.svg')
-    };
 }
