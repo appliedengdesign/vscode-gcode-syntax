@@ -1,13 +1,12 @@
 import * as vscode from 'vscode';
 import { config } from './config';
-import * as util from './util';
-import * as manifest from './manifest.json';
+import * as consts from './util/constants';
 
 import { GCodeTreeProvider } from './providers/gcodeTree';
 //import { getColorization } from './colorization';
 
-const name = manifest.name;
-const version = manifest.version;
+const name = consts.name;
+const version = consts.version;
 
 // Create output channel
 const conout = vscode.window.createOutputChannel("G-Code");
@@ -22,6 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.registerTreeDataProvider('gcodeTree', gcodeTree);
 
     vscode.commands.registerCommand('gcodeTree.refreshEntry', () => gcodeTree.refresh());
+    vscode.commands.registerCommand('extension.gcodeSelection', range => gcodeTree.select(range));
 
     conout.appendLine("G-Code Tree View Enabled");
     conout.appendLine('Tree AutoRefresh: ' + (config.getParam('treeAutoRefresh') ? 'Enabled' : 'Disabled') );

@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { config } from '../config';
 import * as gcodeparser from './gcodeParser';
+import { iconsPath } from '../util/constants';
 
 export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode> {
 
@@ -41,6 +42,7 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
                 vscode.commands.executeCommand('setContext', 'gcodeTreeEnabled', enabled);
 
                 if (enabled) {
+                    this.editor = vscode.window.activeTextEditor;
                     this.refresh();
                 }
             }
@@ -50,11 +52,20 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
     }
 
     private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent): void {
-        if (this.editor && this.autoRefresh) {
-                this.refresh();
+        if (vscode.window.activeTextEditor) {
+            if (vscode.window.activeTextEditor.document.uri.scheme === 'file') {
+                const enabled = vscode.window.activeTextEditor.document.languageId === 'gcode';
+                vscode.commands.executeCommand('setContext', 'gcodeTreeEnabled', enabled);
+
+                if (enabled) {
+                    this.editor = vscode.window.activeTextEditor;
+                    this.refresh();
+                }
+            }
+        } else {
+            vscode.commands.executeCommand('setContext', 'gcodeTreeEnabled', false);
         }
     }
-
 
     getTreeItem(element: any): vscode.TreeItem {
         return element[0];
@@ -66,7 +77,6 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
 
         
     }
-
 
     private parseTree(): GCodeTreeNode[] {
 
@@ -86,6 +96,13 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
     
         return [];
     }
+
+    select(range: vscode.Range) {
+        if (this.editor) {
+            this.editor.selection = new vscode.Selection(range.start, range.end);
+            this.editor.revealRange(range, vscode.TextEditorRevealType.InCenter);
+        }
+    }
     
 }
 
@@ -103,58 +120,22 @@ export class GCodeTreeNode extends vscode.TreeItem {
 
         switch (type) {
             case "toolchange":
-                this.iconPath = {
-                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'toolchange.svg'),
-                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'toolchange.svg')
-                };
-                break;
-
-            case "rapid":
-                this.iconPath = {
-                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'rapid.svg'),
-                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'rapid.svg')
-                };
-                break;
-            
+            case "rapid":    
             case "cutting":
-                this.iconPath = {
-                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'cutting.svg'),
-                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'cutting.svg')
-                };
-                break;
-            
             case "cwcutting":
-                this.iconPath = {
-                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'cwcutting.svg'),
-                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'cwcutting.svg')
-                };
-                break;
-
             case "ccwcutting":
-                this.iconPath = {
-                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'ccwcutting.svg'),
-                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'ccwcutting.svg')
-                };
-                break;
-
             case "coolanton":
-                this.iconPath = {
-                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'coolanton.svg'),
-                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'coolanton.svg')
-                };
-                break;
-            
             case "coolantoff":
                 this.iconPath = {
-                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'coolantoff.svg'),
-                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'coolantoff.svg')
+                    light: path.join(iconsPath, 'light', type+'.svg'),
+                    dark: path.join(iconsPath, 'dark', type+'.svg')
                 };
                 break;
 
             default:
                 this.iconPath = {
-                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'gcode.svg'),
-                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'gcode.svg')
+                    light: path.join(iconsPath, 'light', 'gcode.svg'),
+                    dark: path.join(iconsPath, 'dark', 'gcode.svg')
                 };
         }
 

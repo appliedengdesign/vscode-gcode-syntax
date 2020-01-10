@@ -29,7 +29,7 @@ export class GCodeParser {
                 continue;
             }
 
-            const result = this.parseLine(line);
+            const result = this.parseLine(line, i);
             if (result.length !== 0) {
                 nodes.push(result);
             }
@@ -40,10 +40,11 @@ export class GCodeParser {
     }
 
     // Parse Line for Blocks
-    private parseLine(line: string): Array<GCodeTreeNode> {
+    private parseLine(line: string, lnum:number): Array<GCodeTreeNode> {
 
         let blocks: Array<GCodeTreeNode> = [];
         let node: GCodeTreeNode;
+        let len = line.length;
         
         // Regexp to Pull key words
         const re = /((GOTO)|(IF)|(EQ)|(NE)|(LT)|(GT)|(LE)|(GE)|(DO)|(WHILE)|(END)|(AND)|(OR)|(XOR)|(SIN)|(COS)|(TAN)|(ASIN)|(ACOS)|(ATAN)|(FIX)|(FUP)|(LN)|(ROUND)|(SQRT)|(FIX)|(FUP)|(ROUND)|(ABS))|((?:\$\$)|(?:\$[a-zA-Z0-9#]*))|([a-zA-Z][0-9\+\-\.]+)|(\*[0-9]+)|([#][0-9]+)|([#][\[].+[\]])/igm;
@@ -73,6 +74,11 @@ export class GCodeParser {
                         );
                         node.tooltip = '[G00] Rapid Motion';
                         node.setIcon('rapid');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
 
                         blocks.push(node);
                         break;
@@ -86,6 +92,11 @@ export class GCodeParser {
                         );
                         node.tooltip = '[G01] Linear]';
                         node.setIcon('cutting');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
 
                         blocks.push(node);
                         break;
@@ -99,6 +110,11 @@ export class GCodeParser {
                         );
                         node.tooltip = '[G02] CW Interpolation';
                         node.setIcon('cwcutting');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
 
                         blocks.push(node);
                         break;
@@ -112,6 +128,11 @@ export class GCodeParser {
                         );
                         node.tooltip = '[G03] CCW Interpolation';
                         node.setIcon('ccwcutting');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
 
                         blocks.push(node);
                         break;
@@ -134,7 +155,12 @@ export class GCodeParser {
                         );
                         node.tooltip = 'Tool Change';
                         node.setIcon('toolchange');
-                        
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
+
                         blocks.push(node);
                         break;
                     
@@ -148,6 +174,11 @@ export class GCodeParser {
                         );
                         node.tooltip = 'Coolant Turned On';
                         node.setIcon('coolanton');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
                         
                         blocks.push(node);
                         break;
@@ -161,6 +192,11 @@ export class GCodeParser {
                         );
                         node.tooltip = 'Coolant Turned Off';
                         node.setIcon('coolantoff');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
                         
                         blocks.push(node);
 
