@@ -5,8 +5,8 @@ import * as gcodeparser from './gcodeParser';
 
 export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode> {
 
-    private _onDidChnageTreeData: vscode.EventEmitter<GCodeTreeNode | undefined> = new vscode.EventEmitter<GCodeTreeNode | undefined>();
-    readonly onDidChangeTreeData: vscode.Event<GCodeTreeNode | undefined> = this._onDidChnageTreeData.event;
+    private _onDidChangeTreeData: vscode.EventEmitter<GCodeTreeNode | undefined> = new vscode.EventEmitter<GCodeTreeNode | undefined>();
+    readonly onDidChangeTreeData: vscode.Event<GCodeTreeNode | undefined> = this._onDidChangeTreeData.event;
 
     private text: string = '';
     private tree: Array<GCodeTreeNode>;
@@ -31,7 +31,7 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
         
         this.parseTree();
 
-        this._onDidChnageTreeData.fire();
+        this._onDidChangeTreeData.fire();
     }
 
     private onActiveEditorChanged(): void {
