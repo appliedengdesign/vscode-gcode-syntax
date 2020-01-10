@@ -30,7 +30,7 @@
     "bugs": {
         "url": "https://github.com/appliedengdesign/vscode-gcode-syntax/issues"
     },
-    "main": "./out/extension",
+    "main": "./out/extension.js",
     "activationEvents": [
         "onLanguage:gcode"
     ],
@@ -107,7 +107,7 @@
             "type": "object",
             "title": "G-Code",
             "properties": {
-                "gcode.colorization.enabled": {
+                "gcode.colorization": {
                     "type": "boolean",
                     "default": false,
                     "description": "Enable G-Code specific colorization options",
@@ -115,19 +115,62 @@
                 },
                 "gcode.machineType": {
                     "type": "string",
-                    "default": "mill",
+                    "default": "Mill",
                     "enum": [
-                        "mill",
-                        "lathe"
+                        "Mill",
+                        "Lathe"
                     ],
                     "enumDescriptions": [
                         "Loads specific snippets for CNC Mill G-Code",
                         "Loads specific snippets for CNC Lathe G-Code"
                     ],
                     "scope": "window"
+                },
+                "gcode.treeAutoRefresh": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable G-Code Tree Auto Refresh",
+                    "scope": "window"
                 }
             }
-        }
+        },
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "gcode",
+                    "title": "G-Code",
+                    "icon": "images/vscode-gcode-syntax-icon.svg"
+                }
+            ]
+        },
+        "views": {
+            "gcode": [
+                {
+                    "id": "gcodeTree",
+                    "name": "G-Code Tree",
+                    "when": "gcodeTreeEnabled"
+                }
+            ]
+        },
+        "menus": {
+            "view/title": [
+                {
+                    "command": "gcodeTree.refreshEntry",
+                    "when": "view == gcodeTree",
+                    "group": "navigation"
+                }
+            ]
+        },
+        "commands": [
+            {
+                "command": "gcodeTree.refreshEntry",
+                "title": "Refresh",
+                "icon": {
+                    "light": "resources/icons/light/refresh.svg",
+                    "dark": "resources/icons/dark/refresh.svg"
+                }
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
