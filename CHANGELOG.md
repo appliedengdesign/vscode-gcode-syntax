@@ -2,6 +2,12 @@
 
 All changes to vscode-code-syntax will be documented here.
 
+## v0.3.0 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.3.0)
+
+- Added G-Code Tree view of code.
+- Cleaned up code for modularity
+- Updated dependencies
+
 ## v0.2.0 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.2.0)
 
 - Refactor extension code for new vscode extension syntax

@@ -77,11 +77,11 @@ Please visit our [GitHub Issues](https://github.com/appliedengdesign/vscode-gcod
 - Add more snippets
 - Add additional tree items.
 - G-Code Debugging
-- Backplotting?
+- Backplotter
 
 ## Changelog
 
-Latest Version: v0.2.0
+Latest Version: v0.3.0
 
 Please refer to our [CHANGELOG](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CHANGELOG.md) doc.
 
