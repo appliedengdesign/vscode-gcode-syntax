@@ -13,6 +13,11 @@ class Config {
         this.config = workspace.getConfiguration("gcode");
     } 
 
+    getParam(param: string): any {
+
+        return this.config.get(param);
+    }
+
 }
 
 export const config = new Config();
