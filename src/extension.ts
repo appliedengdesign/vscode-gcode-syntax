@@ -24,6 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('gcodeTree.refreshEntry', () => gcodeTree.refresh());
 
     conout.appendLine("G-Code Tree View Enabled");
+    conout.appendLine('Tree AutoRefresh: ' + (config.getParam('treeAutoRefresh') ? 'Enabled' : 'Disabled') );
 
     /*
 

@@ -11,7 +11,7 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
     private text: string = '';
     private tree: Array<GCodeTreeNode>;
     private editor: vscode.TextEditor | undefined;
-    private autoRefresh: boolean = true;
+    private autoRefresh: boolean = false;
 
     constructor(private context: vscode.ExtensionContext) {
         this.tree = [];
@@ -50,10 +50,8 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
     }
 
     private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent): void {
-        if (this.editor) {
-            if (this.autoRefresh && changeEvent.document.uri.toString() === this.editor.document.uri.toString()) {
+        if (this.editor && this.autoRefresh) {
                 this.refresh();
-            }
         }
     }
 
@@ -106,8 +104,22 @@ export class GCodeTreeNode extends vscode.TreeItem {
         switch (type) {
             case "toolchange":
                 this.iconPath = {
-                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'boolean.svg'),
-                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'boolean.svg')
+                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'toolchange.svg'),
+                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'toolchange.svg')
+                };
+                break;
+
+            case "rapid":
+                this.iconPath = {
+                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'rapid.svg'),
+                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'rapid.svg')
+                };
+                break;
+            
+            case "cutting":
+                this.iconPath = {
+                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'cutting.svg'),
+                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'cutting.svg')
                 };
                 break;
             
@@ -115,6 +127,27 @@ export class GCodeTreeNode extends vscode.TreeItem {
                 this.iconPath = {
                     light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'cwcutting.svg'),
                     dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'cwcutting.svg')
+                };
+                break;
+
+            case "ccwcutting":
+                this.iconPath = {
+                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'ccwcutting.svg'),
+                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'ccwcutting.svg')
+                };
+                break;
+
+            case "coolanton":
+                this.iconPath = {
+                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'coolanton.svg'),
+                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'coolanton.svg')
+                };
+                break;
+            
+            case "coolantoff":
+                this.iconPath = {
+                    light: path.join(__dirname, '..','..', 'resources', 'icons', 'light', 'coolantoff.svg'),
+                    dark: path.join(__dirname, '..', '..', 'resources', 'icons', 'dark', 'coolantoff.svg')
                 };
                 break;
 

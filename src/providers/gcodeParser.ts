@@ -147,7 +147,7 @@ export class GCodeParser {
                             vscode.TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Coolant Turned On';
-                        node.setIcon('coolant');
+                        node.setIcon('coolanton');
                         
                         blocks.push(node);
                         break;
@@ -160,7 +160,7 @@ export class GCodeParser {
                             vscode.TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Coolant Turned Off';
-                        node.setIcon('coolant');
+                        node.setIcon('coolantoff');
                         
                         blocks.push(node);
 
