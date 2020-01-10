@@ -15,6 +15,8 @@ Language synax, IntelliSense, code snippits & more for writing G-Code for CNC ma
 
 This extension adds language syntax for CNC G-Code, code snippets, and colorization.
 
+There is also a tree-view of the G-Code, which parses the commands and gives you an overview of the program.
+
 ### Current Supported Extensions
 
 - .m
@@ -51,11 +53,20 @@ This extension adds language syntax for CNC G-Code, code snippets, and colorizat
 
 ## Installation
 
-Install from Extensions Marketplace
+Install from Extensions Marketplace or manually install the `vsix` file.
 
 ## Usage
 
 Install & activate extension. Extension activates when you open a file marked for the `gcode` language.
+
+Tree view is enabled by default and can be access from the G icon on the activity bar.
+
+## Configuration
+
+- Colorization ( Not Currently Active )
+- Machine Type ( Not Currently Active )
+- Tree Auto-Refresh
+  - Tree auto-refreshes as changes are made to the gcode. Disabled by default.
 
 ## Known Issues
 
@@ -64,7 +75,7 @@ Please visit our [GitHub Issues](https://github.com/appliedengdesign/vscode-gcod
 ## TODO
 
 - Add more snippets
-- Add tree view feature for machining blocks
+- Add additional tree items.
 - G-Code Debugging
 - Backplotting?
 
@@ -79,6 +90,12 @@ Please refer to our [CHANGELOG](https://github.com/appliedengdesign/vscode-gcode
 If you work like to help contribute to the code or this project, please fork away and submit pull requests!
 
 For more information on contributing, please refer to the [CONTRIBUTING](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CONTRIBUTING.md) doc.
+
+## About Applied Eng & Design
+
+We are a full service engineering and design firm, specializing in CAD/CAM, CNC milling, rapid prototyping, training and more.  We also like to dabble in Arudino / RaspberryPi projects, electronics, drones and robotics projects! Subscribe to our YouTube channel for videos on our projects, screencast tutorials, and more!
+
+Follow us on [Twitter](https://twitter.com/appliedengdes) & [Instagram](https://instagram.com/appliedengdes), and like our [Facebook Page](https://facebook.com/appliedengdesign)!
 
 ## License
 
