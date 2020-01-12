@@ -2,7 +2,7 @@
     "name": "vscode-gcode-syntax",
     "displayName": "G-Code Syntax",
     "description": "CNC G-Code Syntax Langauge",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "license": "MIT",
     "publisher": "appliedengdesign",
     "author": {
@@ -77,7 +77,8 @@
                     ".g00",
                     ".cls",
                     ".dnc",
-                    ".knc"
+                    ".knc",
+                    ".prg"
                 ],
                 "configuration": "./language/gcode-language.json"
             }
@@ -139,7 +140,7 @@
                 {
                     "id": "gcode",
                     "title": "G-Code",
-                    "icon": "images/vscode-gcode-syntax-icon.svg"
+                    "icon": "resources/icons/gcode.svg"
                 }
             ]
         },
