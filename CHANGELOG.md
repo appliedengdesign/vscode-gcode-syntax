@@ -2,6 +2,11 @@
 
 All changes to vscode-code-syntax will be documented here.
 
+## v0.3.1 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.3.1)
+
+- Added ```.prg``` file extension [#7](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/7)
+- Moved activity bar icon into resources folder. [#5](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/5)
+
 ## v0.3.0 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.3.0)
 
 - Added G-Code Tree view of code.
