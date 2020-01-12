@@ -50,6 +50,7 @@ There is also a tree-view of the G-Code, which parses the commands and gives you
 - .cls
 - .dnc
 - .knc
+- .prg
 
 ## Installation
 

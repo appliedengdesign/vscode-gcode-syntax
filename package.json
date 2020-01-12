@@ -77,7 +77,8 @@
                     ".g00",
                     ".cls",
                     ".dnc",
-                    ".knc"
+                    ".knc",
+                    ".prg"
                 ],
                 "configuration": "./language/gcode-language.json"
             }
@@ -139,7 +140,7 @@
                 {
                     "id": "gcode",
                     "title": "G-Code",
-                    "icon": "images/vscode-gcode-syntax-icon.svg"
+                    "icon": "resources/icons/gcode.svg"
                 }
             ]
         },
