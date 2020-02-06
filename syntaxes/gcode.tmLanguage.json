@@ -41,10 +41,6 @@
                     "name": "comment.gcode",
                     "begin": ";",
                     "end": "\\n"
-                },
-                {
-                    "begin": "[\\/].*",
-                    "end": "\\n"
                 }
             ]
         },
