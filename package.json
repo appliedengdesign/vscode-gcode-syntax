@@ -2,7 +2,7 @@
     "name": "vscode-gcode-syntax",
     "displayName": "G-Code Syntax",
     "description": "CNC G-Code Syntax Langauge",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "license": "MIT",
     "publisher": "appliedengdesign",
     "author": {
@@ -183,13 +183,13 @@
     },
     "devDependencies": {
         "@types/glob": "^7.1.1",
-        "@types/mocha": "^5.2.7",
-        "@types/node": "^12.12.24",
-        "@types/vscode": "^1.41.0",
+        "@types/mocha": "^7.0.1",
+        "@types/node": "^12.12.26",
+        "@types/vscode": "^1.42.0",
         "glob": "^7.1.6",
-        "mocha": "^6.2.2",
-        "tslint": "^5.20.0",
-        "typescript": "^3.7.4",
+        "mocha": "^7.0.1",
+        "tslint": "^6.0.0",
+        "typescript": "^3.7.5",
         "vscode-test": "^1.2.2"
     }
 }
