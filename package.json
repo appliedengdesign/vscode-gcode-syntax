@@ -122,8 +122,9 @@
                         "Lathe"
                     ],
                     "enumDescriptions": [
-                        "Loads specific snippets for CNC Mill G-Code",
-                        "Loads specific snippets for CNC Lathe G-Code"
+                        "Configure G-Code Extension for CNC Mill",
+                        "Configure G-Code Extension for CNC Lathe",
+                        "Configure G-Code Extension for 3D Printers"
                     ],
                     "scope": "window"
                 },

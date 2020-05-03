@@ -3,6 +3,7 @@ import { config } from './util/config';
 import * as consts from './util/constants';
 
 import { GCodeTreeProvider } from './providers/gcodeTree';
+import { GCodeHoverProvider } from './providers/gcodeHover';
 //import { getColorization } from './colorization';
 
 const name = consts.name;
@@ -11,7 +12,7 @@ const version = consts.version;
 // Create output channel
 const conout = vscode.window.createOutputChannel("G-Code");
 
-export function activate(context: vscode.ExtensionContext) {
+export function activate(context: vscode.ExtensionContext): void {
 
     conout.show(true);
     conout.appendLine(name + " v" + version + " activated.");
@@ -25,6 +26,13 @@ export function activate(context: vscode.ExtensionContext) {
 
     conout.appendLine("G-Code Tree View Enabled");
     conout.appendLine('Tree AutoRefresh: ' + (config.getParam('treeAutoRefresh') ? 'Enabled' : 'Disabled') );
+
+
+    context.subscriptions.push(
+        vscode.languages.registerHoverProvider(
+            GCODE, new GCodeHoverProvider()
+        )
+    );
 
     /*
 
