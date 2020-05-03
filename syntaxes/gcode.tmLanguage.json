@@ -72,7 +72,7 @@
                     "name": "support.constant.math.gcode"
                 },
                 {
-                    "match": "(FIX)|(FUP)|(ROUND)|(ABS)",
+                    "match": "(FIX)|(FUP)|(ROUND)|(ABS)|(MOD)",
                     "name": "support.constant.math.gcode"
                 },
                 {
@@ -108,7 +108,7 @@
                     "name": "string.regexp.gcode"
                 },
                 {
-                    "match": "[pP][0-9]{1,5}",
+                    "match": "[pP][0-9]{0,5}",
                     "name": "string.regexp.gcode"
                 }
             ]
