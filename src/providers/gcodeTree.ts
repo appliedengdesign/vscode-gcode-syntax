@@ -126,6 +126,9 @@ export class GCodeTreeNode extends vscode.TreeItem {
             case "ccwcutting":
             case "coolanton":
             case "coolantoff":
+            case "extsubprog":
+            case "localsubprog":
+            case "subprogreturn":
                 this.iconPath = {
                     light: path.join(iconsPath, 'light', type+'.svg'),
                     dark: path.join(iconsPath, 'dark', type+'.svg')

@@ -136,6 +136,23 @@ export class GCodeParser {
 
                         blocks.push(node);
                         break;
+                    
+                    // External Sub Program
+                    case '65':
+                        node = new GCodeTreeNode(
+                            'Ext Subprogram', 
+                            vscode.TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = '[G65] Ext Subprogram Call';
+                        node.setIcon('extsubprog');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
+
+                        blocks.push(node);
+                        break;
 
                     default: {
                         break;
@@ -199,6 +216,41 @@ export class GCodeParser {
                         };
                         
                         blocks.push(node);
+                        break;
+                    
+                    // Local Subprogram
+                    case '97':
+                        node = new GCodeTreeNode(
+                            'Local Sub Call', 
+                            vscode.TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = 'Local Subprogram Call';
+                        node.setIcon('localsubprog');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
+                        
+                        blocks.push(node);
+                        break;
+
+                    // Local Subprogram
+                    case '99':
+                        node = new GCodeTreeNode(
+                            'Local Sub Return', 
+                            vscode.TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = 'Local Subprogram Return';
+                        node.setIcon('subprogreturn');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
+                        
+                        blocks.push(node);
+                        break;
 
                     default:
                         break;
