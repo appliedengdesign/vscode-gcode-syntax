@@ -184,15 +184,6 @@
     },
     "devDependencies": {
         "@types/glob": "^7.1.1",
-<<<<<<< HEAD
-        "@types/mocha": "^7.0.1",
-        "@types/node": "^12.12.28",
-        "@types/vscode": "^1.42.0",
-        "glob": "^7.1.6",
-        "mocha": "^7.0.1",
-        "tslint": "^6.0.0",
-        "typescript": "^3.8.2",
-=======
         "@types/mocha": "^7.0.2",
         "@types/node": "^12.12.37",
         "@types/vscode": "^1.44.0",
@@ -202,7 +193,6 @@
         "glob": "^7.1.6",
         "mocha": "^7.1.2",
         "typescript": "^3.8.3",
->>>>>>> hotfix-0.3.3
         "vscode-test": "^1.2.2"
     },
     "dependencies": {}
