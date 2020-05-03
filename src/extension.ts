@@ -3,7 +3,7 @@ import { config } from './util/config';
 import * as consts from './util/constants';
 
 import { GCodeTreeProvider } from './providers/gcodeTree';
-import { GCodeHoverProvider } from './providers/gcodeHover';
+//import { GCodeHoverProvider } from './providers/gcodeHover';
 //import { getColorization } from './colorization';
 
 const name = consts.name;
@@ -28,13 +28,13 @@ export function activate(context: vscode.ExtensionContext): void {
     conout.appendLine('Tree AutoRefresh: ' + (config.getParam('treeAutoRefresh') ? 'Enabled' : 'Disabled') );
 
 
+
+/*
     context.subscriptions.push(
         vscode.languages.registerHoverProvider(
             GCODE, new GCodeHoverProvider()
         )
     );
-
-    /*
 
 
     if (gcodeconf.colorization) {
