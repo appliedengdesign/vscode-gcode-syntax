@@ -2,6 +2,12 @@
 
 All changes to vscode-code-syntax will be documented here.
 
+## v0.3.3 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.3.3)
+
+- Updated dependencies to fix some security vulnerabilities
+- Fixed syntax coloring for ```MOD``` and when using P with brackets ```P[ #1 + 1]```
+- Migrated from the depreciated tslint to eslint
+
 ## v0.3.2 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.3.2)
 
 - Fixed Markup with division symbol [#9](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/7)
