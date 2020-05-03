@@ -28,8 +28,7 @@ export function activate(context: vscode.ExtensionContext): void {
     conout.appendLine('Tree AutoRefresh: ' + (config.getParam('treeAutoRefresh') ? 'Enabled' : 'Disabled') );
 
 
-
-/*
+    /*
     context.subscriptions.push(
         vscode.languages.registerHoverProvider(
             GCODE, new GCodeHoverProvider()
