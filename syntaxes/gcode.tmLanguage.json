@@ -92,7 +92,7 @@
                     "name": "constant.language.gcode"
                 },
                 {
-                    "match": "([fF])(?=-|\\d|\\[|#)-?(?:\\d+(?:\\.\\d*)?)?",
+                    "match": "([eEfF])(?=-|\\d|\\[|#)-?(?:\\d+(?:\\.\\d*)?)?",
                     "name": "constant.language.gcode"
                 }
             ]
