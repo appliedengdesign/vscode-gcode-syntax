@@ -162,6 +162,10 @@
                 {
                     "match": "([qQrR])(?=-|\\d|\\[|#)-?(?:\\d+(?:\\.\\d*)?)?",
                     "name": "support.constant.math.gcode"
+                },
+                {
+                    "match": "([uUwW])(?=-|\\d|\\[|#)-?(?:\\d+(?:\\.\\d*)?)?",
+                    "name": "support.constant.math.gcode"
                 }
             ]
         },
