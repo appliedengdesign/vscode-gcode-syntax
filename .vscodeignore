@@ -1,3 +1,4 @@
+.github/**
 .vscode/**
 .vscode-test/**
 out/test/**
@@ -11,3 +12,7 @@ package-lock.json
 vsc-extension-quickstart.md
 images/*.ai
 images/*.svg
+LICENSE
+CONTRIBUTING.md
+node_modules/**
+.eslintignore
