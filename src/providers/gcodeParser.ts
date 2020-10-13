@@ -44,6 +44,7 @@ export class GCodeParser {
 
         const blocks: Array<GCodeTreeNode> = [];
         let node: GCodeTreeNode;
+        let x: number;
         const len = line.length;
         
         // Regexp to Pull key words
@@ -257,6 +258,44 @@ export class GCodeParser {
 
                 switch(argument) {
 
+                    // Spindle Clockwise
+                    case '03':
+                    case '3' :
+                        if (i == 0) { x = 1; } else { x = -1; }
+                        node = new GCodeTreeNode(
+                            'Spindle On ' + words[i + x].substr(1) + 'RPM' + ' CW',
+                            vscode.TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = 'Spindle On Clockwise (' + words[i + x].substr(1) + 'RPM)';
+                        node.setIcon('spindlecw');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
+
+                        blocks.push(node);
+                        break;
+
+                    // Spindle CounterClockwise
+                    case '04':
+                    case '4':
+                        if (i == 0) { x = 1; } else { x = -1; }
+                        node = new GCodeTreeNode(
+                            'Spindle On ' + words[i + x].substr(1) + 'RPM' + ' CCW',
+                            vscode.TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = 'Spindle On Counter Clockwise (' + words[i + x].substr(1) + 'RPM)';
+                        node.setIcon('spindleccw');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
+
+                        blocks.push(node);
+                        break;
+                        
                     // Tool Change
                     case '06':
                     case '6' :
