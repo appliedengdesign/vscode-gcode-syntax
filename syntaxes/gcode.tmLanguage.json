@@ -47,6 +47,18 @@
         "keywords": {
             "patterns": [
                 {
+                    "match": "[gG](1)?5[4-9](.1)?\\s?(P[0-9]{1,3})?",
+                    "name": "constant.numeric.gcode"
+                },
+                {
+                    "match": "[gG]1[1-2][0-9]",
+                    "name": "constant.numeric.gcode"   
+                },
+                {
+                    "match": "[gG]15\\s?(H[0-9]{1,2})?",
+                    "name": "constant.numeric.gcode"
+                },
+                {
                     "match": "[gG][0-9]{1,3}",
                     "name": "markup.bold.gcode"
                 },

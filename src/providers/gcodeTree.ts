@@ -9,10 +9,10 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
     private _onDidChangeTreeData: vscode.EventEmitter<GCodeTreeNode | undefined> = new vscode.EventEmitter<GCodeTreeNode | undefined>();
     readonly onDidChangeTreeData: vscode.Event<GCodeTreeNode | undefined> = this._onDidChangeTreeData.event;
 
-    private text: string = '';
+    private text = '';
     private tree: Array<GCodeTreeNode>;
     private editor: vscode.TextEditor | undefined;
-    private autoRefresh: boolean = false;
+    private autoRefresh = false;
 
     constructor(private context: vscode.ExtensionContext) {
         this.tree = [];
@@ -32,7 +32,7 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
         
         this.parseTree();
 
-        this._onDidChangeTreeData.fire();
+        this._onDidChangeTreeData.fire(undefined);
     }
 
     private onActiveEditorChanged(): void {
@@ -82,12 +82,12 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
 
         this.text = '';
         this.tree = [];
-        let editor = vscode.window.activeTextEditor;
+        const editor = vscode.window.activeTextEditor;
     
         if (editor && editor.document) {
             this.text = editor.document.getText();
     
-            let parsed = new gcodeparser.GCodeParser(this.text);
+            const parsed = new gcodeparser.GCodeParser(this.text);
             return parsed.getTree();
     
         } else {
@@ -129,6 +129,7 @@ export class GCodeTreeNode extends vscode.TreeItem {
             case "extsubprog":
             case "localsubprog":
             case "subprogreturn":
+            case "workoffset":
                 this.iconPath = {
                     light: path.join(iconsPath, 'light', type+'.svg'),
                     dark: path.join(iconsPath, 'dark', type+'.svg')

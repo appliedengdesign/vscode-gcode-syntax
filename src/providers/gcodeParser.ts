@@ -42,11 +42,12 @@ export class GCodeParser {
     // Parse Line for Blocks
     private parseLine(line: string, lnum:number): Array<GCodeTreeNode> {
 
-        let blocks: Array<GCodeTreeNode> = [];
+        const blocks: Array<GCodeTreeNode> = [];
         let node: GCodeTreeNode;
-        let len = line.length;
+        const len = line.length;
         
         // Regexp to Pull key words
+        // eslint-disable-next-line
         const re = /((GOTO)|(IF)|(EQ)|(NE)|(LT)|(GT)|(LE)|(GE)|(DO)|(WHILE)|(END)|(AND)|(OR)|(XOR)|(SIN)|(COS)|(TAN)|(ASIN)|(ACOS)|(ATAN)|(FIX)|(FUP)|(LN)|(ROUND)|(SQRT)|(FIX)|(FUP)|(ROUND)|(ABS))|((?:\$\$)|(?:\$[a-zA-Z0-9#]*))|([a-zA-Z][0-9\+\-\.]+)|(\*[0-9]+)|([#][0-9]+)|([#][\[].+[\]])/igm;
        
         // Strip Comments
@@ -134,6 +135,99 @@ export class GCodeParser {
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
 
+                        blocks.push(node);
+                        break;
+                    
+                    // Standard Work Offsets
+                    case '54':
+                    case '55':
+                    case '56':
+                    case '57':
+                    case '58':
+                    case '59':
+                    case '110':
+                    case '111':
+                    case '112':
+                    case '113':
+                    case '114':
+                    case '115':
+                    case '116':
+                    case '117':
+                    case '118':
+                    case '119':
+                    case '120':
+                    case '121':
+                    case '122':
+                    case '123':
+                    case '124':
+                    case '125':
+                    case '126':
+                    case '127':
+                    case '128':
+                    case '129':
+                        node = new GCodeTreeNode(
+                            'Work Offset' + ' (G' + argument + ')', 
+                            vscode.TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = '[G' + argument + '] Work Offset';
+                        node.setIcon('workoffset');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
+
+                        blocks.push(node);
+                        break;
+                    
+                    // Extended Work Offsets
+                    case '154':
+                        node = new GCodeTreeNode(
+                            'Work Offset' + ' (G154 ' + words[i + 1] + ')',
+                            vscode.TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = '[G154 ' + words[i + 1] + '] Work Offset';
+                        node.setIcon('workoffset');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
+
+                        blocks.push(node);
+                        break;
+
+                    // Extended Work Offsets
+                    case '54.1':
+                        node = new GCodeTreeNode(
+                            'Work Offset' + ' (G54.1 ' + words[i + 1] + ')',
+                            vscode.TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = '[G54.1 ' + words[i + 1] + '] Work Offset';
+                        node.setIcon('workoffset');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
+    
+                        blocks.push(node);
+                        break;
+                    
+                    // Okuma Work Offsets
+                    case '15':
+                        node = new GCodeTreeNode(
+                            'Work Offset' + ' (G15 ' + words[i + 1] + ')',
+                            vscode.TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = '[G15 ' + words[i + 1] + '] Work Offset';
+                        node.setIcon('workoffset');
+                        node.command = {
+                            command: 'extension.gcodeSelection',
+                            title: "",
+                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                        };
+    
                         blocks.push(node);
                         break;
                     
@@ -265,6 +359,7 @@ export class GCodeParser {
 
     // Comments
     private stripComments(line: string): string {
+        // eslint-disable-next-line
         const re1 = new RegExp(/\s*\([^\)]*\)/g);   // Remove anything inside the parentheses
         const re2 = new RegExp(/\s*;.*/g);          // Remove anything after a semi-colon to the end of the line, including preceding spaces
         const re3 = new RegExp(/\s+/g);
