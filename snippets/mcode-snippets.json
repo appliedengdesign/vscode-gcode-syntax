@@ -7,6 +7,22 @@
         ],
         "description": "Spindle Speed"
     },
+    "M03": {
+        "scope": "gcode",
+        "prefix": "M03",
+        "body": [
+            "M03 S${0:[RPM]}"
+        ],
+        "description": "Spindle CW"
+    },
+    "M04": {
+        "scope": "gcode",
+        "prefix": "M04",
+        "body": [
+            "M04 S${0:[RPM]}"
+        ],
+        "description": "Spindle CCW"
+    },
     "M05": {
         "scope": "gcode",
         "prefix": "M05",
