@@ -16,6 +16,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
     conout.show(true);
     conout.appendLine(name + " v" + version + " activated.");
+    conout.appendLine('Copyright (c) 2020 Appliend Eng Design / Mike Centola');
 
     // G-Code Tree View
     const gcodeTree = new GCodeTreeProvider(context);
