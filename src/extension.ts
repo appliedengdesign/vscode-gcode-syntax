@@ -1,3 +1,9 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Applied Eng & Design All rights reserved.
+ *  Licensed under the MIT License. See License.md in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+'use strict';
 import * as vscode from 'vscode';
 import { config } from './util/config';
 import * as consts from './util/constants';
@@ -6,21 +12,24 @@ import { GCodeTreeProvider } from './providers/gcodeTree';
 //import { GCodeHoverProvider } from './providers/gcodeHover';
 //import { getColorization } from './colorization';
 
-const name = consts.name;
-const version = consts.version;
-
 // Create output channel
-const conout = vscode.window.createOutputChannel("G-Code");
+const conout = vscode.window.createOutputChannel(consts.extensionOutputChannelName);
 
 export function activate(context: vscode.ExtensionContext): void {
 
+    const start = process.hrtime();
+
+    const gcode = vscode.extensions.getExtension(consts.extensionQualifiedId);
+    const gcodeVersion = gcode?.packageJSON.version;
+    const gcodeName = gcode?.packageJSON.displayName;
+
     conout.show(true);
-    conout.appendLine(name + " v" + version + " activated.");
+    conout.appendLine(gcodeName + " v" + gcodeVersion + " activated.");
     conout.appendLine('Copyright (c) 2020 Appliend Eng Design / Mike Centola');
 
     // G-Code Tree View
     const gcodeTree = new GCodeTreeProvider(context);
-    vscode.window.registerTreeDataProvider('gcodeTree', gcodeTree);
+    vscode.window.registerTreeDataProvider('gcode.gcodeTree', gcodeTree);
 
     vscode.commands.registerCommand('gcodeTree.refreshEntry', () => gcodeTree.refresh());
     vscode.commands.registerCommand('extension.gcodeSelection', range => gcodeTree.select(range));
@@ -98,6 +107,5 @@ export function activate(context: vscode.ExtensionContext): void {
 }
 
 export function deactivate() {
-
     conout.dispose();
 }
