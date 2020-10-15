@@ -1,6 +1,7 @@
 {
     "name": "vscode-gcode-syntax",
     "displayName": "G-Code Syntax",
+    "shortName": "G-Code",
     "description": "CNC G-Code Syntax Langauge",
     "version": "0.3.3",
     "license": "MIT",
@@ -9,6 +10,7 @@
         "name": "Mike Centola",
         "url": "https://mikecentola.com"
     },
+    "copyright": "Copyright (c) 2020 Applied Eng. & Design / Mike Centola",
     "engines": {
         "vscode": "^1.44.0"
     },
@@ -17,11 +19,19 @@
         "Snippets",
         "Other"
     ],
+    "keywords": [
+        "G-Code",
+        "CNC",
+        "syntax",
+        "gcode",
+        "nc"
+    ],
     "icon": "images/logo.png",
     "galleryBanner": {
         "color": "#666666",
         "theme": "dark"
     },
+    "markdown": "github",
     "repository": {
         "type": "git",
         "url": "https://github.com/appliedengdesign/vscode-gcode-syntax.git"
@@ -134,6 +144,12 @@
                     "default": false,
                     "description": "Enable G-Code Tree Auto Refresh",
                     "scope": "window"
+                },
+                "gcode.statsEnable": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable G-Code Statistics Panel",
+                    "scope": "window"
                 }
             }
         },
@@ -149,25 +165,57 @@
         "views": {
             "gcode": [
                 {
-                    "id": "gcodeTree",
+                    "id": "gcode.gcodeTree",
                     "name": "G-Code Tree",
-                    "when": "gcodeTreeEnabled"
+                    "contextualTitle": "G-Code",
+                    "type": "tree"
+                },
+                {
+                    "id": "gcode.gcodeStats",
+                    "name": "G-Code Stats",
+                    "contextualTitle": "G-Code",
+                    "type": "tree"
                 }
             ]
         },
+        "viewsWelcome": [
+            {
+                "view": "gcode.gcodeTree",
+                "contents": "Tree only available when viewing G-Code",
+                "when": "!gcodeViewEnabled"
+            },
+            {
+                "view": "gcode.gcodeStats",
+                "contents": "G-Code Stats are disabled\n[Enable Stats](command:gcode.gcodeStats.enable)\n",
+                "when": "!config.gcode.statsEnable"
+            }
+        ],
         "menus": {
             "view/title": [
                 {
-                    "command": "gcodeTree.refreshEntry",
-                    "when": "view == gcodeTree",
+                    "command": "gcode.gcodeTree.refresh",
+                    "when": "view == gcode.gcodeTree",
+                    "group": "navigation"
+                },
+                {
+                    "command": "gcode.gcodeStats.refresh",
+                    "when": "view == gcode.gcodeStats && config.gcode.statsEnable",
                     "group": "navigation"
                 }
             ]
         },
         "commands": [
             {
-                "command": "gcodeTree.refreshEntry",
-                "title": "Refresh",
+                "command": "gcode.gcodeTree.refresh",
+                "title": "G-Code: Refresh Tree",
+                "icon": {
+                    "light": "resources/icons/light/refresh.svg",
+                    "dark": "resources/icons/dark/refresh.svg"
+                }
+            },
+            {
+                "command": "gcode.gcodeStats.refresh",
+                "title": "G-Code: Refresh Stats",
                 "icon": {
                     "light": "resources/icons/light/refresh.svg",
                     "dark": "resources/icons/dark/refresh.svg"
