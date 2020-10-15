@@ -3,7 +3,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run Extension",
+            "name": "Launch Extension",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
@@ -11,13 +11,14 @@
                 "--disable-extensions",
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ],
+            "stopOnEntry": false,
             "outFiles": [
                 "${workspaceFolder}/out/**/*.js"
             ],
             "preLaunchTask": "${defaultBuildTask}"
         },
         {
-            "name": "Extension Tests",
+            "name": "Launch Extension Tests",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
@@ -25,10 +26,11 @@
                 "--extensionDevelopmentPath=${workspaceFolder}",
                 "--extensionsTestsPath=${workspaceFolder}/out/test/suite/index"
             ],
+            "stopOnEntry": false,
             "outFiles": [
                 "${workspaceFolder}/out/**/*.js"
             ],
-            "preLaunchTask": "${defaultBuildTask"
+            "preLaunchTask": "${defaultBuildTask}"
         }
     ]
 }

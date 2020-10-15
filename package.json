@@ -1,14 +1,16 @@
 {
     "name": "vscode-gcode-syntax",
     "displayName": "G-Code Syntax",
+    "shortName": "G-Code",
     "description": "CNC G-Code Syntax Langauge",
-    "version": "0.3.3",
+    "version": "0.4.0",
     "license": "MIT",
     "publisher": "appliedengdesign",
     "author": {
         "name": "Mike Centola",
         "url": "https://mikecentola.com"
     },
+    "copyright": "Copyright (c) 2020 Applied Eng. & Design / Mike Centola",
     "engines": {
         "vscode": "^1.44.0"
     },
@@ -17,11 +19,19 @@
         "Snippets",
         "Other"
     ],
+    "keywords": [
+        "G-Code",
+        "CNC",
+        "syntax",
+        "gcode",
+        "nc"
+    ],
     "icon": "images/logo.png",
     "galleryBanner": {
         "color": "#666666",
         "theme": "dark"
     },
+    "markdown": "github",
     "repository": {
         "type": "git",
         "url": "https://github.com/appliedengdesign/vscode-gcode-syntax.git"
@@ -78,7 +88,8 @@
                     ".cls",
                     ".dnc",
                     ".knc",
-                    ".prg"
+                    ".prg",
+                    ".001"
                 ],
                 "configuration": "./language/gcode-language.json"
             }
@@ -108,13 +119,13 @@
             "type": "object",
             "title": "G-Code",
             "properties": {
-                "gcode.colorization": {
+                "gcode.general.colorization": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Enable G-Code specific colorization options",
+                    "markdowndescription": "Enable G-Code specific colorization options",
                     "scope": "window"
                 },
-                "gcode.machineType": {
+                "gcode.general.machineType": {
                     "type": "string",
                     "default": "Mill",
                     "enum": [
@@ -122,15 +133,29 @@
                         "Lathe"
                     ],
                     "enumDescriptions": [
-                        "Loads specific snippets for CNC Mill G-Code",
-                        "Loads specific snippets for CNC Lathe G-Code"
+                        "Configure G-Code Extension for CNC Mill",
+                        "Configure G-Code Extension for CNC Lathe",
+                        "Configure G-Code Extension for 3D Printers"
                     ],
+                    "markdownDescription": "Configure G-Code Extension for a Specific Machine Type",
                     "scope": "window"
                 },
-                "gcode.treeAutoRefresh": {
+                "gcode.tree.autoRefresh": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdowndescription": "Enable G-Code Tree Auto Refresh",
+                    "scope": "window"
+                },
+                "gcode.stats.enable": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Enable G-Code Tree Auto Refresh",
+                    "markdowndescription": "Enable G-Code Statistics Panel",
+                    "scope": "window"
+                },
+                "gcode.stats.autoRefresh": {
+                    "type": "boolean",
+                    "default": false,
+                    "markdowndescription": "Enable G-Code Stats Auto Refresh",
                     "scope": "window"
                 }
             }
@@ -147,25 +172,58 @@
         "views": {
             "gcode": [
                 {
-                    "id": "gcodeTree",
+                    "id": "gcode.gcodeTree",
                     "name": "G-Code Tree",
-                    "when": "gcodeTreeEnabled"
+                    "contextualTitle": "G-Code",
+                    "type": "tree"
+                },
+                {
+                    "id": "gcode.gcodeStats",
+                    "name": "G-Code Stats",
+                    "when": "config.gcode.statsEnable",
+                    "contextualTitle": "G-Code",
+                    "type": "tree"
                 }
             ]
         },
+        "viewsWelcome": [
+            {
+                "view": "gcode.gcodeTree",
+                "contents": "Tree only available when viewing G-Code",
+                "when": "!gcodeTreeViewEnabled"
+            },
+            {
+                "view": "gcode.gcodeStats",
+                "contents": "G-Code Stats only available when viewing G-Code",
+                "when": "!gcodeStatsViewEnabled && config.gcode.statsEnable"
+            }
+        ],
         "menus": {
             "view/title": [
                 {
-                    "command": "gcodeTree.refreshEntry",
-                    "when": "view == gcodeTree",
+                    "command": "gcode.gcodeTree.refresh",
+                    "when": "view == gcode.gcodeTree",
+                    "group": "navigation"
+                },
+                {
+                    "command": "gcode.gcodeStats.refresh",
+                    "when": "view == gcode.gcodeStats && config.gcode.statsEnable",
                     "group": "navigation"
                 }
             ]
         },
         "commands": [
             {
-                "command": "gcodeTree.refreshEntry",
-                "title": "Refresh",
+                "command": "gcode.gcodeTree.refresh",
+                "title": "G-Code: Refresh Tree",
+                "icon": {
+                    "light": "resources/icons/light/refresh.svg",
+                    "dark": "resources/icons/dark/refresh.svg"
+                }
+            },
+            {
+                "command": "gcode.gcodeStats.refresh",
+                "title": "G-Code: Refresh Stats",
                 "icon": {
                     "light": "resources/icons/light/refresh.svg",
                     "dark": "resources/icons/dark/refresh.svg"
@@ -179,20 +237,20 @@
         "lint": "eslint -c .eslintrc.js --ext .ts ./",
         "watch": "tsc -watch -p ./",
         "pretest": "npm run compile",
-        "test": "node ./out/test/runTest.js"
+        "test": "node ./out/test/runTests.js"
     },
     "devDependencies": {
-        "@types/glob": "^7.1.1",
-        "@types/mocha": "^7.0.2",
-        "@types/node": "^12.12.37",
-        "@types/vscode": "^1.44.0",
-        "@typescript-eslint/eslint-plugin": "^2.30.0",
-        "@typescript-eslint/parser": "^2.30.0",
-        "eslint": "^6.8.0",
+        "@types/glob": "^7.1.3",
+        "@types/mocha": "^8.0.3",
+        "@types/node": "^14.11.8",
+        "@types/vscode": "^1.50.0",
+        "@typescript-eslint/eslint-plugin": "^4.4.1",
+        "@typescript-eslint/parser": "^4.4.1",
+        "eslint": "^7.11.0",
         "glob": "^7.1.6",
-        "mocha": "^7.1.2",
-        "typescript": "^3.8.3",
-        "vscode-test": "^1.2.2"
+        "mocha": "^8.1.3",
+        "typescript": "^4.0.3",
+        "vscode-test": "^1.4.0"
     },
     "dependencies": {}
 }

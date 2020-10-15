@@ -1,32 +1,80 @@
-import * as vscode from 'vscode';
-import { config } from './util/config';
-import * as consts from './util/constants';
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Applied Eng & Design All rights reserved.
+ *  Licensed under the MIT License. See License.md in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 
+'use strict';
+import { commands, ExtensionContext, window } from 'vscode';
+import { Config, configuration } from './util/config';
+import { constants } from './util/constants';
+import { Logger } from './util/logger';
+import { StatusBar } from './util/statusBar';
 import { GCodeTreeProvider } from './providers/gcodeTree';
+import { GCodeStatsProvider } from './providers/gcodeStats';
+
+
+//import { GCodeHoverProvider } from './providers/gcodeHover';
 //import { getColorization } from './colorization';
 
-const name = consts.name;
-const version = consts.version;
 
-// Create output channel
-const conout = vscode.window.createOutputChannel("G-Code");
+export async function activate(context: ExtensionContext) {
 
-export function activate(context: vscode.ExtensionContext) {
+    const start = process.hrtime();
 
-    conout.show(true);
-    conout.appendLine(name + " v" + version + " activated.");
+    Logger.configure(context);
+    Logger.enable();
+
+    Config.configure(context);
+
+    StatusBar.configure(context);
+
+    Logger.log(constants.extension.shortname + " v" + constants.extension.version + " activated.");
+    Logger.log(constants.copyright);
 
     // G-Code Tree View
+    Logger.log("Loading Tree View...");
     const gcodeTree = new GCodeTreeProvider(context);
-    vscode.window.registerTreeDataProvider('gcodeTree', gcodeTree);
+    window.registerTreeDataProvider('gcode.gcodeTree', gcodeTree);
 
-    vscode.commands.registerCommand('gcodeTree.refreshEntry', () => gcodeTree.refresh());
-    vscode.commands.registerCommand('extension.gcodeSelection', range => gcodeTree.select(range));
+    commands.registerCommand('gcode.gcodeTree.refresh', () => {
+        if (window.activeTextEditor?.document.languageId === constants.langId) {
+            commands.executeCommand('setContext', 'gcodeTreeViewEnabled', true);
+        }
+        gcodeTree.refresh();        
+    });
+    commands.registerCommand('gcode.gcodeTree.Selection', range => gcodeTree.select(range));
 
-    conout.appendLine("G-Code Tree View Enabled");
-    conout.appendLine('Tree AutoRefresh: ' + (config.getParam('treeAutoRefresh') ? 'Enabled' : 'Disabled') );
+    
+    Logger.log('Tree AutoRefresh: ' + (configuration.getParam('tree.sutoRefresh') ? 'Enabled' : 'Disabled') );
+
+    // G-Code Stats View
+    Logger.log("Loading Stats View...");
+    const gcodeStats = new GCodeStatsProvider(context);
+    window.registerTreeDataProvider('gcode.gcodeStats', gcodeStats);
+
+    commands.registerCommand('gcode.gcodeStats.refresh', () => {
+        if (window.activeTextEditor?.document.languageId === constants.langId) {
+            commands.executeCommand('setContext', 'gcodeStatsViewEnabled', true);
+        }
+        gcodeStats.refresh();
+    });
+    commands.registerCommand('gcode.gcodeStats.enable', () => {
+        Logger.log('Enabling Stats...');
+        configuration.setParam('stats.enable', true);
+
+        }
+    );
+
+    Logger.log('Stats: ' + (configuration.getParam('stats.enable') ? 'Enabled' : 'Disabled') );
+    Logger.log('Stats AutoRefresh: ' + (configuration.getParam('stats.sutoRefresh') ? 'Enabled' : 'Disabled') );
+
 
     /*
+    context.subscriptions.push(
+        vscode.languages.registerHoverProvider(
+            GCODE, new GCodeHoverProvider()
+        )
+    );
 
 
     if (gcodeconf.colorization) {
@@ -90,6 +138,8 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {
-
-    conout.dispose();
+    // Clean up
+    Logger.close();
+    StatusBar.dispose();
+    
 }

@@ -2,13 +2,14 @@
 
 import * as path from "path";
 import * as vscode from "vscode";
-import  { config } from "../util/config";
+import  { configuration } from "../util/config";
 
 
 export class GcodeCompletionItemProvider implements vscode.CompletionItemProvider {
     private completions = new vscode.CompletionList();
 
     constructor(filename: string) {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const snippets = require(path.join("../../snippets/", filename));
 
         for (const snippetType of Object.keys(snippets)) {
