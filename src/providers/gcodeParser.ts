@@ -77,7 +77,7 @@ export class GCodeParser {
                         node.tooltip = '[G00] Rapid Motion';
                         node.setIcon('rapid');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -95,7 +95,7 @@ export class GCodeParser {
                         node.tooltip = '[G01] Linear]';
                         node.setIcon('cutting');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -113,7 +113,7 @@ export class GCodeParser {
                         node.tooltip = '[G02] CW Interpolation';
                         node.setIcon('cwcutting');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -131,7 +131,7 @@ export class GCodeParser {
                         node.tooltip = '[G03] CCW Interpolation';
                         node.setIcon('ccwcutting');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -173,7 +173,7 @@ export class GCodeParser {
                         node.tooltip = '[G' + argument + '] Work Offset';
                         node.setIcon('workoffset');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -190,7 +190,7 @@ export class GCodeParser {
                         node.tooltip = '[G154 ' + words[i + 1] + '] Work Offset';
                         node.setIcon('workoffset');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -207,7 +207,7 @@ export class GCodeParser {
                         node.tooltip = '[G54.1 ' + words[i + 1] + '] Work Offset';
                         node.setIcon('workoffset');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -224,7 +224,7 @@ export class GCodeParser {
                         node.tooltip = '[G15 ' + words[i + 1] + '] Work Offset';
                         node.setIcon('workoffset');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -241,7 +241,7 @@ export class GCodeParser {
                         node.tooltip = '[G65] Ext Subprogram Call';
                         node.setIcon('extsubprog');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -269,7 +269,7 @@ export class GCodeParser {
                         node.tooltip = 'Spindle On Clockwise (' + words[i + x].substr(1) + 'RPM)';
                         node.setIcon('spindlecw');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -288,7 +288,7 @@ export class GCodeParser {
                         node.tooltip = 'Spindle On Counter Clockwise (' + words[i + x].substr(1) + 'RPM)';
                         node.setIcon('spindleccw');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -306,7 +306,7 @@ export class GCodeParser {
                         node.tooltip = 'Tool Change';
                         node.setIcon('toolchange');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -325,7 +325,7 @@ export class GCodeParser {
                         node.tooltip = 'Coolant Turned On';
                         node.setIcon('coolanton');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -343,7 +343,7 @@ export class GCodeParser {
                         node.tooltip = 'Coolant Turned Off';
                         node.setIcon('coolantoff');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -360,7 +360,7 @@ export class GCodeParser {
                         node.tooltip = 'Local Subprogram Call';
                         node.setIcon('localsubprog');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
@@ -377,7 +377,7 @@ export class GCodeParser {
                         node.tooltip = 'Local Subprogram Return';
                         node.setIcon('subprogreturn');
                         node.command = {
-                            command: 'extension.gcodeSelection',
+                            command: 'gcode.gcodeTree.Selection',
                             title: "",
                             arguments: [new vscode.Range(lnum, 0, lnum, len)]
                         };
