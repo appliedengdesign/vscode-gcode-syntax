@@ -1,8 +1,14 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Applied Eng & Design All rights reserved.
+ *  Licensed under the MIT License. See License.md in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+'use strict';
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { config } from '../util/config';
+import { configuration } from '../util/config';
 import * as gcodeparser from './gcodeParser';
-import { iconsPath } from '../util/constants';
+import { constants } from '../util/constants';
+import { StatusBar } from '../util/statusBar';
 
 export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode> {
 
@@ -22,7 +28,7 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
 
         this.parseTree();
 
-        this.autoRefresh = config.getParam('treeAutoRefresh');
+        this.autoRefresh = configuration.getParam('treeAutoRefresh');
 
         this.onActiveEditorChanged();
 
@@ -33,21 +39,27 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
         this.parseTree();
 
         this._onDidChangeTreeData.fire(undefined);
+        StatusBar.updateStatusBar('Tree Up to Date');
     }
 
     private onActiveEditorChanged(): void {
         if (vscode.window.activeTextEditor) {
             if (vscode.window.activeTextEditor.document.uri.scheme === 'file') {
                 const enabled = vscode.window.activeTextEditor.document.languageId === 'gcode';
-                vscode.commands.executeCommand('setContext', 'gcodeTreeEnabled', enabled);
+                vscode.commands.executeCommand('setContext', 'gcodeViewEnabled', enabled);
 
                 if (enabled) {
                     this.editor = vscode.window.activeTextEditor;
-                    this.refresh();
+                    this.autoRefresh = configuration.getParam('treeAutoRefresh');
+                    StatusBar.updateStatusBar('Tree Dirty');
+                    if (this.autoRefresh) this.refresh();
                 }
             }
         } else {
-            vscode.commands.executeCommand('setContext', 'gcodeTreeEnabled', false);
+            //this.tree = [];
+            vscode.commands.executeCommand('setContext', 'gcodeViewEnabled', false);
+            this.refresh();
+            StatusBar.hideStatusBar();
         }
     }
 
@@ -55,15 +67,19 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
         if (vscode.window.activeTextEditor) {
             if (vscode.window.activeTextEditor.document.uri.scheme === 'file') {
                 const enabled = vscode.window.activeTextEditor.document.languageId === 'gcode';
-                vscode.commands.executeCommand('setContext', 'gcodeTreeEnabled', enabled);
+                vscode.commands.executeCommand('setContext', 'gcodeViewEnabled', enabled);
 
                 if (enabled) {
                     this.editor = vscode.window.activeTextEditor;
-                    this.refresh();
+                    this.autoRefresh = configuration.getParam('treeAutoRefresh');
+                    StatusBar.updateStatusBar('Tree Dirty');
+                    if (this.autoRefresh) this.refresh();
                 }
             }
         } else {
-            vscode.commands.executeCommand('setContext', 'gcodeTreeEnabled', false);
+            vscode.commands.executeCommand('setContext', 'gcodeViewEnabled', false);
+            this.refresh();
+            StatusBar.hideStatusBar();
         }
     }
 
@@ -133,15 +149,15 @@ export class GCodeTreeNode extends vscode.TreeItem {
             case "spindlecw":
             case "spindleccw":
                 this.iconPath = {
-                    light: path.join(iconsPath, 'light', type+'.svg'),
-                    dark: path.join(iconsPath, 'dark', type+'.svg')
+                    light: path.join(constants.iconsPath, 'light', type+'.svg'),
+                    dark: path.join(constants.iconsPath, 'dark', type+'.svg')
                 };
                 break;
 
             default:
                 this.iconPath = {
-                    light: path.join(iconsPath, 'light', 'gcode.svg'),
-                    dark: path.join(iconsPath, 'dark', 'gcode.svg')
+                    light: path.join(constants.iconsPath, 'light', 'gcode.svg'),
+                    dark: path.join(constants.iconsPath, 'dark', 'gcode.svg')
                 };
         }
 
