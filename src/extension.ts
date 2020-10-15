@@ -45,7 +45,7 @@ export async function activate(context: ExtensionContext) {
     commands.registerCommand('gcode.gcodeTree.Selection', range => gcodeTree.select(range));
 
     
-    Logger.log('Tree AutoRefresh: ' + (configuration.getParam('treeAutoRefresh') ? 'Enabled' : 'Disabled') );
+    Logger.log('Tree AutoRefresh: ' + (configuration.getParam('tree.sutoRefresh') ? 'Enabled' : 'Disabled') );
 
     // G-Code Stats View
     Logger.log("Loading Stats View...");
@@ -60,13 +60,13 @@ export async function activate(context: ExtensionContext) {
     });
     commands.registerCommand('gcode.gcodeStats.enable', () => {
         Logger.log('Enabling Stats...');
-        configuration.setParam('statsEnable', true);
+        configuration.setParam('stats.enable', true);
 
         }
     );
 
-    Logger.log('Stats: ' + (configuration.getParam('statsEnable') ? 'Enabled' : 'Disabled') );
-    Logger.log('Stats AutoRefresh: ' + (configuration.getParam('statsAutoRefresh') ? 'Enabled' : 'Disabled') );
+    Logger.log('Stats: ' + (configuration.getParam('stats.enable') ? 'Enabled' : 'Disabled') );
+    Logger.log('Stats AutoRefresh: ' + (configuration.getParam('stats.sutoRefresh') ? 'Enabled' : 'Disabled') );
 
 
     /*

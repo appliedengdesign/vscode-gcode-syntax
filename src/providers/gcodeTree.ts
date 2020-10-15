@@ -28,7 +28,7 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
 
         this.parseTree();
 
-        this.autoRefresh = configuration.getParam('treeAutoRefresh');
+        this.autoRefresh = configuration.getParam('tree.autoRefresh');
 
         this.onActiveEditorChanged();
 
@@ -50,7 +50,7 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
 
                 if (enabled) {
                     this.editor = vscode.window.activeTextEditor;
-                    this.autoRefresh = configuration.getParam('treeAutoRefresh');
+                    this.autoRefresh = configuration.getParam('tree.autoRefresh');
                     StatusBar.updateStatusBar('Tree Dirty');
                     if (this.autoRefresh) this.refresh();
                 }
@@ -71,7 +71,7 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
 
                 if (enabled) {
                     this.editor = vscode.window.activeTextEditor;
-                    this.autoRefresh = configuration.getParam('treeAutoRefresh');
+                    this.autoRefresh = configuration.getParam('tree.autoRefresh');
                     StatusBar.updateStatusBar('Tree Dirty');
                     if (this.autoRefresh) this.refresh();
                 }

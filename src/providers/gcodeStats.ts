@@ -36,7 +36,7 @@ export class GCodeStatsProvider implements TreeDataProvider<GCodeStatsNode> {
         window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
         workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
 
-        this.autoRefresh = configuration.getParam('statsAutoRefresh');
+        this.autoRefresh = configuration.getParam('stats.autoRefresh');
 
     }
 
@@ -55,7 +55,7 @@ export class GCodeStatsProvider implements TreeDataProvider<GCodeStatsNode> {
 
                 if (enabled) {
                     this.editor = window.activeTextEditor;
-                    this.autoRefresh = configuration.getParam('statsAutoRefresh');
+                    this.autoRefresh = configuration.getParam('stats.autoRefresh');
                     if (this.autoRefresh) this.refresh();
                 }
             }
@@ -73,7 +73,7 @@ export class GCodeStatsProvider implements TreeDataProvider<GCodeStatsNode> {
 
                 if (enabled) {
                     this.editor = window.activeTextEditor;
-                    this.autoRefresh = configuration.getParam('statsAutoRefresh');
+                    this.autoRefresh = configuration.getParam('stats.autoRefresh');
                     if(this.autoRefresh) this.refresh();
                 }
             }
