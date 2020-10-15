@@ -5,37 +5,63 @@
 
 'use strict';
 import * as vscode from 'vscode';
-import { config } from './util/config';
-import * as consts from './util/constants';
-
+import { Config, configuration } from './util/config';
+import { constants } from './util/constants';
+import { Logger } from './util/logger';
+import { StatusBar } from './util/statusBar';
 import { GCodeTreeProvider } from './providers/gcodeTree';
+import { GCodeStatsProvider } from './providers/gcodeStats';
+
 //import { GCodeHoverProvider } from './providers/gcodeHover';
 //import { getColorization } from './colorization';
 
-// Create output channel
-const conout = vscode.window.createOutputChannel(consts.extensionOutputChannelName);
 
-export function activate(context: vscode.ExtensionContext): void {
+export async function activate(context: vscode.ExtensionContext) {
 
     const start = process.hrtime();
 
-    const gcode = vscode.extensions.getExtension(consts.extensionQualifiedId);
-    const gcodeVersion = gcode?.packageJSON.version;
-    const gcodeName = gcode?.packageJSON.displayName;
+    Logger.configure(context);
+    Logger.enable();
 
-    conout.show(true);
-    conout.appendLine(gcodeName + " v" + gcodeVersion + " activated.");
-    conout.appendLine('Copyright (c) 2020 Appliend Eng Design / Mike Centola');
+    Config.configure(context);
+
+    StatusBar.configure(context);
+
+    Logger.log(constants.extension.shortname + " v" + constants.extension.version + " activated.");
+    Logger.log(constants.copyright);
 
     // G-Code Tree View
+    Logger.log("Loading Tree View...");
     const gcodeTree = new GCodeTreeProvider(context);
     vscode.window.registerTreeDataProvider('gcode.gcodeTree', gcodeTree);
 
-    vscode.commands.registerCommand('gcodeTree.refreshEntry', () => gcodeTree.refresh());
-    vscode.commands.registerCommand('extension.gcodeSelection', range => gcodeTree.select(range));
+    vscode.commands.registerCommand('gcode.gcodeTree.refresh', () => {
+        if (vscode.window.activeTextEditor?.document.languageId === constants.langId) {
+            vscode.commands.executeCommand('setContext', 'gcodeViewEnabled', true);
+        }
+        gcodeTree.refresh();        
+    });
+    vscode.commands.registerCommand('gcode.gcodeTree.Selection', range => gcodeTree.select(range));
 
-    conout.appendLine("G-Code Tree View Enabled");
-    conout.appendLine('Tree AutoRefresh: ' + (config.getParam('treeAutoRefresh') ? 'Enabled' : 'Disabled') );
+    
+    Logger.log('Tree AutoRefresh: ' + (configuration.getParam('treeAutoRefresh') ? 'Enabled' : 'Disabled') );
+
+    // G-Code Stats View
+    Logger.log("Loading Stats View...");
+    const gcodeStats = new GCodeStatsProvider(context);
+    vscode.window.registerTreeDataProvider('gcode.gcodeStats', gcodeStats);
+
+    vscode.commands.registerCommand('gcode.gcodeStats.refresh', () => {
+        //gcodeStats.refresh();
+    });
+    vscode.commands.registerCommand('gcode.gcodeStats.enable', () => {
+        Logger.log('Enabling Stats...');
+        configuration.setParam('statsEnable', true);
+
+        }
+    );
+
+    Logger.log('Stats: ' + (configuration.getParam('statsEnable') ? 'Enabled' : 'Disabled') );
 
 
     /*
@@ -107,5 +133,7 @@ export function activate(context: vscode.ExtensionContext): void {
 }
 
 export function deactivate() {
-    conout.dispose();
+    // Clean up
+    Logger.close();
+    StatusBar.dispose();
 }
