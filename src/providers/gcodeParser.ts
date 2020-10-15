@@ -1,4 +1,9 @@
-import * as vscode from 'vscode';
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Applied Eng & Design All rights reserved.
+ *  Licensed under the MIT License. See License.md in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+'use strict';
+import { Range, TreeItemCollapsibleState } from 'vscode';
 import {GCodeTreeNode} from './gcodeTree';
 
 export class GCodeParser {
@@ -72,14 +77,14 @@ export class GCodeParser {
                     case '0' : 
                        node = new GCodeTreeNode(
                             'Rapid', 
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G00] Rapid Motion';
                         node.setIcon('rapid');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
 
                         blocks.push(node);
@@ -90,14 +95,14 @@ export class GCodeParser {
                     case '1' : 
                         node = new GCodeTreeNode(
                             'Cutting', 
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G01] Linear]';
                         node.setIcon('cutting');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
 
                         blocks.push(node);
@@ -108,14 +113,14 @@ export class GCodeParser {
                     case '2' : 
                         node = new GCodeTreeNode(
                             'CW Cutting', 
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G02] CW Interpolation';
                         node.setIcon('cwcutting');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
 
                         blocks.push(node);
@@ -126,14 +131,14 @@ export class GCodeParser {
                     case '3' :
                         node = new GCodeTreeNode(
                             'CCW Cutting', 
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G03] CCW Interpolation';
                         node.setIcon('ccwcutting');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
 
                         blocks.push(node);
@@ -168,14 +173,14 @@ export class GCodeParser {
                     case '129':
                         node = new GCodeTreeNode(
                             'Work Offset' + ' (G' + argument + ')', 
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G' + argument + '] Work Offset';
                         node.setIcon('workoffset');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
 
                         blocks.push(node);
@@ -185,14 +190,14 @@ export class GCodeParser {
                     case '154':
                         node = new GCodeTreeNode(
                             'Work Offset' + ' (G154 ' + words[i + 1] + ')',
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G154 ' + words[i + 1] + '] Work Offset';
                         node.setIcon('workoffset');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
 
                         blocks.push(node);
@@ -202,14 +207,14 @@ export class GCodeParser {
                     case '54.1':
                         node = new GCodeTreeNode(
                             'Work Offset' + ' (G54.1 ' + words[i + 1] + ')',
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G54.1 ' + words[i + 1] + '] Work Offset';
                         node.setIcon('workoffset');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
     
                         blocks.push(node);
@@ -219,14 +224,14 @@ export class GCodeParser {
                     case '15':
                         node = new GCodeTreeNode(
                             'Work Offset' + ' (G15 ' + words[i + 1] + ')',
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G15 ' + words[i + 1] + '] Work Offset';
                         node.setIcon('workoffset');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
     
                         blocks.push(node);
@@ -236,14 +241,14 @@ export class GCodeParser {
                     case '65':
                         node = new GCodeTreeNode(
                             'Ext Subprogram', 
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G65] Ext Subprogram Call';
                         node.setIcon('extsubprog');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
 
                         blocks.push(node);
@@ -264,14 +269,14 @@ export class GCodeParser {
                         if (i == 0) { x = 1; } else { x = -1; }
                         node = new GCodeTreeNode(
                             'Spindle On ' + words[i + x].substr(1) + 'RPM' + ' CW',
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Spindle On Clockwise (' + words[i + x].substr(1) + 'RPM)';
                         node.setIcon('spindlecw');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
 
                         blocks.push(node);
@@ -283,14 +288,14 @@ export class GCodeParser {
                         if (i == 0) { x = 1; } else { x = -1; }
                         node = new GCodeTreeNode(
                             'Spindle On ' + words[i + x].substr(1) + 'RPM' + ' CCW',
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Spindle On Counter Clockwise (' + words[i + x].substr(1) + 'RPM)';
                         node.setIcon('spindleccw');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
 
                         blocks.push(node);
@@ -301,14 +306,14 @@ export class GCodeParser {
                     case '6' :
                         node = new GCodeTreeNode(
                             'Tool Change', 
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Tool Change';
                         node.setIcon('toolchange');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
 
                         blocks.push(node);
@@ -320,14 +325,14 @@ export class GCodeParser {
                     case '8' :
                         node = new GCodeTreeNode(
                             'Coolant On', 
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Coolant Turned On';
                         node.setIcon('coolanton');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
                         
                         blocks.push(node);
@@ -338,14 +343,14 @@ export class GCodeParser {
                     case '9' : 
                         node = new GCodeTreeNode(
                             'Coolant Off', 
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Coolant Turned Off';
                         node.setIcon('coolantoff');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
                         
                         blocks.push(node);
@@ -355,14 +360,14 @@ export class GCodeParser {
                     case '97':
                         node = new GCodeTreeNode(
                             'Local Sub Call', 
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Local Subprogram Call';
                         node.setIcon('localsubprog');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
                         
                         blocks.push(node);
@@ -372,14 +377,14 @@ export class GCodeParser {
                     case '99':
                         node = new GCodeTreeNode(
                             'Local Sub Return', 
-                            vscode.TreeItemCollapsibleState.None,
+                            TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Local Subprogram Return';
                         node.setIcon('subprogreturn');
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
-                            arguments: [new vscode.Range(lnum, 0, lnum, len)]
+                            arguments: [new Range(lnum, 0, lnum, len)]
                         };
                         
                         blocks.push(node);

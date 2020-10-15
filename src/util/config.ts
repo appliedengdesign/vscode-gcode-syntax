@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.md in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 'use strict';
-import { mainModule } from "process";
 import { WorkspaceConfiguration, workspace, ExtensionContext, ConfigurationChangeEvent } from "vscode";
 import { constants } from './constants';
 import { Logger } from "./logger";

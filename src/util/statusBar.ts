@@ -4,7 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
-import { ExtensionContext, StatusBarAlignment, StatusBarItem, window } from "vscode";
+import { 
+    ExtensionContext, 
+    StatusBarAlignment, 
+    StatusBarItem, 
+    window 
+} from "vscode";
 
 
 export class StatusBar {
