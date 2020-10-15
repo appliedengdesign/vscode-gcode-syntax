@@ -46,7 +46,7 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
         if (vscode.window.activeTextEditor) {
             if (vscode.window.activeTextEditor.document.uri.scheme === 'file') {
                 const enabled = vscode.window.activeTextEditor.document.languageId === 'gcode';
-                vscode.commands.executeCommand('setContext', 'gcodeViewEnabled', enabled);
+                vscode.commands.executeCommand('setContext', 'gcodeTreeViewEnabled', enabled);
 
                 if (enabled) {
                     this.editor = vscode.window.activeTextEditor;
@@ -57,7 +57,7 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
             }
         } else {
             //this.tree = [];
-            vscode.commands.executeCommand('setContext', 'gcodeViewEnabled', false);
+            vscode.commands.executeCommand('setContext', 'gcodeTreeViewEnabled', false);
             this.refresh();
             StatusBar.hideStatusBar();
         }
@@ -67,7 +67,7 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
         if (vscode.window.activeTextEditor) {
             if (vscode.window.activeTextEditor.document.uri.scheme === 'file') {
                 const enabled = vscode.window.activeTextEditor.document.languageId === 'gcode';
-                vscode.commands.executeCommand('setContext', 'gcodeViewEnabled', enabled);
+                vscode.commands.executeCommand('setContext', 'gcodeTreeViewEnabled', enabled);
 
                 if (enabled) {
                     this.editor = vscode.window.activeTextEditor;
@@ -77,7 +77,7 @@ export class GCodeTreeProvider implements vscode.TreeDataProvider<GCodeTreeNode>
                 }
             }
         } else {
-            vscode.commands.executeCommand('setContext', 'gcodeViewEnabled', false);
+            vscode.commands.executeCommand('setContext', 'gcodeTreeViewEnabled', false);
             this.refresh();
             StatusBar.hideStatusBar();
         }
