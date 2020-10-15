@@ -37,7 +37,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     vscode.commands.registerCommand('gcode.gcodeTree.refresh', () => {
         if (vscode.window.activeTextEditor?.document.languageId === constants.langId) {
-            vscode.commands.executeCommand('setContext', 'gcodeViewEnabled', true);
+            vscode.commands.executeCommand('setContext', 'gcodeTreeViewEnabled', true);
         }
         gcodeTree.refresh();        
     });
@@ -52,7 +52,10 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.window.registerTreeDataProvider('gcode.gcodeStats', gcodeStats);
 
     vscode.commands.registerCommand('gcode.gcodeStats.refresh', () => {
-        //gcodeStats.refresh();
+        if (vscode.window.activeTextEditor?.document.languageId === constants.langId) {
+            vscode.commands.executeCommand('setContext', 'gcodeStatsViewEnabled', true);
+        }
+        gcodeStats.refresh();
     });
     vscode.commands.registerCommand('gcode.gcodeStats.enable', () => {
         Logger.log('Enabling Stats...');
@@ -136,4 +139,5 @@ export function deactivate() {
     // Clean up
     Logger.close();
     StatusBar.dispose();
+    
 }

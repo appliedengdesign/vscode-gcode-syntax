@@ -3,25 +3,40 @@
  *  Licensed under the MIT License. See License.md in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 'use strict';
-import * as vscode from 'vscode';
+import { 
+    commands,
+    Event,
+    EventEmitter,
+    ExtensionContext,
+    TextDocumentChangeEvent,
+    TextEditor,
+    TreeDataProvider,
+    TreeItem,
+    TreeItemCollapsibleState,
+    window,
+    workspace 
+} from 'vscode';
+import { configuration } from '../util/config';
 
 
-export class GCodeStatsProvider implements vscode.TreeDataProvider<GCodeStatsNode> {
+export class GCodeStatsProvider implements TreeDataProvider<GCodeStatsNode> {
 
-    private _onDidChangeTreeData: vscode.EventEmitter<GCodeStatsNode | undefined> = new vscode.EventEmitter<GCodeStatsNode | undefined>();
-    readonly onDidChangeTreeData: vscode.Event<GCodeStatsNode | undefined> = this._onDidChangeTreeData.event;
+    private _onDidChangeTreeData: EventEmitter<GCodeStatsNode | undefined> = new EventEmitter<GCodeStatsNode | undefined>();
+    readonly onDidChangeTreeData: Event<GCodeStatsNode | undefined> = this._onDidChangeTreeData.event;
 
     private text = '';
     private tree: Array<GCodeStatsNode>;
-    private editor: vscode.TextEditor | undefined;
+    private editor: TextEditor | undefined;
     private autoRefresh = false;
 
-    constructor(private context: vscode.ExtensionContext) {
+    constructor(private context: ExtensionContext) {
 
         this.tree = [];
-        this.editor = vscode.window.activeTextEditor;
-        vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
-        vscode.workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
+        this.editor = window.activeTextEditor;
+        window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
+        workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
+
+        this.autoRefresh = configuration.getParam('statsAutoRefresh');
 
     }
 
@@ -33,39 +48,43 @@ export class GCodeStatsProvider implements vscode.TreeDataProvider<GCodeStatsNod
     }
 
     private onActiveEditorChanged(): void {
-        if (vscode.window.activeTextEditor) {
-            if (vscode.window.activeTextEditor.document.uri.scheme === 'file') {
-                const enabled = vscode.window.activeTextEditor.document.languageId === 'gcode';
-                vscode.commands.executeCommand('setContext', 'gcodeViewEnabled', enabled);
+        if (window.activeTextEditor) {
+            if (window.activeTextEditor.document.uri.scheme === 'file') {
+                const enabled = window.activeTextEditor.document.languageId === 'gcode';
+                commands.executeCommand('setContext', 'gcodeStatsViewEnabled', enabled);
 
                 if (enabled) {
-                    this.editor = vscode.window.activeTextEditor;
-                    this.refresh();
+                    this.editor = window.activeTextEditor;
+                    this.autoRefresh = configuration.getParam('statsAutoRefresh');
+                    if (this.autoRefresh) this.refresh();
                 }
             }
         } else {
-            vscode.commands.executeCommand('setContext', 'gcodeViewEnabled', false);
+            commands.executeCommand('setContext', 'gcodeStatsViewEnabled', false);
+            this.refresh();
         }
     }
 
-    private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent): void {
-        if (vscode.window.activeTextEditor) {
-            if (vscode.window.activeTextEditor.document.uri.scheme === 'file') {
-                const enabled = vscode.window.activeTextEditor.document.languageId === 'gcode';
-                vscode.commands.executeCommand('setContext', 'gcodeViewEnabled', enabled);
+    private onDocumentChanged(changeEvent: TextDocumentChangeEvent): void {
+        if (window.activeTextEditor) {
+            if (window.activeTextEditor.document.uri.scheme === 'file') {
+                const enabled = window.activeTextEditor.document.languageId === 'gcode';
+                commands.executeCommand('setContext', 'gcodeStatsViewEnabled', enabled);
 
                 if (enabled) {
-                    this.editor = vscode.window.activeTextEditor;
-                    this.refresh();
+                    this.editor = window.activeTextEditor;
+                    this.autoRefresh = configuration.getParam('statsAutoRefresh');
+                    if(this.autoRefresh) this.refresh();
                 }
             }
         } else {
-            vscode.commands.executeCommand('setContext', 'gcodeViewEnabled', false);
+            commands.executeCommand('setContext', 'gcodeStatsViewEnabled', false);
+            this.refresh();
         }
     }
 
-    getTreeItem(element: any): vscode.TreeItem {
-        return element[0];
+    getTreeItem(element: any): TreeItem {
+        return element;
     }
 
     getChildren(element?: GCodeStatsNode): Thenable<GCodeStatsNode[]> {
@@ -79,7 +98,7 @@ export class GCodeStatsProvider implements vscode.TreeDataProvider<GCodeStatsNod
 
         this.text = '';
         this.tree = [];
-        const editor = vscode.window.activeTextEditor;
+        const editor = window.activeTextEditor;
 
         if (editor && editor.document) {
             this.text = editor.document.getText();
@@ -95,17 +114,34 @@ export class GCodeStatsProvider implements vscode.TreeDataProvider<GCodeStatsNod
 
     private genStats(text: string): Array<GCodeStatsNode> {
 
+        const stats: Array<GCodeStatsNode> = []; 
+        
+        // Tool Changes
+        stats.push(this.getToolChanges(text));
 
 
-        return [];
+
+        return stats;
+    }
+
+    private getToolChanges(text: string):GCodeStatsNode {
+        const re = /(M0?6)/igm;
+        const num = text.match(re)?.length || 0;
+
+        const node: GCodeStatsNode = new GCodeStatsNode(
+            'Tool Changes: ' + num,
+            TreeItemCollapsibleState.None,
+        );
+
+        return node;
     }
 }
 
-export class GCodeStatsNode extends vscode.TreeItem {
+export class GCodeStatsNode extends TreeItem {
 
     constructor(
         public readonly label: string,
-        public readonly collapsibleState: vscode.TreeItemCollapsibleState,
+        public readonly collapsibleState: TreeItemCollapsibleState,
     ) {
         super (label, collapsibleState);
     }

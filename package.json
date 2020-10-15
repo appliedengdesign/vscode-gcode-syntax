@@ -141,7 +141,7 @@
                 },
                 "gcode.treeAutoRefresh": {
                     "type": "boolean",
-                    "default": false,
+                    "default": true,
                     "description": "Enable G-Code Tree Auto Refresh",
                     "scope": "window"
                 },
@@ -149,6 +149,12 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Enable G-Code Statistics Panel",
+                    "scope": "window"
+                },
+                "gcode.statsAutoRefresh": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable G-Code Stats Auto Refresh",
                     "scope": "window"
                 }
             }
@@ -173,6 +179,7 @@
                 {
                     "id": "gcode.gcodeStats",
                     "name": "G-Code Stats",
+                    "when": "config.gcode.statsEnable",
                     "contextualTitle": "G-Code",
                     "type": "tree"
                 }
@@ -182,12 +189,12 @@
             {
                 "view": "gcode.gcodeTree",
                 "contents": "Tree only available when viewing G-Code",
-                "when": "!gcodeViewEnabled"
+                "when": "!gcodeTreeViewEnabled"
             },
             {
                 "view": "gcode.gcodeStats",
-                "contents": "G-Code Stats are disabled\n[Enable Stats](command:gcode.gcodeStats.enable)\n",
-                "when": "!config.gcode.statsEnable"
+                "contents": "G-Code Stats only available when viewing G-Code",
+                "when": "!gcodeStatsViewEnabled && config.gcode.statsEnable"
             }
         ],
         "menus": {
