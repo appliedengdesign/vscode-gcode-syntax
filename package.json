@@ -3,7 +3,7 @@
     "displayName": "G-Code Syntax",
     "shortName": "G-Code",
     "description": "CNC G-Code Syntax Langauge",
-    "version": "0.3.3",
+    "version": "0.4.0",
     "license": "MIT",
     "publisher": "appliedengdesign",
     "author": {
@@ -12,7 +12,7 @@
     },
     "copyright": "Copyright (c) 2020 Applied Eng. & Design / Mike Centola",
     "engines": {
-        "vscode": "^1.44.0"
+        "vscode": "^1.50.0"
     },
     "categories": [
         "Programming Languages",

@@ -121,7 +121,7 @@ Please visit our [GitHub Issues](https://github.com/appliedengdesign/vscode-gcod
 
 ## Changelog
 
-Latest Version: v0.3.3
+Latest Version: v0.4.0
 
 Please refer to our [CHANGELOG](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CHANGELOG.md) doc.
 
