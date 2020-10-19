@@ -6,7 +6,7 @@
 import { Range, TreeItemCollapsibleState } from 'vscode';
 import {GCodeTreeNode} from './gcodeTree';
 
-export class GCodeParser {
+export class GCodeTreeParser {
 
     private blocks: Array<GCodeTreeNode>;
 

@@ -119,7 +119,7 @@ export class GCodeTreeProvider implements TreeDataProvider<GCodeTreeNode> {
         if (editor && editor.document) {
             this.text = editor.document.getText();
     
-            const parsed = new gcodeparser.GCodeParser(this.text);
+            const parsed = new gcodeparser.GCodeTreeParser(this.text);
             return parsed.getTree();
     
         } else {
