@@ -42,7 +42,9 @@
     },
     "main": "./out/extension.js",
     "activationEvents": [
-        "onLanguage:gcode"
+        "onLanguage:gcode",
+        "onView:gcode.gcodeTree",
+        "onView:gcode.gcodeStats"
     ],
     "contributes": {
         "languages": [
@@ -172,13 +174,13 @@
         "views": {
             "gcode": [
                 {
-                    "id": "gcode.gcodeTree",
+                    "id": "gcode.views.gcodeTree",
                     "name": "G-Code Tree",
                     "contextualTitle": "G-Code",
                     "type": "tree"
                 },
                 {
-                    "id": "gcode.gcodeStats",
+                    "id": "gcode.views.gcodeStats",
                     "name": "G-Code Stats",
                     "when": "config.gcode.statsEnable",
                     "contextualTitle": "G-Code",
@@ -188,12 +190,12 @@
         },
         "viewsWelcome": [
             {
-                "view": "gcode.gcodeTree",
+                "view": "gcode.views.gcodeTree",
                 "contents": "Tree only available when viewing G-Code",
                 "when": "!gcodeTreeViewEnabled"
             },
             {
-                "view": "gcode.gcodeStats",
+                "view": "gcode.views.gcodeStats",
                 "contents": "G-Code Stats only available when viewing G-Code",
                 "when": "!gcodeStatsViewEnabled && config.gcode.statsEnable"
             }
@@ -202,13 +204,28 @@
             "view/title": [
                 {
                     "command": "gcode.gcodeTree.refresh",
-                    "when": "view == gcode.gcodeTree",
+                    "when": "view == gcode.views.gcodeTree",
                     "group": "navigation"
                 },
                 {
                     "command": "gcode.gcodeStats.refresh",
-                    "when": "view == gcode.gcodeStats && config.gcode.statsEnable",
+                    "when": "view == gcode.views.gcodeStats && config.gcode.statsEnable",
                     "group": "navigation"
+                },
+                {
+                    "command": "gcode.supportGCode",
+                    "when": "view == gcode.views.gcodeTree",
+                    "group": "navigation"
+                }
+            ],
+            "commandPalette": [
+                {
+                    "command": "gcode.gcodeTree.refresh",
+                    "when": "false"
+                },
+                {
+                    "command": "gcode.gcodeStats.refresh",
+                    "when": "false"
                 }
             ]
         },
@@ -216,6 +233,7 @@
             {
                 "command": "gcode.gcodeTree.refresh",
                 "title": "G-Code: Refresh Tree",
+                "category": "G-Code",
                 "icon": {
                     "light": "resources/icons/light/refresh.svg",
                     "dark": "resources/icons/dark/refresh.svg"
@@ -224,9 +242,19 @@
             {
                 "command": "gcode.gcodeStats.refresh",
                 "title": "G-Code: Refresh Stats",
+                "category": "G-Code",
                 "icon": {
                     "light": "resources/icons/light/refresh.svg",
                     "dark": "resources/icons/dark/refresh.svg"
+                }
+            },
+            {
+                "command": "gcode.supportGCode",
+                "title": "Support G-Code Syntax ❤",
+                "category": "G-Code",
+                "icon": {
+                    "light": "resources/icons/light/heart.svg",
+                    "dark": "resources/icons/dark/heart.svg"
                 }
             }
         ]

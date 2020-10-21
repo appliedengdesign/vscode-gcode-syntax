@@ -21,7 +21,7 @@ export class Messages {
 
         const result = await Messages.showMessage(
             'info',
-            'G-Code Syntax is offered to everyone for free. If you find it useful, please consider [supporting]() it. Thank you!',
+            'G-Code Syntax is offered to everyone for free. If you find it useful, please consider [supporting](https://github.com/sponsors/appliedengdesign) it. Thank you! ❤',
             ...actions
         );
 

@@ -11,6 +11,7 @@ import { Logger } from './util/logger';
 import { StatusBar } from './util/statusBar';
 import { GCodeTreeProvider } from './providers/gcodeTree';
 import { GCodeStatsProvider } from './providers/gcodeStats';
+import { Command } from './util/commands';
 
 
 //import { GCodeHoverProvider } from './providers/gcodeHover';
@@ -34,7 +35,7 @@ export async function activate(context: ExtensionContext) {
     // G-Code Tree View
     Logger.log("Loading Tree View...");
     const gcodeTree = new GCodeTreeProvider(context);
-    window.registerTreeDataProvider('gcode.gcodeTree', gcodeTree);
+    window.registerTreeDataProvider('gcode.views.gcodeTree', gcodeTree);
 
     commands.registerCommand('gcode.gcodeTree.refresh', () => {
         if (window.activeTextEditor?.document.languageId === constants.langId) {
@@ -50,7 +51,7 @@ export async function activate(context: ExtensionContext) {
     // G-Code Stats View
     Logger.log("Loading Stats View...");
     const gcodeStats = new GCodeStatsProvider(context);
-    window.registerTreeDataProvider('gcode.gcodeStats', gcodeStats);
+    window.registerTreeDataProvider('gcode.views.gcodeStats', gcodeStats);
 
     commands.registerCommand('gcode.gcodeStats.refresh', () => {
         if (window.activeTextEditor?.document.languageId === constants.langId) {
@@ -68,6 +69,8 @@ export async function activate(context: ExtensionContext) {
     Logger.log('Stats: ' + (configuration.getParam('stats.enable') ? 'Enabled' : 'Disabled') );
     Logger.log('Stats AutoRefresh: ' + (configuration.getParam('stats.sutoRefresh') ? 'Enabled' : 'Disabled') );
 
+    Command.registerCommands(context);
+    
 
     /*
     context.subscriptions.push(
