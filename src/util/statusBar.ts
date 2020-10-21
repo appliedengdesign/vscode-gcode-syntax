@@ -15,7 +15,7 @@ import {
 export class StatusBar {
     static statusBar: StatusBarItem
 
-    static configure(context: ExtensionContext) {
+    static initialize(context: ExtensionContext) {
         this.statusBar = this.statusBar || window.createStatusBarItem( StatusBarAlignment.Right, 100 );
 
         context.subscriptions.push(this.statusBar);

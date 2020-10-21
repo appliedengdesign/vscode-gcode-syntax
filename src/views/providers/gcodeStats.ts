@@ -16,7 +16,8 @@ import {
     window,
     workspace 
 } from 'vscode';
-import { configuration } from '../util/config';
+import { configuration } from '../../util/config';
+import { GCodeStatsNode } from '../nodes/gcodeStatsNode';
 
 
 export class GCodeStatsProvider implements TreeDataProvider<GCodeStatsNode> {
@@ -137,13 +138,3 @@ export class GCodeStatsProvider implements TreeDataProvider<GCodeStatsNode> {
     }
 }
 
-export class GCodeStatsNode extends TreeItem {
-
-    constructor(
-        public readonly label: string,
-        public readonly collapsibleState: TreeItemCollapsibleState,
-    ) {
-        super (label, collapsibleState);
-    }
-
-}

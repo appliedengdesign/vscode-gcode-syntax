@@ -50,11 +50,11 @@ export abstract class Command implements Disposable{
 
     static registerCommands(context: ExtensionContext): void {
 
-        context.subscriptions.push(new supportGCodeCmd());
+        context.subscriptions.push(new SupportGCodeCmd());
     }
 }
 
-class supportGCodeCmd extends Command {
+class SupportGCodeCmd extends Command {
 
     constructor() {
         super(Commands.GCSUPPORT);

@@ -9,8 +9,8 @@ import { Config, configuration } from './util/config';
 import { constants } from './util/constants';
 import { Logger } from './util/logger';
 import { StatusBar } from './util/statusBar';
-import { GCodeTreeProvider } from './providers/gcodeTree';
-import { GCodeStatsProvider } from './providers/gcodeStats';
+import { GCodeTreeProvider } from './views/gcodeTree';
+import { GCodeStatsProvider } from './views/providers/gcodeStats';
 import { Command } from './util/commands';
 
 
@@ -22,12 +22,15 @@ export async function activate(context: ExtensionContext) {
 
     const start = process.hrtime();
 
-    Logger.configure(context);
+    // Initialize Logger
+    Logger.initialize(context);
     Logger.enable();
 
-    Config.configure(context);
+    // Initialize Config
+    Config.initialize(context);
 
-    StatusBar.configure(context);
+    // Initialize StatusBar
+    StatusBar.initialize(context);
 
     Logger.log(constants.extension.shortname + " v" + constants.extension.version + " activated.");
     Logger.log(constants.copyright);
@@ -46,7 +49,7 @@ export async function activate(context: ExtensionContext) {
     commands.registerCommand('gcode.gcodeTree.Selection', range => gcodeTree.select(range));
 
     
-    Logger.log('Tree AutoRefresh: ' + (configuration.getParam('tree.sutoRefresh') ? 'Enabled' : 'Disabled') );
+    Logger.log('Tree AutoRefresh: ' + (configuration.getParam('tree.autoRefresh') ? 'Enabled' : 'Disabled') );
 
     // G-Code Stats View
     Logger.log("Loading Stats View...");

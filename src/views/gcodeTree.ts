@@ -14,16 +14,14 @@ import {
     TextEditor, 
     TextEditorRevealType, 
     TreeDataProvider, 
-    TreeItem, 
-    TreeItemCollapsibleState, 
+    TreeItem,  
     window, 
     workspace 
 } from 'vscode';
-import * as path from 'path';
 import { configuration } from '../util/config';
-import * as gcodeparser from './gcodeParser';
-import { constants } from '../util/constants';
+import * as gcodeparser from './providers/gcodeTreeParser';
 import { StatusBar } from '../util/statusBar';
+import { GCodeTreeNode } from './nodes/gcodeTreeNode';
 
 
 export class GCodeTreeProvider implements TreeDataProvider<GCodeTreeNode> {
@@ -139,44 +137,3 @@ export class GCodeTreeProvider implements TreeDataProvider<GCodeTreeNode> {
 }
 
 
-export class GCodeTreeNode extends TreeItem {
-
-    constructor(
-        public readonly label: string,
-        public readonly collapsibleState: TreeItemCollapsibleState,
-    ) {
-        super(label, collapsibleState);
-    }
-
-    setIcon(type: string): void {
-
-        switch (type) {
-            case "toolchange":
-            case "rapid":    
-            case "cutting":
-            case "cwcutting":
-            case "ccwcutting":
-            case "coolanton":
-            case "coolantoff":
-            case "extsubprog":
-            case "localsubprog":
-            case "subprogreturn":
-            case "workoffset":
-            case "spindlecw":
-            case "spindleccw":
-                this.iconPath = {
-                    light: path.join(constants.iconsPath, 'light', type+'.svg'),
-                    dark: path.join(constants.iconsPath, 'dark', type+'.svg')
-                };
-                break;
-
-            default:
-                this.iconPath = {
-                    light: path.join(constants.iconsPath, 'light', 'gcode.svg'),
-                    dark: path.join(constants.iconsPath, 'dark', 'gcode.svg')
-                };
-        }
-
-    }
-
-}

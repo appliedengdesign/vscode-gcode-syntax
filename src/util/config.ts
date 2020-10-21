@@ -19,7 +19,7 @@ export class Config {
     private  config: WorkspaceConfiguration;
     //private settings: IgcodeSettings;
 
-    static configure(context: ExtensionContext) {
+    static initialize(context: ExtensionContext) {
         context.subscriptions.push(
             workspace.onDidChangeConfiguration(configuration.onConfigurationChanged, configuration)
         );

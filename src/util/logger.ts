@@ -10,7 +10,7 @@ import { constants } from './constants';
 export class Logger {
     static output: OutputChannel | undefined;
 
-    static configure(context: ExtensionContext) {
+    static initialize(context: ExtensionContext) {
         this.output = this.output || window.createOutputChannel(constants.extensionOutputChannelName);
     }
 

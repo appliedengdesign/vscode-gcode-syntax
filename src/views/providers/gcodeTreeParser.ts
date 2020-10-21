@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 import { Range, TreeItemCollapsibleState } from 'vscode';
-import {GCodeTreeNode} from './gcodeTree';
+import { GCodeTreeNode } from '../nodes/gcodeTreeNode';
 
 export class GCodeTreeParser {
 
