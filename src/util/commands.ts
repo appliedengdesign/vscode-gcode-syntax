@@ -8,12 +8,18 @@
 import { 
     commands, 
     Disposable, 
-    ExtensionContext 
+    ExtensionContext, 
+    window
 } from "vscode";
 import { Messages } from "./messages";
+import { constants } from './constants';
 
 enum Commands {
 
+    GCSTATSENABLE = 'gcode.gcodeStats.enable',
+    GCSTATSREFRESH = 'gcode.gcodeStats.refresh',
+    GCTREEREFRESH = 'gcode.gcodeTree.refresh',
+    GCTREESELECT = 'gcode.gcodeTree.selection',
     GCSUPPORT = 'gcode.supportGCode'
 }
 
