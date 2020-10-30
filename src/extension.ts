@@ -9,9 +9,10 @@ import { Config, configuration } from './util/config';
 import { constants } from './util/constants';
 import { Logger } from './util/logger';
 import { StatusBar } from './util/statusBar';
-import { GCodeTreeProvider } from './views/gcodeTree';
-import { GCodeStatsProvider } from './views/providers/gcodeStats';
-import { Command } from './util/commands';
+//import { GCodeTreeView } from './views/gcodeTreeView';
+import { GCommand } from './util/commands';
+import { config } from 'process';
+import { Control } from './control';
 
 
 //import { GCodeHoverProvider } from './providers/gcodeHover';
@@ -36,8 +37,8 @@ export async function activate(context: ExtensionContext) {
     Logger.log(constants.copyright);
 
     // G-Code Tree View
-    Logger.log("Loading Tree View...");
-    const gcodeTree = new GCodeTreeProvider(context);
+    /*Logger.log("Loading Tree View...");
+    const gcodeTree = new GCodeTreeView(context);
     window.registerTreeDataProvider('gcode.views.gcodeTree', gcodeTree);
 
     commands.registerCommand('gcode.gcodeTree.refresh', () => {
@@ -51,28 +52,11 @@ export async function activate(context: ExtensionContext) {
     
     Logger.log('Tree AutoRefresh: ' + (configuration.getParam('tree.autoRefresh') ? 'Enabled' : 'Disabled') );
 
-    // G-Code Stats View
-    Logger.log("Loading Stats View...");
-    const gcodeStats = new GCodeStatsProvider(context);
-    window.registerTreeDataProvider('gcode.views.gcodeStats', gcodeStats);
+*/
+    GCommand.registerCommands(context);
+    
 
-    commands.registerCommand('gcode.gcodeStats.refresh', () => {
-        if (window.activeTextEditor?.document.languageId === constants.langId) {
-            commands.executeCommand('setContext', 'gcodeStatsViewEnabled', true);
-        }
-        gcodeStats.refresh();
-    });
-    commands.registerCommand('gcode.gcodeStats.enable', () => {
-        Logger.log('Enabling Stats...');
-        configuration.setParam('stats.enable', true);
-
-        }
-    );
-
-    Logger.log('Stats: ' + (configuration.getParam('stats.enable') ? 'Enabled' : 'Disabled') );
-    Logger.log('Stats AutoRefresh: ' + (configuration.getParam('stats.sutoRefresh') ? 'Enabled' : 'Disabled') );
-
-    Command.registerCommands(context);
+    Control.initialize(context, configuration);
     
 
     /*

@@ -148,7 +148,7 @@
                     "markdowndescription": "Enable G-Code Tree Auto Refresh",
                     "scope": "window"
                 },
-                "gcode.stats.enable": {
+                "gcode.stats.enabled": {
                     "type": "boolean",
                     "default": false,
                     "markdowndescription": "Enable G-Code Statistics Panel",
@@ -195,9 +195,9 @@
                 "when": "!gcodeTreeViewEnabled"
             },
             {
-                "view": "gcode.views.gcodeStats",
+                "view": "gcode.views.stats",
                 "contents": "G-Code Stats only available when viewing G-Code",
-                "when": "!gcodeStatsViewEnabled && config.gcode.statsEnable"
+                "when": "!gcodeStatsViewEnabled && config.gcode.statsEnabled"
             }
         ],
         "menus": {
