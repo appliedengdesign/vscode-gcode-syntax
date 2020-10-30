@@ -6,6 +6,7 @@
 'use strict';
 
 import { 
+    Command,
     commands, 
     Disposable, 
     ExtensionContext, 
@@ -23,7 +24,7 @@ enum Commands {
     GCSUPPORT = 'gcode.supportGCode'
 }
 
-export abstract class Command implements Disposable{
+export abstract class GCommand implements  Disposable{
 
     private _disposable: Disposable;
 
@@ -54,7 +55,7 @@ export abstract class Command implements Disposable{
     }
 }
 
-class SupportGCodeCmd extends Command {
+class SupportGCodeCmd extends GCommand {
 
     constructor() {
         super(Commands.GCSUPPORT);

@@ -22,6 +22,7 @@ import { extensions } from 'vscode';
     },
     extensionOutputChannelName: gcode?.packageJSON.shortName,
     iconsPath: path.join(__dirname, "..", "..", "resources", "icons"),
+    iconExt: '.svg',
     langId: gcode?.packageJSON.contributes.languages[0].id,
     urls: {
         changeLog: 'https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CHANGELOG.md',

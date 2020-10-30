@@ -3,7 +3,14 @@
  *  Licensed under the MIT License. See License.md in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 'use strict';
-import { WorkspaceConfiguration, workspace, ExtensionContext, ConfigurationChangeEvent } from "vscode";
+import { 
+    WorkspaceConfiguration, 
+    workspace, 
+    ExtensionContext, 
+    ConfigurationChangeEvent, 
+    EventEmitter, 
+    Event
+} from "vscode";
 import { constants } from './constants';
 import { Logger } from "./logger";
 
@@ -18,6 +25,9 @@ type IgcodeSettings = {
 export class Config {
     private  config: WorkspaceConfiguration;
     //private settings: IgcodeSettings;
+
+    private _onDidChange = new EventEmitter<ConfigurationChangeEvent>();
+    readonly onDidChange: Event<ConfigurationChangeEvent> = this._onDidChange.event; 
 
     static initialize(context: ExtensionContext) {
         context.subscriptions.push(
@@ -34,10 +44,9 @@ export class Config {
     }
 
     private onConfigurationChanged(e: ConfigurationChangeEvent) {
-        if (!e.affectsConfiguration(constants.configId)) {
-            Logger.log('Configuration Updated.');
-            this.reloadConfig();
-        }
+        Logger.log('Configuration changed...');
+
+        this._onDidChange.fire(e);
     }
 
     private reloadConfig() {
@@ -64,6 +73,12 @@ export class Config {
         if (this.config !== undefined) {
             return true;
         } else return false;
+    }
+
+    changed(e: ConfigurationChangeEvent, ...args: any[]) {
+        const section: string = args[0];
+
+        return e.affectsConfiguration(`${constants.configId}.${section}`);
     }
 
 }
