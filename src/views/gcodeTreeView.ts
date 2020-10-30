@@ -21,16 +21,16 @@ import {
 import { configuration } from '../util/config';
 import * as gcodeparser from './providers/gcodeTreeParser';
 import { StatusBar } from '../util/statusBar';
-import { GCodeTreeNode } from './nodes/gcodeTreeNode';
+import { TreeNode } from './nodes/TreeNode';
 
 
-export class GCodeTreeProvider implements TreeDataProvider<GCodeTreeNode> {
+export class GCodeTreeView implements TreeDataProvider<TreeNode> {
 
-    private _onDidChangeTreeData: EventEmitter<GCodeTreeNode | undefined> = new EventEmitter<GCodeTreeNode | undefined>();
-    readonly onDidChangeTreeData: Event<GCodeTreeNode | undefined> = this._onDidChangeTreeData.event;
+    private _onDidChangeTreeData: EventEmitter<TreeNode | undefined> = new EventEmitter<TreeNode | undefined>();
+    readonly onDidChangeTreeData: Event<TreeNode | undefined> = this._onDidChangeTreeData.event;
 
     private text = '';
-    private tree: Array<GCodeTreeNode>;
+    private tree: Array<TreeNode>;
     private editor: TextEditor | undefined;
     private autoRefresh = false;
 
@@ -101,14 +101,14 @@ export class GCodeTreeProvider implements TreeDataProvider<GCodeTreeNode> {
         return element[0];
     }
 
-    getChildren(element?: GCodeTreeNode): Thenable<GCodeTreeNode[]> {
+    getChildren(element?: TreeNode): Thenable<TreeNode[]> {
 
         return Promise.resolve(this.parseTree());
 
         
     }
 
-    private parseTree(): GCodeTreeNode[] {
+    private parseTree(): TreeNode[] {
 
         this.text = '';
         this.tree = [];
