@@ -12,6 +12,8 @@ import {
     TreeItemCollapsibleState, 
     Uri 
 } from "vscode";
+import { StatsNode } from "./StatsNode";
+import { TreeNode } from "./TreeNode";
 
 export enum ResourceType {
     Stats = 'gcode:stats',
@@ -42,9 +44,9 @@ export interface Node {
     refresh?(): void | boolean | Promise<void> | Promise<boolean>;
 }
 
-export abstract class ViewNode extends TreeItem  implements Node {
+export type NodeTypes = TreeNode | StatsNode;
 
-    protected _children: ViewNode[] | ViewNode | undefined;
+export abstract class ViewNode<NType extends NodeTypes = NodeTypes> extends TreeItem  implements Node {
 
     constructor(
         private  _name: string,
@@ -59,7 +61,8 @@ export abstract class ViewNode extends TreeItem  implements Node {
                     light: string | Uri;
                     dark: string | Uri;
             }
-            | ThemeIcon
+            | ThemeIcon,
+        protected readonly parent?: ViewNode
     ) {
         super(_name);
 
@@ -78,6 +81,10 @@ export abstract class ViewNode extends TreeItem  implements Node {
     
     getChildren(): ViewNode[] | Promise<ViewNode[]> {
         return [];
+    }
+
+    getParent(): ViewNode | undefined {
+        return this.parent;
     }
 
     abstract getTreeItem(): ViewNode | Promise<ViewNode>
@@ -101,7 +108,7 @@ export abstract class ViewNode extends TreeItem  implements Node {
                     dark: string | Uri;
                 }
                 | ThemeIcon;
-        }
+        },
     ) {
         if (changes.name !== undefined) this._name = changes.name;
 
@@ -110,6 +117,8 @@ export abstract class ViewNode extends TreeItem  implements Node {
         if (changes.tooltip !== undefined) this._tooltip = changes.tooltip;
 
         if (changes.iconPath !== undefined) this._iconPath = changes.iconPath;
+
+
     }
 }
 

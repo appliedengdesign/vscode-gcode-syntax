@@ -17,6 +17,7 @@ export enum StatsType {
 
 export class StatsNode extends ViewNode {
 
+    private _children: ViewNode[] = [];
 
     constructor(
         private type: StatsType,
@@ -49,4 +50,8 @@ export class StatsNode extends ViewNode {
         return this;
     }
   
+    getChildren(): ViewNode[] {
+        return this._children;
+    }
+
 }

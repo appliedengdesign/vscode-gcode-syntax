@@ -18,7 +18,7 @@ export class Control {
     private static _statsView: GCodeStatsView | undefined;
     static get statsView() {
         if (this._statsView == undefined) {
-            this._context.subscriptions.push((this._statsView = new GCodeStatsView()));
+            this._context.subscriptions.push((this._statsView = new GCodeStatsView(this._context)));
         }
 
         return this._statsView;
@@ -35,7 +35,7 @@ export class Control {
 
         if (config.getParam('stats.enabled')){
             Logger.log("Loading Stats View...");
-            context.subscriptions.push((this._statsView = new GCodeStatsView()));
+            context.subscriptions.push((this._statsView = new GCodeStatsView(this._context)));
         } else {
             let disposable: Disposable;
             // eslint-disable-next-line prefer-const
@@ -43,7 +43,7 @@ export class Control {
                 if (configuration.changed(e, 'stats.enabled')) {
                     disposable.dispose();
                     Logger.log("Loading Stats View...");
-                    context.subscriptions.push((this._statsView = new GCodeStatsView()));
+                    context.subscriptions.push((this._statsView = new GCodeStatsView(this._context)));
                 }
             });
         }

@@ -9,32 +9,36 @@ import {
     Disposable, 
     Event, 
     EventEmitter, 
+    TextDocumentChangeEvent, 
+    TextEditor, 
     TreeDataProvider, 
     TreeItem, 
     TreeItemCollapsibleState, 
     TreeView, 
     TreeViewExpansionEvent, 
     TreeViewVisibilityChangeEvent, 
-    window
+    window,
+    workspace
 } from "vscode";
-import { GCodeStatsView } from "./gcodeStatsView";
-import { GCodeTreeView } from "./gcodeTreeView";
-import { ViewNode } from "./nodes/nodes";
+import { Control } from "../control";
+import { configuration } from "../util/config";
+import { NodeTypes, ViewNode } from "./nodes/nodes";
 
-export abstract class GView<ViewNode> implements TreeDataProvider<ViewNode>, Disposable {
+export abstract class GView<TRoot extends ViewNode<NodeTypes>> implements TreeDataProvider<ViewNode>, Disposable {
 
     protected _disposable: Disposable | undefined;
-    protected _root: ViewNode | ViewNode[] | undefined;
+    protected _root: TRoot | undefined;
     protected _tree: TreeView<ViewNode> | undefined;
+    protected _editor: TextEditor | undefined;
+    protected _autoRefresh: boolean | undefined;
 
     protected _onDidChangeTreeData: EventEmitter<ViewNode | undefined> = new EventEmitter<ViewNode | undefined>();
     readonly onDidChangeTreeData: Event<ViewNode | undefined> = this._onDidChangeTreeData.event;
 
+
     protected abstract getRoot(): ViewNode;
 
-    constructor(public readonly id: string, public readonly name: string) {
-        this.initialize();
-    }
+    constructor(public readonly id: string, public readonly name: string) {}
 
     protected ensureRoot() {
         if (this._root === undefined) this.getRoot();
@@ -45,7 +49,7 @@ export abstract class GView<ViewNode> implements TreeDataProvider<ViewNode>, Dis
     protected initialize(options: { showCollapseAll?: boolean } = {}) {
         if (this._disposable) {
             this._disposable.dispose();
-            
+            this._onDidChangeTreeData = new EventEmitter<ViewNode>();
         }
 
         this._tree = window.createTreeView(
@@ -53,11 +57,21 @@ export abstract class GView<ViewNode> implements TreeDataProvider<ViewNode>, Dis
             {
                 ...options,
                 treeDataProvider: this
-        });
+            }
+        );
+
+        Control.context.subscriptions.push(configuration.onDidChange(this.onConfigurationChanged, this));
+
+        workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
 
         this._disposable = Disposable.from(
             this._tree
         );
+
+    }
+
+    dispose() {
+        this._disposable && this._disposable.dispose();
     }
 
 
@@ -65,32 +79,23 @@ export abstract class GView<ViewNode> implements TreeDataProvider<ViewNode>, Dis
         return element;
     }
 
-    getChildren(element?: <ViewNode>): ViewNode[] | Promise<ViewNode[]> | undefined {
+    getChildren(element?: ViewNode): ViewNode[] | Promise<ViewNode[]> | undefined {
 
-        if (element !== undefined) {
-            if (element.hasChildren())
-        }
-
-        if (this._root === undefined) {
-            this.getRoot();
-            return this._root?.getChildren();
-        }
-        
+        const root = this.ensureRoot();
+        return root?.getChildren();
     }
 
-    dispose() {
-        this._disposable && this._disposable.dispose();
+    getParent(element: ViewNode): ViewNode | undefined {
+        return element.getParent();
     }
 
-    async refresh(element?: ViewNode): Promise<void> {
-        if (this._root !== undefined && this._root.refresh !== undefined) {
-            await this._root.refresh();
-        }
-
-        return Promise.resolve(this._onDidChangeTreeData.fire(undefined));
-    }
+    protected abstract async refresh(element?: ViewNode): Promise<void> 
 
     getQualifiedCommand(cmd: string) {
         return `${this.id}.${cmd}`;
     }
+
+    abstract onDocumentChanged(changeEvent: TextDocumentChangeEvent): void 
+
+    protected abstract onConfigurationChanged(e: ConfigurationChangeEvent): void
 }

@@ -175,16 +175,14 @@
             "gcode": [
                 {
                     "id": "gcode.views.gcodeTree",
-                    "name": "G-Code Tree",
-                    "contextualTitle": "G-Code",
-                    "type": "tree"
+                    "name": "Tree",
+                    "contextualTitle": "G-Code"
                 },
                 {
-                    "id": "gcode.views.gcodeStats",
-                    "name": "G-Code Stats",
+                    "id": "gcode.views.stats",
+                    "name": "Stats",
                     "when": "config.gcode.statsEnable",
-                    "contextualTitle": "G-Code",
-                    "type": "tree"
+                    "contextualTitle": "G-Code"
                 }
             ]
         },
@@ -209,7 +207,7 @@
                 },
                 {
                     "command": "gcode.gcodeStats.refresh",
-                    "when": "view == gcode.views.gcodeStats && config.gcode.statsEnable",
+                    "when": "view == gcode.views.stats && config.gcode.statsEnable",
                     "group": "navigation"
                 },
                 {
