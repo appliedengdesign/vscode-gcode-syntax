@@ -4,13 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
-import { NODATA } from "dns";
-import { config } from "process";
 import { 
     commands,
     ConfigurationChangeEvent,
     ExtensionContext,
     TextDocumentChangeEvent,
+    TextEditor,
     TreeItemCollapsibleState,
     window 
 } from "vscode";
@@ -18,16 +17,16 @@ import { configuration } from "../util/config";
 import { constants } from "../util/constants";
 import { Logger } from "../util/logger";
 import { ResourceType } from "./nodes/nodes";
-import { StatsNode, StatsType } from "./nodes/StatsNode";
+import { StatsNode, StatsType } from "./nodes/statsNode";
 import { GView } from "./views";
 
-enum StatsView {
+enum StatsViewInfo {
     ID = 'gcode.views.stats',
     NAME = 'Stats'
 }
 
 
-export class GCodeStatsView extends GView<StatsNode> {
+export class StatsView extends GView<StatsNode> {
 
     private _children: StatsNode[] | undefined;
 
@@ -37,8 +36,9 @@ export class GCodeStatsView extends GView<StatsNode> {
     };
 
     constructor(private context: ExtensionContext) {
-        super(StatsView.ID, StatsView.NAME);
+        super(StatsViewInfo.ID, StatsViewInfo.NAME);
 
+        this._editor = window.activeTextEditor;
 
         this.initialize();
 
@@ -90,16 +90,42 @@ export class GCodeStatsView extends GView<StatsNode> {
         return this._children;
     }
 
+    onActiveEditorChanged(editor: TextEditor):void {
+        if (window.activeTextEditor) {
+            this._editor = window.activeTextEditor;
+
+            if (this._editor.document.uri.scheme === 'file') {
+
+                const enabled = this._editor.document.languageId === 'gcode';
+                commands.executeCommand('setContext', 'statsEnabled', enabled);
+
+                if (enabled) {
+                    this._editor = window.activeTextEditor;
+                    this._autoRefresh = configuration.getParam('stats.autoRefresh');
+
+                    if (this._autoRefresh) this.refresh();
+                }
+            }
+        } else {
+            commands.executeCommand('setContext', 'statsEnabled', false);
+        }
+    }
+
     onDocumentChanged(changeEvent: TextDocumentChangeEvent) {
-        if (window.activeTextEditor && window.activeTextEditor.document.uri.scheme === 'file') {
+        if (window.activeTextEditor) {
+            this._editor = window.activeTextEditor;
 
-            const enabled = window.activeTextEditor.document.languageId === 'gcode';
-            commands.executeCommand('setContext', 'statsViewEnabled', enabled);
+            if (this._editor.document.uri.scheme === 'file') {
 
-            if (enabled) {
-                this._editor = window.activeTextEditor;
-                
+                const enabled = this._editor.document.languageId === 'gcode';
+                commands.executeCommand('setContext', 'statsEnabled', enabled);
 
+                if (enabled) {
+                    this._editor = window.activeTextEditor;
+                    this._autoRefresh = configuration.getParam('stats.autoRefresh');
+
+                    if (this._autoRefresh) this.refresh();
+                }
             }
         }
     }
@@ -136,24 +162,23 @@ export class GCodeStatsView extends GView<StatsNode> {
     }
 
     protected async refresh( element?: StatsNode): Promise<void> {
-        this.genStats();
+        if (this.genStats()) {
 
-        if (element) {
-            return Promise.resolve(this._onDidChangeTreeData.fire(element));
-        } else {
-            return Promise.resolve(this._onDidChangeTreeData.fire(undefined));
+            if (element) {
+                return Promise.resolve(this._onDidChangeTreeData.fire(element));
+            } else {
+                return Promise.resolve(this._onDidChangeTreeData.fire(undefined));
+            }
         }
     }
 
     private genStats(): boolean {
 
-        const editor = window.activeTextEditor;
-
         this._children = [];
 
-        if (editor && editor.document) {
+        if (this._editor && this._editor.document) {
 
-            const text = editor.document.getText();
+            const text = this._editor.document.getText();
 
             if (this.updateToolChanges(text)) {
                 this._children.push(
