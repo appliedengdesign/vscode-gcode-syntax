@@ -12,8 +12,8 @@ import {
     TreeItemCollapsibleState, 
     Uri 
 } from "vscode";
-import { StatsNode } from "./StatsNode";
-import { TreeNode } from "./TreeNode";
+import { StatsNode } from "./statsNode";
+import { NavTreeNode } from "./navTreeNode";
 
 export enum ResourceType {
     Stats = 'gcode:stats',
@@ -44,7 +44,7 @@ export interface Node {
     refresh?(): void | boolean | Promise<void> | Promise<boolean>;
 }
 
-export type NodeTypes = TreeNode | StatsNode;
+export type NodeTypes = NavTreeNode | StatsNode;
 
 export abstract class ViewNode<NType extends NodeTypes = NodeTypes> extends TreeItem  implements Node {
 

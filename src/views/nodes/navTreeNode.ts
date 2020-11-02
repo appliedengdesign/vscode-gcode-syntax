@@ -10,7 +10,7 @@ import * as path from 'path';
 import { IconType, ResourceType, ViewNode } from './nodes';
 
 
-export class TreeNode extends ViewNode {
+export class NavTreeNode extends ViewNode {
 
   constructor(
         public readonly label: string,

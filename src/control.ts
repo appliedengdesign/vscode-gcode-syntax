@@ -8,17 +8,17 @@
 import { Disposable, ExtensionContext } from "vscode";
 import { Config, configuration } from "./util/config";
 import { Logger } from "./util/logger";
-import { GCodeStatsView } from "./views/gcodeStatsView";
+import { StatsView } from "./views/statsView";
 
 export class Control {
 
     private static _config: Config | undefined;
     private static _context: ExtensionContext;
 
-    private static _statsView: GCodeStatsView | undefined;
+    private static _statsView: StatsView | undefined;
     static get statsView() {
         if (this._statsView == undefined) {
-            this._context.subscriptions.push((this._statsView = new GCodeStatsView(this._context)));
+            this._context.subscriptions.push((this._statsView = new StatsView(this._context)));
         }
 
         return this._statsView;
@@ -35,7 +35,7 @@ export class Control {
 
         if (config.getParam('stats.enabled')){
             Logger.log("Loading Stats View...");
-            context.subscriptions.push((this._statsView = new GCodeStatsView(this._context)));
+            context.subscriptions.push((this._statsView = new StatsView(this._context)));
         } else {
             let disposable: Disposable;
             // eslint-disable-next-line prefer-const
@@ -43,7 +43,7 @@ export class Control {
                 if (configuration.changed(e, 'stats.enabled')) {
                     disposable.dispose();
                     Logger.log("Loading Stats View...");
-                    context.subscriptions.push((this._statsView = new GCodeStatsView(this._context)));
+                    context.subscriptions.push((this._statsView = new StatsView(this._context)));
                 }
             });
         }
