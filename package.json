@@ -142,7 +142,7 @@
                     "markdownDescription": "Configure G-Code Extension for a Specific Machine Type",
                     "scope": "window"
                 },
-                "gcode.tree.autoRefresh": {
+                "gcode.navTree.autoRefresh": {
                     "type": "boolean",
                     "default": true,
                     "markdowndescription": "Enable G-Code Tree Auto Refresh",
@@ -174,7 +174,7 @@
         "views": {
             "gcode": [
                 {
-                    "id": "gcode.views.gcodeTree",
+                    "id": "gcode.views.navTree",
                     "name": "Tree",
                     "contextualTitle": "G-Code"
                 },
@@ -188,14 +188,14 @@
         },
         "viewsWelcome": [
             {
-                "view": "gcode.views.gcodeTree",
+                "view": "gcode.views.navTree",
                 "contents": "Tree only available when viewing G-Code",
-                "when": "!gcodeTreeViewEnabled"
+                "when": "!navTreeEnabled"
             },
             {
                 "view": "gcode.views.stats",
                 "contents": "G-Code Stats only available when viewing G-Code",
-                "when": "!gcodeStatsViewEnabled && config.gcode.statsEnabled"
+                "when": "!statsEnabled && config.gcode.statsEnabled"
             }
         ],
         "menus": {

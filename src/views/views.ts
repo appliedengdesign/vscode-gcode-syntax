@@ -36,7 +36,7 @@ export abstract class GView<TRoot extends ViewNode<NodeTypes>> implements TreeDa
     readonly onDidChangeTreeData: Event<ViewNode | undefined> = this._onDidChangeTreeData.event;
 
 
-    protected abstract getRoot(): ViewNode;
+    protected abstract getRoot(): ViewNode | undefined;
 
     constructor(public readonly id: string, public readonly name: string) {}
 
@@ -62,6 +62,7 @@ export abstract class GView<TRoot extends ViewNode<NodeTypes>> implements TreeDa
 
         Control.context.subscriptions.push(configuration.onDidChange(this.onConfigurationChanged, this));
 
+        window.onDidChangeActiveTextEditor(e => this.onActiveEditorChanged(e));
         workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
 
         this._disposable = Disposable.from(
@@ -95,7 +96,9 @@ export abstract class GView<TRoot extends ViewNode<NodeTypes>> implements TreeDa
         return `${this.id}.${cmd}`;
     }
 
-    abstract onDocumentChanged(changeEvent: TextDocumentChangeEvent): void 
+    protected abstract onDocumentChanged(changeEvent: TextDocumentChangeEvent): void 
+
+    protected abstract onActiveEditorChanged(editor: TextEditor | undefined): void
 
     protected abstract onConfigurationChanged(e: ConfigurationChangeEvent): void
 }

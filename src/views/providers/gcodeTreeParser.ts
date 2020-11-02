@@ -4,11 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 import { Range, TreeItemCollapsibleState } from 'vscode';
-import { TreeIconType, TreeNode } from '../nodes/TreeNode';
+import { NavTreeNode } from '../nodes/NavTreeNode';
+import { IconType } from '../nodes/nodes';
 
 export class GCodeTreeParser {
 
-    private blocks: Array<TreeNode>;
+    private blocks: Array<NavTreeNode>;
 
     constructor( readonly text: string) {
     
@@ -16,7 +17,7 @@ export class GCodeTreeParser {
 
     }
 
-    getTree(): Array<TreeNode> {
+    getTree(): Array<NavTreeNode> {
         return this.blocks;
     }
 
@@ -45,10 +46,10 @@ export class GCodeTreeParser {
     }
 
     // Parse Line for Blocks
-    private parseLine(line: string, lnum:number): Array<TreeNode> {
+    private parseLine(line: string, lnum:number): Array<NavTreeNode> {
 
-        const blocks: Array<TreeNode> = [];
-        let node: TreeNode;
+        const blocks: Array<NavTreeNode> = [];
+        let node: NavTreeNode;
         let x: number;
         const len = line.length;
         
@@ -75,12 +76,12 @@ export class GCodeTreeParser {
                     // Rapid Motion
                     case '00':
                     case '0' : 
-                       node = new TreeNode(
+                       node = new NavTreeNode(
                             'Rapid', 
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G00] Rapid Motion';
-                        node.setIcon(TreeIconType.RAPID);
+                        node.setIcon(IconType.RAPID);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -93,12 +94,12 @@ export class GCodeTreeParser {
                     // Linear / Cutting
                     case '01':
                     case '1' : 
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'Cutting', 
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G01] Linear]';
-                        node.setIcon(TreeIconType.CUTTING);
+                        node.setIcon(IconType.CUTTING);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -111,12 +112,12 @@ export class GCodeTreeParser {
                     // CW Motion
                     case '02':
                     case '2' : 
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'CW Cutting', 
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G02] CW Interpolation';
-                        node.setIcon(TreeIconType.CWCUTTING);
+                        node.setIcon(IconType.CWCUTTING);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -129,12 +130,12 @@ export class GCodeTreeParser {
                     // CCW Motion
                     case '03':
                     case '3' :
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'CCW Cutting', 
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G03] CCW Interpolation';
-                        node.setIcon(TreeIconType.CCWCUTTING);
+                        node.setIcon(IconType.CCWCUTTING);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -171,12 +172,12 @@ export class GCodeTreeParser {
                     case '127':
                     case '128':
                     case '129':
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'Work Offset' + ' (G' + argument + ')', 
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G' + argument + '] Work Offset';
-                        node.setIcon(TreeIconType.WORKOFFSET);
+                        node.setIcon(IconType.WORKOFFSET);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -188,12 +189,12 @@ export class GCodeTreeParser {
                     
                     // Extended Work Offsets
                     case '154':
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'Work Offset' + ' (G154 ' + words[i + 1] + ')',
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G154 ' + words[i + 1] + '] Work Offset';
-                        node.setIcon(TreeIconType.WORKOFFSET);
+                        node.setIcon(IconType.WORKOFFSET);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -205,12 +206,12 @@ export class GCodeTreeParser {
 
                     // Extended Work Offsets
                     case '54.1':
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'Work Offset' + ' (G54.1 ' + words[i + 1] + ')',
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G54.1 ' + words[i + 1] + '] Work Offset';
-                        node.setIcon(TreeIconType.WORKOFFSET);
+                        node.setIcon(IconType.WORKOFFSET);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -222,12 +223,12 @@ export class GCodeTreeParser {
                     
                     // Okuma Work Offsets
                     case '15':
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'Work Offset' + ' (G15 ' + words[i + 1] + ')',
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G15 ' + words[i + 1] + '] Work Offset';
-                        node.setIcon(TreeIconType.WORKOFFSET);
+                        node.setIcon(IconType.WORKOFFSET);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -239,12 +240,12 @@ export class GCodeTreeParser {
                     
                     // External Sub Program
                     case '65':
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'Ext Subprogram', 
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = '[G65] Ext Subprogram Call';
-                        node.setIcon(TreeIconType.EXTSUBPROG);
+                        node.setIcon(IconType.EXTSUBPROG);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -267,12 +268,12 @@ export class GCodeTreeParser {
                     case '03':
                     case '3' :
                         if (i == 0) { x = 1; } else { x = -1; }
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'Spindle On ' + words[i + x].substr(1) + 'RPM' + ' CW',
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Spindle On Clockwise (' + words[i + x].substr(1) + 'RPM)';
-                        node.setIcon(TreeIconType.SPINDLECW);
+                        node.setIcon(IconType.SPINDLECW);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -286,12 +287,12 @@ export class GCodeTreeParser {
                     case '04':
                     case '4':
                         if (i == 0) { x = 1; } else { x = -1; }
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'Spindle On ' + words[i + x].substr(1) + 'RPM' + ' CCW',
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Spindle On Counter Clockwise (' + words[i + x].substr(1) + 'RPM)';
-                        node.setIcon(TreeIconType.SPINDLECCW);
+                        node.setIcon(IconType.SPINDLECCW);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -304,12 +305,12 @@ export class GCodeTreeParser {
                     // Tool Change
                     case '06':
                     case '6' :
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'Tool Change', 
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Tool Change';
-                        node.setIcon(TreeIconType.TOOLCHANGE);
+                        node.setIcon(IconType.TOOLCHANGE);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -323,12 +324,12 @@ export class GCodeTreeParser {
                     // Coolant On
                     case '08':
                     case '8' :
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'Coolant On', 
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Coolant Turned On';
-                        node.setIcon(TreeIconType.COOLANTON);
+                        node.setIcon(IconType.COOLANTON);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -341,12 +342,12 @@ export class GCodeTreeParser {
                     // Coolant Off
                     case '09':
                     case '9' : 
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'Coolant Off', 
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Coolant Turned Off';
-                        node.setIcon(TreeIconType.COOLANTOFF);
+                        node.setIcon(IconType.COOLANTOFF);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -358,12 +359,12 @@ export class GCodeTreeParser {
                     
                     // Local Subprogram
                     case '97':
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'Local Sub Call', 
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Local Subprogram Call';
-                        node.setIcon(TreeIconType.LOCALSUB);
+                        node.setIcon(IconType.LOCALSUB);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
@@ -375,12 +376,12 @@ export class GCodeTreeParser {
 
                     // Local Subprogram
                     case '99':
-                        node = new TreeNode(
+                        node = new NavTreeNode(
                             'Local Sub Return', 
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = 'Local Subprogram Return';
-                        node.setIcon(TreeIconType.SUBPROGRET);
+                        node.setIcon(IconType.SUBPROGRET);
                         node.command = {
                             command: 'gcode.gcodeTree.Selection',
                             title: "",
