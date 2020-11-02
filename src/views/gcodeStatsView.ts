@@ -166,6 +166,8 @@ export class GCodeStatsView extends GView<StatsNode> {
                         'Tool Changes'
                     )
                 );
+
+                return true;
             }
 
 
