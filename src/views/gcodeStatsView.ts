@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
+import { NODATA } from "dns";
 import { config } from "process";
 import { 
     commands,
@@ -69,12 +70,21 @@ export class GCodeStatsView extends GView<StatsNode> {
             this._children = 
             [new StatsNode(
                 StatsType.TOOLCHANGES,
-                'Tool Changes',
+                'Tool Changes: ' + this._stats.toolchanges,
                 undefined,
                 ResourceType.Stats,
                 TreeItemCollapsibleState.None,
                 undefined
-            )];
+            ),
+            new StatsNode(
+                StatsType.RUNTIME,
+                "Runtime: " + this._stats.runtime,
+                undefined,
+                ResourceType.Stats,
+                TreeItemCollapsibleState.None,
+                undefined
+            )
+        ];
         } 
         
         return this._children;
@@ -106,7 +116,7 @@ export class GCodeStatsView extends GView<StatsNode> {
             this.getQualifiedCommand('refresh'),
             () => {
                 if (window.activeTextEditor?.document.languageId === constants.langId) {
-                    commands.executeCommand('setContext', 'gcodeStatsViewEnabled', true);
+                    commands.executeCommand('setContext', 'StatsViewEnabled', true);
                 }
 
                 this.refresh();
@@ -139,13 +149,26 @@ export class GCodeStatsView extends GView<StatsNode> {
 
         const editor = window.activeTextEditor;
 
+        this._children = [];
+
         if (editor && editor.document) {
 
             const text = editor.document.getText();
 
-            return (
-                this.updateToolChanges(text)
-            );
+            if (this.updateToolChanges(text)) {
+                this._children.push(
+                    new StatsNode(
+                        StatsType.TOOLCHANGES,
+                        'Tool Changes: ' + this._stats.toolchanges,
+                        undefined,
+                        ResourceType.Stats,
+                        TreeItemCollapsibleState.None,
+                        'Tool Changes'
+                    )
+                );
+            }
+
+
         }
 
         return false;

@@ -12,7 +12,8 @@ import * as path from 'path';
 
 export enum StatsType {
     ROOT,
-    TOOLCHANGES
+    TOOLCHANGES,
+    RUNTIME
 }
 
 export class StatsNode extends ViewNode {

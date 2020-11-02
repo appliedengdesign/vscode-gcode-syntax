@@ -206,7 +206,7 @@
                     "group": "navigation"
                 },
                 {
-                    "command": "gcode.gcodeStats.refresh",
+                    "command": "gcode.views.stats.refresh",
                     "when": "view == gcode.views.stats && config.gcode.statsEnable",
                     "group": "navigation"
                 },
@@ -222,7 +222,7 @@
                     "when": "false"
                 },
                 {
-                    "command": "gcode.gcodeStats.refresh",
+                    "command": "gcode.views.stats.refresh",
                     "when": "false"
                 }
             ]
@@ -238,7 +238,7 @@
                 }
             },
             {
-                "command": "gcode.gcodeStats.refresh",
+                "command": "gcode.views.stats.refresh",
                 "title": "G-Code: Refresh Stats",
                 "category": "G-Code",
                 "icon": {
