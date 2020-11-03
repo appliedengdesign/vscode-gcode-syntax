@@ -152,15 +152,15 @@
         "tools": {
             "patterns": [
                 {
-                    "match": "([dD])(?=-|\\d|\\[|#|\\.)-?(?:\\d+(?:\\.\\d*)|(?:\\.(?:\\d*))?)?",
+                    "match": "[dD][0-9]+",
                     "name": "constant.character.gcode"
                 },
                 {
-                    "match": "([hH])(?=-|\\d|\\[|#|\\.)-?(?:\\d+(?:\\.\\d*)|(?:\\.(?:\\d*))?)?",
+                    "match": "[hH][0-9]+",
                     "name": "constant.character.gcode"
                 },
                 {
-                    "match": "([tT])(?=-|\\d|\\[|#|\\.)-?(?:\\d+(?:\\.\\d*)|(?:\\.(?:\\d*))?)?",
+                    "match": "[tT][0-9]+",
                     "name": "constant.character.gcode"
                 }
             ]
