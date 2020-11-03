@@ -201,8 +201,8 @@
         "menus": {
             "view/title": [
                 {
-                    "command": "gcode.gcodeTree.refresh",
-                    "when": "view == gcode.views.gcodeTree",
+                    "command": "gcode.views.navTree.refresh",
+                    "when": "view == gcode.views.navTree",
                     "group": "navigation"
                 },
                 {
@@ -212,13 +212,13 @@
                 },
                 {
                     "command": "gcode.supportGCode",
-                    "when": "view == gcode.views.gcodeTree",
+                    "when": "view == gcode.views.navTree",
                     "group": "navigation"
                 }
             ],
             "commandPalette": [
                 {
-                    "command": "gcode.gcodeTree.refresh",
+                    "command": "gcode.views.navTree.refresh",
                     "when": "false"
                 },
                 {
@@ -229,7 +229,7 @@
         },
         "commands": [
             {
-                "command": "gcode.gcodeTree.refresh",
+                "command": "gcode.views.navTree.refresh",
                 "title": "G-Code: Refresh Tree",
                 "category": "G-Code",
                 "icon": {

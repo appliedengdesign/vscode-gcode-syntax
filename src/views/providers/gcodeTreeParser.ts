@@ -9,7 +9,7 @@ import { IconType } from '../nodes/nodes';
 
 export class GCodeTreeParser {
 
-    private blocks: Array<NavTreeNode>;
+    private blocks: NavTreeNode[];
 
     constructor( readonly text: string) {
     
@@ -17,14 +17,14 @@ export class GCodeTreeParser {
 
     }
 
-    getTree(): Array<NavTreeNode> {
+    getTree(): NavTreeNode[] {
         return this.blocks;
     }
 
     // Split Text into Blocks by newline or ;
-    private getBlocks(text: string): Array<any> {
+    private getBlocks(text: string): NavTreeNode[] {
 
-        const nodes:Array<any> = [];
+        let nodes: NavTreeNode[] = [];
         const lines = text.match(/.*(?:\r\n|\r|\n)/g) || [];
 
         for (let i = 0; i < lines.length; ++i) {
@@ -37,7 +37,7 @@ export class GCodeTreeParser {
 
             const result = this.parseLine(line, i);
             if (result.length !== 0) {
-                nodes.push(result);
+                nodes = nodes.concat(result);
             }
         }
         
@@ -46,9 +46,9 @@ export class GCodeTreeParser {
     }
 
     // Parse Line for Blocks
-    private parseLine(line: string, lnum:number): Array<NavTreeNode> {
+    private parseLine(line: string, lnum:number): NavTreeNode[] {
 
-        const blocks: Array<NavTreeNode> = [];
+        const blocks: NavTreeNode[] = [];
         let node: NavTreeNode;
         let x: number;
         const len = line.length;
@@ -83,7 +83,7 @@ export class GCodeTreeParser {
                         node.tooltip = '[G00] Rapid Motion';
                         node.setIcon(IconType.RAPID);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -101,7 +101,7 @@ export class GCodeTreeParser {
                         node.tooltip = '[G01] Linear]';
                         node.setIcon(IconType.CUTTING);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -119,7 +119,7 @@ export class GCodeTreeParser {
                         node.tooltip = '[G02] CW Interpolation';
                         node.setIcon(IconType.CWCUTTING);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -137,7 +137,7 @@ export class GCodeTreeParser {
                         node.tooltip = '[G03] CCW Interpolation';
                         node.setIcon(IconType.CCWCUTTING);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -179,7 +179,7 @@ export class GCodeTreeParser {
                         node.tooltip = '[G' + argument + '] Work Offset';
                         node.setIcon(IconType.WORKOFFSET);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -196,7 +196,7 @@ export class GCodeTreeParser {
                         node.tooltip = '[G154 ' + words[i + 1] + '] Work Offset';
                         node.setIcon(IconType.WORKOFFSET);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -213,7 +213,7 @@ export class GCodeTreeParser {
                         node.tooltip = '[G54.1 ' + words[i + 1] + '] Work Offset';
                         node.setIcon(IconType.WORKOFFSET);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -230,7 +230,7 @@ export class GCodeTreeParser {
                         node.tooltip = '[G15 ' + words[i + 1] + '] Work Offset';
                         node.setIcon(IconType.WORKOFFSET);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -247,7 +247,7 @@ export class GCodeTreeParser {
                         node.tooltip = '[G65] Ext Subprogram Call';
                         node.setIcon(IconType.EXTSUBPROG);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -275,7 +275,7 @@ export class GCodeTreeParser {
                         node.tooltip = 'Spindle On Clockwise (' + words[i + x].substr(1) + 'RPM)';
                         node.setIcon(IconType.SPINDLECW);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -294,7 +294,7 @@ export class GCodeTreeParser {
                         node.tooltip = 'Spindle On Counter Clockwise (' + words[i + x].substr(1) + 'RPM)';
                         node.setIcon(IconType.SPINDLECCW);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -312,7 +312,7 @@ export class GCodeTreeParser {
                         node.tooltip = 'Tool Change';
                         node.setIcon(IconType.TOOLCHANGE);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -331,7 +331,7 @@ export class GCodeTreeParser {
                         node.tooltip = 'Coolant Turned On';
                         node.setIcon(IconType.COOLANTON);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -349,7 +349,7 @@ export class GCodeTreeParser {
                         node.tooltip = 'Coolant Turned Off';
                         node.setIcon(IconType.COOLANTOFF);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -366,7 +366,7 @@ export class GCodeTreeParser {
                         node.tooltip = 'Local Subprogram Call';
                         node.setIcon(IconType.LOCALSUB);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };
@@ -383,7 +383,7 @@ export class GCodeTreeParser {
                         node.tooltip = 'Local Subprogram Return';
                         node.setIcon(IconType.SUBPROGRET);
                         node.command = {
-                            command: 'gcode.gcodeTree.Selection',
+                            command: 'gcode.views.navTree.select',
                             title: "",
                             arguments: [new Range(lnum, 0, lnum, len)]
                         };

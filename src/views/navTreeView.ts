@@ -6,16 +6,12 @@
 import { 
     commands, 
     ConfigurationChangeEvent, 
-    Event, 
-    EventEmitter, 
     ExtensionContext, 
     Range, 
     Selection, 
     TextDocumentChangeEvent, 
     TextEditor, 
     TextEditorRevealType, 
-    TreeDataProvider, 
-    TreeItem,  
     window, 
     workspace 
 } from 'vscode';
@@ -48,6 +44,9 @@ export class NavTreeView extends GView<NavTreeNode> {
 
         this._autoRefresh = configuration.getParam('navTree.autoRefresh');
 
+        if (this._autoRefresh) {
+            this.refresh();
+        }
 
     }
 
@@ -149,7 +148,8 @@ export class NavTreeView extends GView<NavTreeNode> {
             this.getQualifiedCommand('select'),
             (range) => {
                 this.select(range);
-            }
+            },
+            this
         );
     }
 
@@ -175,6 +175,8 @@ export class NavTreeView extends GView<NavTreeNode> {
             const parsed = new GCodeTreeParser(text);
 
             this._children = parsed.getTree();
+
+            StatusBar.updateStatusBar('Tree Up To Date');
 
             return true;
         } 

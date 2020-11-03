@@ -36,23 +36,6 @@ export async function activate(context: ExtensionContext) {
     Logger.log(constants.extension.shortname + " v" + constants.extension.version + " activated.");
     Logger.log(constants.copyright);
 
-    // G-Code Tree View
-    /*Logger.log("Loading Tree View...");
-    const gcodeTree = new GCodeTreeView(context);
-    window.registerTreeDataProvider('gcode.views.gcodeTree', gcodeTree);
-
-    commands.registerCommand('gcode.gcodeTree.refresh', () => {
-        if (window.activeTextEditor?.document.languageId === constants.langId) {
-            commands.executeCommand('setContext', 'gcodeTreeViewEnabled', true);
-        }
-        gcodeTree.refresh();        
-    });
-    commands.registerCommand('gcode.gcodeTree.Selection', range => gcodeTree.select(range));
-
-    
-    Logger.log('Tree AutoRefresh: ' + (configuration.getParam('tree.autoRefresh') ? 'Enabled' : 'Disabled') );
-
-*/
     GCommand.registerCommands(context);
     
 
