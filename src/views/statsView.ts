@@ -176,25 +176,29 @@ export class StatsView extends GView<StatsNode> {
 
         this._children = [];
 
-        if (this._editor && this._editor.document) {
+        if (window.activeTextEditor) {
+            this._editor = window.activeTextEditor;
 
-            const text = this._editor.document.getText();
+            if (this._editor && this._editor.document) {
 
-            if (this.updateToolChanges(text)) {
-                this._children.push(
-                    new StatsNode(
-                        StatsType.TOOLCHANGES,
-                        'Tool Changes: ' + this._stats.toolchanges,
-                        undefined,
-                        ResourceType.Stats,
-                        TreeItemCollapsibleState.None,
-                        'Tool Changes'
-                    )
-                );
+                const text = this._editor.document.getText();
 
-                return true;
+                if (this.updateToolChanges(text)) {
+                    this._children.push(
+                        new StatsNode(
+                            StatsType.TOOLCHANGES,
+                            'Tool Changes: ' + this._stats.toolchanges,
+                            undefined,
+                            ResourceType.Stats,
+                            TreeItemCollapsibleState.None,
+                            'Tool Changes'
+                        )
+                    );
+
+                    return true;
+                }
+
             }
-
 
         }
 
