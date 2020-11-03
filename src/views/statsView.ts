@@ -105,9 +105,17 @@ export class StatsView extends GView<StatsNode> {
 
                     if (this._autoRefresh) this.refresh();
                 }
+            } else {
+                commands.executeCommand('setContext', 'statsEnabled', false);
+
+                this._children = [];
+                this._onDidChangeTreeData.fire(undefined);
             }
         } else {
             commands.executeCommand('setContext', 'statsEnabled', false);
+
+            this._children = [];
+            this._onDidChangeTreeData.fire(undefined);
         }
     }
 
@@ -126,7 +134,17 @@ export class StatsView extends GView<StatsNode> {
 
                     if (this._autoRefresh) this.refresh();
                 }
+            } else {
+                commands.executeCommand('setContext', 'statsEnabled', false);
+
+                this._children = [];
+                this._onDidChangeTreeData.fire(undefined);
             }
+        } else {
+            commands.executeCommand('setContext', 'statsEnabled', false);
+
+            this._children = [];
+            this._onDidChangeTreeData.fire(undefined);
         }
     }
 
@@ -165,9 +183,9 @@ export class StatsView extends GView<StatsNode> {
         if (this.genStats()) {
 
             if (element) {
-                return Promise.resolve(this._onDidChangeTreeData.fire(element));
+                this._onDidChangeTreeData.fire(element);
             } else {
-                return Promise.resolve(this._onDidChangeTreeData.fire(undefined));
+                this._onDidChangeTreeData.fire(undefined);
             }
         }
     }
