@@ -62,8 +62,9 @@ export abstract class GView<TRoot extends ViewNode<NodeTypes>> implements TreeDa
 
         Control.context.subscriptions.push(configuration.onDidChange(this.onConfigurationChanged, this));
 
-        window.onDidChangeActiveTextEditor(e => this.onActiveEditorChanged(e));
+        window.onDidChangeActiveTextEditor( () => this.onActiveEditorChanged());
         workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
+
 
         this._disposable = Disposable.from(
             this._tree
@@ -90,15 +91,15 @@ export abstract class GView<TRoot extends ViewNode<NodeTypes>> implements TreeDa
         return element.getParent();
     }
 
-    protected abstract async refresh(element?: ViewNode): Promise<void> 
+    protected abstract refresh(element?: ViewNode): void
 
     getQualifiedCommand(cmd: string) {
         return `${this.id}.${cmd}`;
     }
 
-    protected abstract onDocumentChanged(changeEvent: TextDocumentChangeEvent): void 
-
-    protected abstract onActiveEditorChanged(editor: TextEditor | undefined): void
-
     protected abstract onConfigurationChanged(e: ConfigurationChangeEvent): void
+
+    protected abstract onActiveEditorChanged(): void;
+
+    protected abstract onDocumentChanged(changeEvent: TextDocumentChangeEvent): void;
 }

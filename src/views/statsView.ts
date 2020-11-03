@@ -90,7 +90,7 @@ export class StatsView extends GView<StatsNode> {
         return this._children;
     }
 
-    onActiveEditorChanged(editor: TextEditor):void {
+    onActiveEditorChanged():void {
         if (window.activeTextEditor) {
             this._editor = window.activeTextEditor;
 

@@ -36,10 +36,10 @@ export class NavTreeView extends GView<NavTreeNode> {
 
         super( NavTreeViewInfo.ID, NavTreeViewInfo.NAME);
 
-        this._editor = window.activeTextEditor;
-
+        // Initialize View
         this.initialize();
 
+        // Register View Commands
         this.registerCommands();
 
         this._autoRefresh = configuration.getParam('navTree.autoRefresh');
@@ -70,12 +70,12 @@ export class NavTreeView extends GView<NavTreeNode> {
         
     }
 
-    protected onActiveEditorChanged(editor: TextEditor): void {
+    protected onActiveEditorChanged(): void {
     
         if (window.activeTextEditor) {
             this._editor = window.activeTextEditor;
 
-            if (this._editor.document.uri.scheme === 'file') {
+            if (this._editor && this._editor.document.uri.scheme === 'file') {
 
                 const enabled = this._editor.document.languageId === 'gcode';
                 commands.executeCommand('setContext', 'navTreeEnabled', enabled);
@@ -87,10 +87,20 @@ export class NavTreeView extends GView<NavTreeNode> {
 
                     if (this._autoRefresh) this.refresh();
                 }
+            } else {
+                commands.executeCommand('setContext', 'navTreeEnabled', false);
+                StatusBar.hideStatusBar();
+
+                this._children = [];
+                this._onDidChangeTreeData.fire(undefined);
             }
         } else {
             commands.executeCommand('setContext', 'navTreeEnabled', false);
             StatusBar.hideStatusBar();
+
+            this._children = [];
+            this._onDidChangeTreeData.fire(undefined);
+
         }
     }
 
@@ -111,11 +121,14 @@ export class NavTreeView extends GView<NavTreeNode> {
 
                     if (this._autoRefresh) this.refresh();
                 }
+            } else {
+                commands.executeCommand('setContext', 'navTreeEnabled', false);
+                StatusBar.hideStatusBar();
+                
+                this._children = [];
+                this._onDidChangeTreeData.fire(undefined);
             }
-        } else {
-            commands.executeCommand('setContext', 'navTreeEnabled', false);
-            StatusBar.hideStatusBar();
-        }
+        } 
     }
 
 
@@ -153,14 +166,14 @@ export class NavTreeView extends GView<NavTreeNode> {
         );
     }
 
-    protected async refresh( element?: NavTreeNode): Promise<void> {
+    protected refresh( element?: NavTreeNode): void {
         
         if (this.parseTree()) {
 
             if (element) {
-                return Promise.resolve(this._onDidChangeTreeData.fire(element));
+                this._onDidChangeTreeData.fire(element);
             } else {
-                return Promise.resolve(this._onDidChangeTreeData.fire(undefined));
+                this._onDidChangeTreeData.fire(undefined);
             }
         }
     }
