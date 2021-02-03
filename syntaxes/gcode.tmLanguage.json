@@ -59,7 +59,7 @@
                     "name": "constant.numeric.gcode"
                 },
                 {
-                    "match": "[gG][0-9]{1,3}",
+                    "match": "[gG][0-9]{1,3}\\.?[0-9]?",
                     "name": "markup.bold.gcode"
                 },
                 {
