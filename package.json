@@ -89,7 +89,8 @@
                     ".dnc",
                     ".knc",
                     ".prg",
-                    ".001"
+                    ".001",
+                    ".ngc"
                 ],
                 "configuration": "./language/gcode-language.json"
             }
