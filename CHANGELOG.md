@@ -2,6 +2,15 @@
 
 All changes to vscode-code-syntax will be documented here.
 
+## v0.4.1 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.4.1)
+
+### Fixes
+
+- Added `.ngc` file extension to supported files ( [#14](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/14))
+- Added file extensions for Okuma OSP controls ( [#15](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/15))
+- Fixed colorization of G-Codes with dot ( [#16](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/16))
+- Updated all dependencies
+
 ## v0.4.0 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.4.0)
 
 Finally a major update to vscode-gcode-syntax!
