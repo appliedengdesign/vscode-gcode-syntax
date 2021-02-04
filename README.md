@@ -96,15 +96,15 @@ G-Code Syntax is customizable and provides many configuration settings to allow 
 | Name                          | Description                                                                                 |
 | ----------------------------- | ------------------------------------------------------------------------------------------- |
 | `gcode.general.colorizaztion` | **( Not Currently Active )**                                                                |
-|                                                                                                                             |
+|                               |                                                                                             |
 | `gcode.general.machineType`   | **( Not Currently Active )**                                                                |
-|                                                                                                                             |
+|                               |                                                                                             |
 | `gcode.tree.autoRefresh`      | Tree auto-refreshes as changes are made to the g-code. ( Disabled by default )              |
-|                                                                                                                             |
+|                               |                                                                                             |
 | `gcode.stats.enable`          | Enable the statistics view. ( Disabled by default )                                         |
-|                                                                                                                             |
+|                               |                                                                                             |
 | `gcode.stats.autoRefresh`     | Auto-refresh the stats view when changes are made to the g-code. (Disabled by default)      |
-|                                                                                                                             |
+|                               |                                                                                             |
 
 ![Settings Screenshot](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/images/settings-screenshot.png?raw=true)
 
