@@ -59,7 +59,7 @@
                     "name": "constant.numeric.gcode"
                 },
                 {
-                    "match": "[gG][0-9]{1,3}",
+                    "match": "[gG][0-9]{1,3}(\\.[0-9])?",
                     "name": "markup.bold.gcode"
                 },
                 {
@@ -100,15 +100,11 @@
         "speedsfeeds": {
             "patterns": [
                 {
-                    "match": "([sS])(?=-|\\d|\\[|#)-?(?:\\d+(?:\\.\\d*)?)?",
+                    "match": "([sS])(\\d+)?",
                     "name": "constant.language.gcode"
                 },
                 {
-                    "match": "([fF])(?=-|\\d|\\[|#|\\.)-?(?:\\d+(?:\\.\\d*)|(?:\\.(?:\\d*))?)?",
-                    "name": "constant.language.gcode"
-                },
-                {
-                    "match": "([eE])(?=-|\\d|\\[|#|\\.)-?(?:\\d+(?:\\.\\d*)|(?:\\.(?:\\d*))?)?",
+                    "match": "([eEfF])(\\d*\\.?\\d+\\.?)?",
                     "name": "constant.language.gcode"
                 }
             ]
@@ -116,15 +112,15 @@
         "prognumbers": {
             "patterns": [
                 {
-                    "match": "[nN][0-9]+",
+                    "match": "([nN])(\\d+)?",
                     "name": "constant.numeric.gcode"
                 },
                 {
-                    "match": "[oO][0-9]{1,5}",
+                    "match": "([oO])(\\d+)?",
                     "name": "string.regexp.gcode"
                 },
                 {
-                    "match": "[pP][0-9]{0,5}",
+                    "match": "([pP])(\\d+)?",
                     "name": "string.regexp.gcode"
                 }
             ]
@@ -132,19 +128,19 @@
         "coords": {
             "patterns": [
                 {
-                    "match": "([xX])(?=-|\\d|\\[|#|\\.)-?(?:\\d+(?:\\.\\d*)|(?:\\.(?:\\d*))?)?",
+                    "match": "([xX])(\\-?\\d?\\.?\\d+\\.?)?",
                     "name": "string.gcode"
                 },
                 {
-                    "match": "([yY])(?=-|\\d|\\[|#|\\.)-?(?:\\d+(?:\\.\\d*)|(?:\\.(?:\\d*))?)?",
+                    "match": "([yY])(\\-?\\d?\\.?\\d+\\.?)?",
                     "name": "string.gcode"
                 },
                 {
-                    "match": "([zZ])(?=-|\\d|\\[|#|\\.)-?(?:\\d+(?:\\.\\d*)|(?:\\.(?:\\d*))?)?",
+                    "match": "([zZ])(\\-?\\d?\\.?\\d+\\.?)?",
                     "name": "invalid.gcode"
                 },
                 {
-                    "match": "([aAbBcC])(?=-|\\d|\\[|#|\\.)-?(?:\\d+(?:\\.\\d*)|(?:\\.(?:\\d*))?)?",
+                    "match": "([aAbBcC])(\\-?\\d?\\.?\\d+\\.?)?",
                     "name": "constant.character.escape.gcode"
                 }
             ]
@@ -152,15 +148,15 @@
         "tools": {
             "patterns": [
                 {
-                    "match": "[dD][0-9]+",
+                    "match": "([dD])([0-9])*",
                     "name": "constant.character.gcode"
                 },
                 {
-                    "match": "[hH][0-9]+",
+                    "match": "([hH])([0-9]*)",
                     "name": "constant.character.gcode"
                 },
                 {
-                    "match": "[tT][0-9]+",
+                    "match": "([tT])([0-9]*)",
                     "name": "constant.character.gcode"
                 }
             ]
@@ -168,15 +164,15 @@
         "modifiers": {
             "patterns": [
                 {
-                    "match": "([iIjJkK])(?=-|\\d|\\[|#|\\.)-?(?:\\d+(?:\\.\\d*)|(?:\\.(?:\\d*))?)?",
+                    "match": "([iIjJkK])(\\-?\\d?\\.?\\d+\\.?)?",
                     "name": "constant.character.escape.gcode"
                 },
                 {
-                    "match": "([qQrR])(?=-|\\d|\\[|#|\\.)-?(?:\\d+(?:\\.\\d*)|(?:\\.(?:\\d*))?)?",
+                    "match": "([qQrR])(\\-?\\d?\\.?\\d+\\.?)?",
                     "name": "support.constant.math.gcode"
                 },
                 {
-                    "match": "([uUwW])(?=-|\\d|\\[|#|\\.)-?(?:\\d+(?:\\.\\d*)|(?:\\.(?:\\d*))?)?",
+                    "match": "([uUwW])(\\-?\\d?\\.?\\d+\\.?)?",
                     "name": "support.constant.math.gcode"
                 }
             ]

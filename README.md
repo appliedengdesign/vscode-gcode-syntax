@@ -72,6 +72,10 @@ This extension adds language syntax for CNC G-Code, code snippets, and colorizat
 - .knc
 - .prg
 - .001
+- .ngc
+- .ssb
+- .sub
+- .lib
 
 If you would like another file extension supported by this extension, please [open an issue](https://github.com/appliedemgdesign/issues).
 
@@ -92,15 +96,15 @@ G-Code Syntax is customizable and provides many configuration settings to allow 
 | Name                          | Description                                                                                 |
 | ----------------------------- | ------------------------------------------------------------------------------------------- |
 | `gcode.general.colorizaztion` | **( Not Currently Active )**                                                                |
-|
+|                               |                                                                                             |
 | `gcode.general.machineType`   | **( Not Currently Active )**                                                                |
-|
+|                               |                                                                                             |
 | `gcode.tree.autoRefresh`      | Tree auto-refreshes as changes are made to the g-code. ( Disabled by default )              |
-|
+|                               |                                                                                             |
 | `gcode.stats.enable`          | Enable the statistics view. ( Disabled by default )                                         |
-|
+|                               |                                                                                             |
 | `gcode.stats.autoRefresh`     | Auto-refresh the stats view when changes are made to the g-code. (Disabled by default)      |
-|
+|                               |                                                                                             |
 
 ![Settings Screenshot](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/images/settings-screenshot.png?raw=true)
 
@@ -121,7 +125,7 @@ Please visit our [GitHub Issues](https://github.com/appliedengdesign/vscode-gcod
 
 ## Changelog
 
-Latest Version: v0.4.0
+Latest Version: v0.4.1
 
 Please refer to our [CHANGELOG](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CHANGELOG.md) doc.
 
