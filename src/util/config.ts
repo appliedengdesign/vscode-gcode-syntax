@@ -14,17 +14,13 @@ import {
 import { constants } from './constants';
 import { Logger } from "./logger";
 
-type IgcodeSettings = {
-    colorization: boolean;
-    machine: string;
-    trAutoRef: boolean;
-    statsEnabled: boolean;
+export enum GCodeUnits {
+    IMPERIAL,
+    METRIC
 }
-
 
 export class Config {
     private  config: WorkspaceConfiguration;
-    //private settings: IgcodeSettings;
 
     private _onDidChange = new EventEmitter<ConfigurationChangeEvent>();
     readonly onDidChange: Event<ConfigurationChangeEvent> = this._onDidChange.event; 
@@ -35,6 +31,7 @@ export class Config {
         );
     }
 
+    // Constructor
     constructor() {
         // Static reference to configuration
         this.config = workspace.getConfiguration(constants.configId);
@@ -53,11 +50,13 @@ export class Config {
         this.config = workspace.getConfiguration(constants.configId);
     } 
 
+    // Get Parameter
     getParam(param: string): any {
         this.reloadConfig();
         return this.config.get(param);
     }
 
+    // Set Parameter
     setParam( param: string, value: any, global = true): boolean {
         
         try {
@@ -81,6 +80,26 @@ export class Config {
         return e.affectsConfiguration(`${constants.configId}.${section}`);
     }
 
+
+    // Units Helper Function
+    getUnits(): GCodeUnits {
+
+        switch( this.getParam('general.units') ) {
+
+            case 'Imperial':
+                return GCodeUnits.IMPERIAL;
+                break;
+
+            case 'Metric':
+                return GCodeUnits.METRIC;
+                break;
+
+            default:
+                return GCodeUnits.IMPERIAL;
+        }
+
+
+    }
 }
 
 export const configuration = new Config();

@@ -40,6 +40,9 @@ export class Control {
         this._context = context;
         this._config = config;
 
+        // Units
+        Logger.log('Units: ' + configuration.getParam('general.units'));
+
         // Load Nav Tree
 
         Logger.log('Loading Nav Tree...');

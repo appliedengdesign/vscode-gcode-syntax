@@ -13,7 +13,7 @@ import {
     TreeItemCollapsibleState,
     window 
 } from "vscode";
-import { configuration } from "../util/config";
+import { configuration, GCodeUnits } from "../util/config";
 import { constants } from "../util/constants";
 import { Logger } from "../util/logger";
 import { ResourceType } from "./nodes/nodes";
@@ -29,6 +29,7 @@ enum StatsViewInfo {
 export class StatsView extends GView<StatsNode> {
 
     private _children: StatsNode[] | undefined;
+    private _units: GCodeUnits | undefined;
 
     private _stats = {
         toolchanges: 0,
@@ -45,6 +46,8 @@ export class StatsView extends GView<StatsNode> {
         this.registerCommands();
 
         this._autoRefresh = configuration.getParam('stats.autoRefresh');
+        
+        this._units = configuration.getUnits();
 
     }
 
@@ -247,6 +250,13 @@ export class StatsView extends GView<StatsNode> {
         return true;
 
 
+    }
+
+    private updateRunTime(text: string): boolean {
+
+
+
+        return true;
     }
 
 }
