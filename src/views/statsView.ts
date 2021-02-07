@@ -201,6 +201,8 @@ export class StatsView extends GView<StatsNode> {
 
                 const text = this._editor.document.getText();
 
+                // Generate Tool Change Stats
+
                 if (this.updateToolChanges(text)) {
                     this._children.push(
                         new StatsNode(
@@ -212,9 +214,21 @@ export class StatsView extends GView<StatsNode> {
                             'Tool Changes'
                         )
                     );
-
-                    return true;
+                } else {
+                    this._children.push(
+                        new StatsNode(
+                            StatsType.ERROR,
+                            'Tool Changes: ' + 'Error',
+                            undefined,
+                            ResourceType.Stats,
+                            TreeItemCollapsibleState.None,
+                            'Error Generating Tool Change Stats'
+                        )
+                    );
                 }
+
+
+                return true;
 
             }
 
