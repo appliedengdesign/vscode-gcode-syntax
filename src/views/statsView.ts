@@ -231,6 +231,32 @@ export class StatsView extends GView<StatsNode> {
                 }
 
 
+                // Generate Runtime Stats
+                if (this.updateRunTime(text)) {
+                    this._children.push(
+                        new StatsNode(
+                            StatsType.RUNTIME,
+                            'Est Runtime: ' + this._stats.runtime,
+                            undefined,
+                            ResourceType.Stats,
+                            TreeItemCollapsibleState.None,
+                            'Runtime'
+                        )
+                    );
+                } else {
+                    this._children.push(
+                        new StatsNode(
+                            StatsType.ERROR,
+                            'Est Runtime: Error',
+                            undefined,
+                            ResourceType.Stats,
+                            TreeItemCollapsibleState.None,
+                            'Error Generating Runtime Stats'
+                        )
+                    );
+                }
+
+
                 return true;
 
             }
