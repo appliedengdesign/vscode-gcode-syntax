@@ -213,7 +213,7 @@
             {
                 "view": "gcode.views.stats",
                 "contents": "G-Code Stats only available when viewing G-Code",
-                "when": "!statsEnabled && config.gcode.statsEnabled"
+                "when": "!statsEnabled"
             }
         ],
         "menus": {
@@ -232,6 +232,13 @@
                     "command": "gcode.supportGCode",
                     "when": "view == gcode.views.navTree",
                     "group": "navigation"
+                }
+            ],
+            "view/item/context": [
+                {
+                    "command": "gcode.views.stats.refresh",
+                    "when": "view == gcode.views.stats && config.gcode.statsEnable",
+                    "group": "inline"
                 }
             ],
             "commandPalette": [
