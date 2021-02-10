@@ -5,6 +5,8 @@
 
 'use strict';
 
+import { GCodeUnits } from "../../util/config";
+
 interface Coords {
     x: number,
     y: number,
@@ -13,18 +15,20 @@ interface Coords {
 
 export class GCodeRuntimeParser {
 
-    private code: string;
-    private runtime: number;
+    private _code: string;
+    private _runtime: number;
+    private _units: GCodeUnits;
 
-    constructor( readonly text: string ) {
+    constructor( readonly text: string, readonly units: GCodeUnits) {
 
-        this.code = text;
-        this.runtime = 0;
+        this._code = text;
+        this._runtime = 0;
+        this._units = units;
     }
 
 
     getRuntime(): number {
-        return this.runtime;
+        return this._runtime;
     }
 
     update(): boolean {
@@ -33,22 +37,16 @@ export class GCodeRuntimeParser {
 
     private genRunTime(): boolean {
 
-        let oldpt: Coords = {x:0, y:0, z:0};
-        let newpt: Coords;
-        let distance: number;
-        let feedrate: number;
-        let rapid: boolean;
+        const oldpt: Coords = { x:0, y:0, z:0 };
+        const newpt: Coords = { x:0, y:0, z:0 };
+        let distance = 0;
+        let feedrate = 1;
+        let rapid = true;
         let abs = true;
-        let rt: number;
-
-        // Initialize
-        rt = 0;
-        newpt = {x:0, y:0, z:0};
-        distance = 0;
-        feedrate = 1;
+        let rt = 0;
 
         // Split into lines
-        const lines = this.code.match(/.*(?:\r\n|\r|\n)/g) || [];
+        const lines = this._code.match(/.*(?:\r\n|\r|\n)/g) || [];
 
         for (let i = 0; i < lines.length; ++i) {
 
@@ -61,7 +59,7 @@ export class GCodeRuntimeParser {
             line = this.stripComments(line);
 
             // eslint-disable-next-line
-            const re = /((?:\$\$) | (?:\$[a-zA-Z0-9#]*)) | ([a-zA-Z][0-9\+\-\.]+) | (\*[0-9]+)|([#][0-9]+) | ([#][\[].+[\]])/igm;
+            const re = /((?:\$\$)|(?:\$[a-zA-Z0-9#]*))|([a-zA-Z][0-9\+\-\.]+)|(\*[0-9]+)|([#][0-9]+)|([#][\[].+[\]])/igm;
 
             const words = line.match(re) || [];
 
@@ -119,22 +117,19 @@ export class GCodeRuntimeParser {
             if (abs) {
                 distance = Math.sqrt( Math.pow((newpt.x - oldpt.x), 2) + Math.pow((newpt.y - oldpt.y), 2) + Math.pow((newpt.z - oldpt.z), 2) );
 
-                if (distance == 0) {
-                    newpt = oldpt;
-                    continue;
-                } else {
-                    oldpt = newpt;
-                }
+                Object.assign(oldpt, newpt);
             }
 
-            // Calculate Time :: t = d / v
-            rt += (distance / feedrate);
+            if (!rapid) {
+                // Calculate Time :: t = d / v
+                rt += (distance / feedrate);
+            }
             
 
         }
 
 
-        this.runtime = rt;
+        this._runtime = rt;
 
         return true;
     }

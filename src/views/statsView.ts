@@ -18,6 +18,7 @@ import { constants } from "../util/constants";
 import { Logger } from "../util/logger";
 import { ResourceType } from "./nodes/nodes";
 import { StatsNode, StatsType } from "./nodes/statsNode";
+import { GCodeRuntimeParser } from "./providers/gcodeRuntimeParser";
 import { GView } from "./views";
 
 enum StatsViewInfo {
@@ -29,7 +30,7 @@ enum StatsViewInfo {
 export class StatsView extends GView<StatsNode> {
 
     private _children: StatsNode[] | undefined;
-    private _units: GCodeUnits | undefined;
+    private _units: GCodeUnits;
 
     private _stats = {
         toolchanges: 0,
@@ -48,6 +49,10 @@ export class StatsView extends GView<StatsNode> {
         this._autoRefresh = configuration.getParam('stats.autoRefresh');
         
         this._units = configuration.getUnits();
+
+        if (this._autoRefresh) {
+            this.refresh();
+        }
 
     }
 
@@ -236,7 +241,7 @@ export class StatsView extends GView<StatsNode> {
                     this._children.push(
                         new StatsNode(
                             StatsType.RUNTIME,
-                            'Est Runtime: ' + this._stats.runtime,
+                            'Est Runtime: ' + new Date( (this._stats.runtime) * 1000).toISOString().substr(11, 8),
                             undefined,
                             ResourceType.Stats,
                             TreeItemCollapsibleState.None,
@@ -280,9 +285,17 @@ export class StatsView extends GView<StatsNode> {
 
     private updateRunTime(text: string): boolean {
 
+        const rtparser = new GCodeRuntimeParser(text, this._units);
+
+        if (rtparser.update()) {
+            this._stats.runtime = rtparser.getRuntime();
 
 
-        return true;
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
