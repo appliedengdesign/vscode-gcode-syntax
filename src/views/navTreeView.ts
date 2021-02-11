@@ -79,7 +79,7 @@ export class NavTreeView extends GView<NavTreeNode> {
 
             if (this._editor && this._editor.document.uri.scheme === 'file') {
 
-                const enabled = this._editor.document.languageId === 'gcode';
+                const enabled = this._editor.document.languageId === constants.langId;
                 commands.executeCommand('setContext', 'navTreeEnabled', enabled);
 
                 if (enabled) {
@@ -113,7 +113,7 @@ export class NavTreeView extends GView<NavTreeNode> {
             
             if (this._editor && this._editor.document.uri.scheme === 'file') {
 
-                const enabled = this._editor.document.languageId === 'gcode';
+                const enabled = this._editor.document.languageId === constants.langId;
                 commands.executeCommand('setContext', 'navTreeEnabled', enabled);
 
                 if (enabled) {
