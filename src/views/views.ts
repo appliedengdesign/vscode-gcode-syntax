@@ -13,10 +13,7 @@ import {
     TextEditor, 
     TreeDataProvider, 
     TreeItem, 
-    TreeItemCollapsibleState, 
     TreeView, 
-    TreeViewExpansionEvent, 
-    TreeViewVisibilityChangeEvent, 
     window,
     workspace
 } from "vscode";
