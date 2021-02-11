@@ -8,7 +8,6 @@ import { ExtensionContext } from 'vscode';
 import { Config, configuration } from './util/config';
 import { constants } from './util/constants';
 import { Logger } from './util/logger';
-import { StatusBar } from './util/statusBar';
 import { GCommand } from './util/commands';
 import { Control } from './control';
 
@@ -25,9 +24,6 @@ export async function activate(context: ExtensionContext) {
     // Initialize Config
     Config.initialize(context);
 
-    // Initialize StatusBar
-    StatusBar.initialize(context);
-
     Logger.log(constants.extension.shortname + " v" + constants.extension.version + " activated.");
     Logger.log(constants.copyright);
 
@@ -41,8 +37,8 @@ export async function activate(context: ExtensionContext) {
 }
 
 export function deactivate() {
+    
     // Clean up
-    Logger.close();
-    StatusBar.dispose();
+    Control.terminate();
     
 }

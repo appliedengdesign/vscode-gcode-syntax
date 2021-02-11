@@ -13,36 +13,41 @@ import {
 
 
 export class StatusBar {
-    static statusBar: StatusBarItem
+    private _statusBar: StatusBarItem
 
-    static initialize(context: ExtensionContext) {
-        this.statusBar = this.statusBar || window.createStatusBarItem( StatusBarAlignment.Right, 100 );
+    constructor (private context: ExtensionContext, private align: StatusBarAlignment, priority: number) {
+        this._statusBar = window.createStatusBarItem(
+            align,
+            priority
+        );
 
-        context.subscriptions.push(this.statusBar);
+        context.subscriptions.push(this._statusBar);
     }
 
-    static updateStatusBar(message: string): void {
-        if (this.statusBar !== undefined) {
-            this.statusBar.text = message;
-            this.statusBar.show();
+    dispose() {
+        if (this._statusBar !== undefined) {
+            this._statusBar.dispose();
         }
     }
 
-    static showStatusBar (): void {
-        if (this.statusBar !== undefined) {
-            this.statusBar.show();
+    updateStatusBar(message: string): void {
+        if (this._statusBar !== undefined) {
+            this._statusBar.text = message;
+            this._statusBar.show();
         }
     }
 
-    static hideStatusBar(): void {
-        if (this.statusBar !== undefined) {
-            this.statusBar.hide();
+    showStatusBar() {
+        if (this._statusBar !== undefined) {
+            this._statusBar.show();
         }
     }
 
-    static dispose(): void {
-        if (this.statusBar !== undefined) {
-            this.statusBar.dispose();
+    hideStatusBar() {
+        if (this._statusBar !== undefined) {
+            this._statusBar.hide();
         }
     }
+
+
 }

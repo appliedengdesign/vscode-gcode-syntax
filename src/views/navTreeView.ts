@@ -10,10 +10,8 @@ import {
     Range, 
     Selection, 
     TextDocumentChangeEvent, 
-    TextEditor, 
     TextEditorRevealType, 
     window, 
-    workspace 
 } from 'vscode';
 import { configuration } from '../util/config';
 import { StatusBar } from '../util/statusBar';
@@ -31,8 +29,9 @@ enum NavTreeViewInfo {
 export class NavTreeView extends GView<NavTreeNode> {
 
     private _children: NavTreeNode[] | undefined;
+    private _statusbar: StatusBar;
 
-    constructor(private context: ExtensionContext) {
+    constructor(private context: ExtensionContext, statusbar: StatusBar) {
 
         super( NavTreeViewInfo.ID, NavTreeViewInfo.NAME);
 
@@ -41,6 +40,9 @@ export class NavTreeView extends GView<NavTreeNode> {
 
         // Register View Commands
         this.registerCommands();
+
+        // Initialize StatusBar
+        this._statusbar = statusbar;
 
         this._autoRefresh = configuration.getParam('navTree.autoRefresh');
 
@@ -83,20 +85,20 @@ export class NavTreeView extends GView<NavTreeNode> {
                 if (enabled) {
                     this._editor = window.activeTextEditor;
                     this._autoRefresh = configuration.getParam('navTree.autoRefresh');
-                    StatusBar.updateStatusBar('Tree Dirty');
+                    this._statusbar.updateStatusBar('Tree Dirty');
 
                     if (this._autoRefresh) this.refresh();
                 }
             } else {
                 commands.executeCommand('setContext', 'navTreeEnabled', false);
-                StatusBar.hideStatusBar();
+                this._statusbar.hideStatusBar();
 
                 this._children = [];
                 this._onDidChangeTreeData.fire(undefined);
             }
         } else {
             commands.executeCommand('setContext', 'navTreeEnabled', false);
-            StatusBar.hideStatusBar();
+            this._statusbar.hideStatusBar();
 
             this._children = [];
             this._onDidChangeTreeData.fire(undefined);
@@ -117,13 +119,13 @@ export class NavTreeView extends GView<NavTreeNode> {
                 if (enabled) {
                     this._editor = window.activeTextEditor;
                     this._autoRefresh = configuration.getParam('navTree.autoRefresh');
-                    StatusBar.updateStatusBar('Tree Dirty');
+                    this._statusbar.updateStatusBar('Tree Dirty');
 
                     if (this._autoRefresh) this.refresh();
                 }
             } else {
                 commands.executeCommand('setContext', 'navTreeEnabled', false);
-                StatusBar.hideStatusBar();
+                this._statusbar.hideStatusBar();
                 
                 this._children = [];
                 this._onDidChangeTreeData.fire(undefined);
@@ -189,7 +191,7 @@ export class NavTreeView extends GView<NavTreeNode> {
 
             this._children = parsed.getTree();
 
-            StatusBar.updateStatusBar('Tree Up To Date');
+            this._statusbar.updateStatusBar('Tree Up To Date');
 
             return true;
         } 

@@ -5,9 +5,10 @@
 
 'use strict';
 
-import { Disposable, ExtensionContext } from "vscode";
+import { Disposable, ExtensionContext, StatusBarAlignment } from "vscode";
 import { Config, configuration } from "./util/config";
 import { Logger } from "./util/logger";
+import { StatusBar } from "./util/statusBar";
 import { NavTreeView } from "./views/navTreeView";
 import { StatsView } from "./views/statsView";
 
@@ -15,39 +16,38 @@ export class Control {
 
     private static _config: Config | undefined;
     private static _context: ExtensionContext;
-
+    private static _statusBars: StatusBar[] | undefined;
     private static _statsView: StatsView | undefined;
-    static get statsView() {
-        if (this._statsView === undefined) {
-            this._context.subscriptions.push((this._statsView = new StatsView(this._context)));
-        }
-
-        return this._statsView;
-    }
-
     private static _navTree: NavTreeView | undefined;
-    static get navTree() {
-        if (this._navTree === undefined) {
-            this._context.subscriptions.push((this._navTree = new NavTreeView(this._context)));
-        }
-
-        return this._navTree;
-    }
 
 
     static initialize(context: ExtensionContext, config: Config) {
 
         this._context = context;
         this._config = config;
+        this._statusBars = [];
 
         // Units
-        Logger.log('Units: ' + configuration.getParam('general.units'));
+        //Logger.log('Units: ' + configuration.getParam('general.units'));
+
+
+        // Load StatusBars
+
+        Logger.log('Loading Status Bars...');
+
+        const treeStatusBar: StatusBar = new StatusBar(
+            this._context,
+            StatusBarAlignment.Left,
+            0
+        );
+        this._statusBars.push(treeStatusBar);
+
 
         // Load Nav Tree
 
         Logger.log('Loading Nav Tree...');
 
-        context.subscriptions.push((this._navTree = new NavTreeView(this._context)));
+        context.subscriptions.push((this._navTree = new NavTreeView(this._context, treeStatusBar)));
 
         Logger.log('Nav Tree AutoRefresh: ' + (configuration.getParam('navTree.autoRefresh') ? 'Enabled' : 'Disabled') );
 
@@ -73,6 +73,23 @@ export class Control {
         }
 
 
+        
+
+    }
+
+    static terminate() {
+
+        Logger.log('Terminating Extension...');
+
+        // Dispose of status bars
+        if (this._statusBars) {
+            this._statusBars.forEach(element => {
+                element.dispose();
+            });
+        }
+
+        Logger.close();
+
     }
 
     static get context() {
@@ -82,4 +99,20 @@ export class Control {
     static get config() {
         return this._config;
     }
+
+   /* static get navTree() {
+        if (this._navTree === undefined) {
+            this._context.subscriptions.push((this._navTree = new NavTreeView(this._context, )));
+        }
+
+        return this._navTree;
+    }
+
+    static get statsView() {
+        if (this._statsView === undefined) {
+            this._context.subscriptions.push((this._statsView = new StatsView(this._context)));
+        }
+
+        return this._statsView;
+    }*/
 }
