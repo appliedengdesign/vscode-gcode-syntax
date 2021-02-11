@@ -88,7 +88,6 @@ export class Control {
             });
         }
 
-        Logger.close();
 
     }
 

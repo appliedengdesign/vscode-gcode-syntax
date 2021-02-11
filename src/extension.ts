@@ -40,5 +40,8 @@ export function deactivate() {
     
     // Clean up
     Control.terminate();
+
+    // Close Logger
+    Logger.close();
     
 }
