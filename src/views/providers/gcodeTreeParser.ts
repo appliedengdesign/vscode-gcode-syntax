@@ -6,6 +6,7 @@
 import { Range, TreeItemCollapsibleState } from 'vscode';
 import { NavTreeNode } from '../nodes/NavTreeNode';
 import { IconType } from '../nodes/nodes';
+import { stripComments } from './gcodeUtil';
 
 export class GCodeTreeParser {
 
@@ -58,7 +59,7 @@ export class GCodeTreeParser {
         const re = /((GOTO)|(IF)|(EQ)|(NE)|(LT)|(GT)|(LE)|(GE)|(DO)|(WHILE)|(END)|(AND)|(OR)|(XOR)|(SIN)|(COS)|(TAN)|(ASIN)|(ACOS)|(ATAN)|(FIX)|(FUP)|(LN)|(ROUND)|(SQRT)|(FIX)|(FUP)|(ROUND)|(ABS))|((?:\$\$)|(?:\$[a-zA-Z0-9#]*))|([a-zA-Z][0-9\+\-\.]+)|(\*[0-9]+)|([#][0-9]+)|([#][\[].+[\]])/igm;
        
         // Strip Comments
-        line = this.stripComments(line);
+        line = stripComments(line);
 
         // Get Words
         const words = line.match(re) || [];
@@ -401,18 +402,5 @@ export class GCodeTreeParser {
 
         
     }
-
-    // Comments
-    private stripComments(line: string): string {
-        // eslint-disable-next-line
-        const re1 = new RegExp(/\s*\([^\)]*\)/g);   // Remove anything inside the parentheses
-        const re2 = new RegExp(/\s*;.*/g);          // Remove anything after a semi-colon to the end of the line, including preceding spaces
-        const re3 = new RegExp(/\s+/g);
-        
-        return (line.replace(re1, '').replace(re2, '').replace(re3, ''));
-    }
-
-
-
 
 }

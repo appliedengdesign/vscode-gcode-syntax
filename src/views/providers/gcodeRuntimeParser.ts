@@ -5,7 +5,10 @@
 
 'use strict';
 
-import { GCodeUnits } from "../../util/config";
+import { 
+    GCodeUnits, 
+    stripComments 
+} from "./gcodeUtil";
 
 interface Coords {
     x: number,
@@ -56,7 +59,7 @@ export class GCodeRuntimeParser {
                 continue;
             }
 
-            line = this.stripComments(line);
+            line = stripComments(line);
 
             // eslint-disable-next-line
             const re = /((?:\$\$)|(?:\$[a-zA-Z0-9#]*))|([a-zA-Z][0-9\+\-\.]+)|(\*[0-9]+)|([#][0-9]+)|([#][\[].+[\]])/igm;
@@ -132,16 +135,6 @@ export class GCodeRuntimeParser {
         this._runtime = rt;
 
         return true;
-    }
-
-    // Comments
-    private stripComments(line: string): string {
-        // eslint-disable-next-line
-        const re1 = new RegExp(/\s*\([^\)]*\)/g);   // Remove anything inside the parentheses
-        const re2 = new RegExp(/\s*;.*/g);          // Remove anything after a semi-colon to the end of the line, including preceding spaces
-        const re3 = new RegExp(/\s+/g);
-        
-        return (line.replace(re1, '').replace(re2, '').replace(re3, ''));
     }
 
 }
