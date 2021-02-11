@@ -146,20 +146,6 @@
                     "markdownDescription": "Configure G-Code Extension for a Specific Machine Type",
                     "scope": "window"
                 },
-                "gcode.general.units": {
-                    "type": "string",
-                    "default": "Imperial",
-                    "enum": [
-                        "Imperial",
-                        "Metric"
-                    ],
-                    "enumDescriptions": [
-                        "Configure G-Code Extension for Imperial Units (Inch)",
-                        "Configure G-Code Extension for Metric Units (MM)"
-                    ],
-                    "markdownDescription": "Configure G-Code Extension for Units Type",
-                    "scope": "window"
-                },
                 "gcode.navTree.autoRefresh": {
                     "type": "boolean",
                     "default": true,
