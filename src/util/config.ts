@@ -14,11 +14,6 @@ import {
 import { constants } from './constants';
 import { Logger } from "./logger";
 
-export enum GCodeUnits {
-    IMPERIAL,
-    METRIC
-}
-
 export class Config {
     private  config: WorkspaceConfiguration;
 
@@ -80,26 +75,6 @@ export class Config {
         return e.affectsConfiguration(`${constants.configId}.${section}`);
     }
 
-
-    // Units Helper Function
-    getUnits(): GCodeUnits {
-
-        switch( this.getParam('general.units') ) {
-
-            case 'Imperial':
-                return GCodeUnits.IMPERIAL;
-                break;
-
-            case 'Metric':
-                return GCodeUnits.METRIC;
-                break;
-
-            default:
-                return GCodeUnits.IMPERIAL;
-        }
-
-
-    }
 }
 
 export const configuration = new Config();

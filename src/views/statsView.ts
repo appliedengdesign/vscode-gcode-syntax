@@ -12,12 +12,13 @@ import {
     TreeItemCollapsibleState,
     window 
 } from "vscode";
-import { configuration, GCodeUnits } from "../util/config";
+import { configuration } from "../util/config";
 import { constants } from "../util/constants";
 import { Logger } from "../util/logger";
 import { ResourceType } from "./nodes/nodes";
 import { StatsNode, StatsType } from "./nodes/statsNode";
 import { GCodeRuntimeParser } from "./providers/gcodeRuntimeParser";
+import { defUnits, GCodeUnits } from "./providers/gcodeUtil";
 import { GView } from "./views";
 
 enum StatsViewInfo {
@@ -29,7 +30,7 @@ enum StatsViewInfo {
 export class StatsView extends GView<StatsNode> {
 
     private _children: StatsNode[] | undefined;
-    //private _units: GCodeUnits;
+    private _units: GCodeUnits;
 
     private _stats = {
         toolchanges: 0,
@@ -47,7 +48,7 @@ export class StatsView extends GView<StatsNode> {
 
         this._autoRefresh = configuration.getParam('stats.autoRefresh');
         
-        //this._units = configuration.getUnits();
+        this._units = defUnits;
 
         if (this._autoRefresh) {
             this.refresh();
@@ -103,7 +104,7 @@ export class StatsView extends GView<StatsNode> {
 
             if (this._editor.document.uri.scheme === 'file') {
 
-                const enabled = this._editor.document.languageId === 'gcode';
+                const enabled = this._editor.document.languageId === constants.langId;
                 commands.executeCommand('setContext', 'statsEnabled', enabled);
 
                 if (enabled) {
@@ -132,7 +133,7 @@ export class StatsView extends GView<StatsNode> {
 
             if (this._editor.document.uri.scheme === 'file') {
 
-                const enabled = this._editor.document.languageId === 'gcode';
+                const enabled = this._editor.document.languageId === constants.langId;
                 commands.executeCommand('setContext', 'statsEnabled', enabled);
 
                 if (enabled) {
@@ -284,7 +285,7 @@ export class StatsView extends GView<StatsNode> {
 
     private updateRunTime(text: string): boolean {
 
-        const rtparser = new GCodeRuntimeParser(text, GCodeUnits.IMPERIAL);
+        const rtparser = new GCodeRuntimeParser(text, this._units);
 
         if (rtparser.update()) {
             this._stats.runtime = rtparser.getRuntime();
