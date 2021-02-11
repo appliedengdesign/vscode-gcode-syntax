@@ -146,6 +146,26 @@
                     "markdownDescription": "Configure G-Code Extension for a Specific Machine Type",
                     "scope": "window"
                 },
+                "gcode.general.statusBars.enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "Enable G-Code Statusbars",
+                  "scope": "window"
+                },
+                "gcode.general.statusBars.alignment": {
+                    "type": "string",
+                    "default": "left",
+                    "enum": [
+                        "left",
+                        "right"
+                    ],
+                    "enumDescriptions": [
+                        "Aligns to the left",
+                        "Aligns to the right"
+                    ],
+                    "markdownDescription": "Specifies status bars alignment",
+                    "scope": "window"
+                },
                 "gcode.navTree.autoRefresh": {
                     "type": "boolean",
                     "default": true,
