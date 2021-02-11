@@ -9,7 +9,6 @@ import {
     ConfigurationChangeEvent,
     ExtensionContext,
     TextDocumentChangeEvent,
-    TextEditor,
     TreeItemCollapsibleState,
     window 
 } from "vscode";
@@ -30,7 +29,7 @@ enum StatsViewInfo {
 export class StatsView extends GView<StatsNode> {
 
     private _children: StatsNode[] | undefined;
-    private _units: GCodeUnits;
+    //private _units: GCodeUnits;
 
     private _stats = {
         toolchanges: 0,
@@ -48,7 +47,7 @@ export class StatsView extends GView<StatsNode> {
 
         this._autoRefresh = configuration.getParam('stats.autoRefresh');
         
-        this._units = configuration.getUnits();
+        //this._units = configuration.getUnits();
 
         if (this._autoRefresh) {
             this.refresh();
@@ -285,7 +284,7 @@ export class StatsView extends GView<StatsNode> {
 
     private updateRunTime(text: string): boolean {
 
-        const rtparser = new GCodeRuntimeParser(text, this._units);
+        const rtparser = new GCodeRuntimeParser(text, GCodeUnits.IMPERIAL);
 
         if (rtparser.update()) {
             this._stats.runtime = rtparser.getRuntime();
