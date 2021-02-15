@@ -27,6 +27,7 @@
         "nc"
     ],
     "icon": "images/logo.png",
+    "preview": false,
     "galleryBanner": {
         "color": "#666666",
         "theme": "dark"
@@ -44,7 +45,10 @@
     "activationEvents": [
         "onLanguage:gcode",
         "onView:gcode.gcodeTree",
-        "onView:gcode.gcodeStats"
+        "onView:gcode.gcodeStats",
+        "onCommand:gcode.views.navTree.refresh",
+        "onCommand:gcode.views.stats.refresh",
+        "onCommand:gcode.supportGCode"
     ],
     "contributes": {
         "languages": [
@@ -148,10 +152,10 @@
                 },
                 "gcode.general.statusBars.alignment": {
                     "type": "string",
-                    "default": "left",
+                    "default": "Left",
                     "enum": [
-                        "left",
-                        "right"
+                        "Left",
+                        "Right"
                     ],
                     "enumDescriptions": [
                         "Aligns to the left",
@@ -159,6 +163,16 @@
                     ],
                     "markdownDescription": "Specifies status bars alignment",
                     "scope": "window"
+                },
+                "gcode.general.units": {
+                    "type": "string",
+                    "default": "Auto",
+                    "enum": [
+                        "Auto",
+                        "Inch",
+                        "Metric"
+                    ],
+                    "markdownDescription": "Configure Units for G-Code Files. Choose Auto to have G-Code parse for ```G20/G21```"
                 },
                 "gcode.navTree.autoRefresh": {
                     "type": "boolean",
