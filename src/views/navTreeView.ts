@@ -14,24 +14,35 @@ import {
     window, 
 } from 'vscode';
 import { configuration } from '../util/config';
-import { StatusBar } from '../util/statusBar';
+import { StatusBarControl, StatusBar } from '../util/statusBar';
 import { NavTreeNode } from './nodes/navTreeNode'; 
 import { GView } from './views';
 import { constants } from '../util/constants';
 import { GCodeTreeParser } from './providers/gcodeTreeParser';
 
-enum NavTreeViewInfo {
-    ID = 'gcode.views.navTree',
-    NAME = 'Nav Tree'
-}
+const NavTreeViewInfo = {
+    ID: 'gcode.views.navTree',
+    NAME: 'Nav Tree',
+    CONFIG: {
+        AUTOREF: "navTree.autoRefresh"
+    },
+    CONTEXT: 'navTreeEnabled',
+};
+
+const NavTreeStatus = {
+    TREEDIRTY: 'Tree Dirty',
+    TREECLEAN: 'Tree Up to Date'
+};
+
+const treeStatusBar: StatusBar = 'treeStatusBar';
 
 
 export class NavTreeView extends GView<NavTreeNode> {
 
     private _children: NavTreeNode[] | undefined;
-    private _statusbar: StatusBar;
+    private _statusbar: StatusBarControl | undefined;
 
-    constructor(private context: ExtensionContext, statusbar: StatusBar) {
+    constructor(private context: ExtensionContext, statusbar: StatusBarControl | undefined) {
 
         super( NavTreeViewInfo.ID, NavTreeViewInfo.NAME);
 
@@ -42,9 +53,11 @@ export class NavTreeView extends GView<NavTreeNode> {
         this.registerCommands();
 
         // Initialize StatusBar
-        this._statusbar = statusbar;
+        if (statusbar) {
+            this._statusbar = statusbar;
+        }
 
-        this._autoRefresh = configuration.getParam('navTree.autoRefresh');
+        this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
 
         if (this._autoRefresh) {
             this.refresh();
@@ -80,25 +93,24 @@ export class NavTreeView extends GView<NavTreeNode> {
             if (this._editor && this._editor.document.uri.scheme === 'file') {
 
                 const enabled = this._editor.document.languageId === constants.langId;
-                commands.executeCommand('setContext', 'navTreeEnabled', enabled);
+                commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, enabled);
 
                 if (enabled) {
                     this._editor = window.activeTextEditor;
-                    this._autoRefresh = configuration.getParam('navTree.autoRefresh');
-                    this._statusbar.updateStatusBar('Tree Dirty');
+                    this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
+                    if (this._statusbar) this._statusbar.updateStatusBar(NavTreeStatus.TREEDIRTY, treeStatusBar);
 
                     if (this._autoRefresh) this.refresh();
                 }
             } else {
-                commands.executeCommand('setContext', 'navTreeEnabled', false);
-                this._statusbar.hideStatusBar();
+                commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, false);
+                if (this._statusbar) this._statusbar.hideStatusBars();
 
                 this._children = [];
                 this._onDidChangeTreeData.fire(undefined);
             }
         } else {
-            commands.executeCommand('setContext', 'navTreeEnabled', false);
-            this._statusbar.hideStatusBar();
+            commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, false);
 
             this._children = [];
             this._onDidChangeTreeData.fire(undefined);
@@ -114,18 +126,17 @@ export class NavTreeView extends GView<NavTreeNode> {
             if (this._editor && this._editor.document.uri.scheme === 'file') {
 
                 const enabled = this._editor.document.languageId === constants.langId;
-                commands.executeCommand('setContext', 'navTreeEnabled', enabled);
+                commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, enabled);
 
                 if (enabled) {
                     this._editor = window.activeTextEditor;
-                    this._autoRefresh = configuration.getParam('navTree.autoRefresh');
-                    this._statusbar.updateStatusBar('Tree Dirty');
+                    this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
+                    if (this._statusbar) this._statusbar.updateStatusBar(NavTreeStatus.TREEDIRTY, treeStatusBar);
 
                     if (this._autoRefresh) this.refresh();
                 }
             } else {
-                commands.executeCommand('setContext', 'navTreeEnabled', false);
-                this._statusbar.hideStatusBar();
+                commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, false);
                 
                 this._children = [];
                 this._onDidChangeTreeData.fire(undefined);
@@ -135,8 +146,8 @@ export class NavTreeView extends GView<NavTreeNode> {
 
 
     protected onConfigurationChanged(e: ConfigurationChangeEvent) {
-        if (configuration.changed(e, 'navTree.autoRefresh')) {
-            this._autoRefresh = configuration.getParam('navTree.autoRefresh');
+        if (configuration.changed(e, NavTreeViewInfo.CONFIG.AUTOREF)) {
+            this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
         }
     }
 
@@ -149,7 +160,7 @@ export class NavTreeView extends GView<NavTreeNode> {
                 
                 if (this._editor && this._editor.document) {
                     if (this._editor.document.languageId === constants.langId) {
-                        commands.executeCommand('setContext', 'NavTreeViewEnabled', true);
+                        commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, true);
                     }
                     
                     this.refresh();
@@ -191,7 +202,7 @@ export class NavTreeView extends GView<NavTreeNode> {
 
             this._children = parsed.getTree();
 
-            this._statusbar.updateStatusBar('Tree Up To Date');
+            if (this._statusbar) this._statusbar.updateStatusBar(NavTreeStatus.TREECLEAN, treeStatusBar);
 
             return true;
         } 
