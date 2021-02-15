@@ -125,12 +125,6 @@
             "type": "object",
             "title": "G-Code",
             "properties": {
-                "gcode.general.colorization": {
-                    "type": "boolean",
-                    "default": false,
-                    "markdowndescription": "Enable G-Code specific colorization options",
-                    "scope": "window"
-                },
                 "gcode.general.machineType": {
                     "type": "string",
                     "default": "Mill",

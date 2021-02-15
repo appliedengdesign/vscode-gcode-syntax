@@ -95,8 +95,6 @@ G-Code Syntax is customizable and provides many configuration settings to allow 
 
 | Name                          | Description                                                                                 |
 | ----------------------------- | ------------------------------------------------------------------------------------------- |
-| `gcode.general.colorizaztion` | **( Not Currently Active )**                                                                |
-|                               |                                                                                             |
 | `gcode.general.machineType`   | **( Not Currently Active )**                                                                |
 |                               |                                                                                             |
 | `gcode.tree.autoRefresh`      | Tree auto-refreshes as changes are made to the g-code. ( Disabled by default )              |
