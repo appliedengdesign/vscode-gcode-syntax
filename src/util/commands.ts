@@ -17,9 +17,9 @@ import { constants } from './constants';
 
 enum Commands {
 
-    GCSTATSENABLE = 'gcode.gcodeStats.enable',
-    GCSTATSREFRESH = 'gcode.gcodeStats.refresh',
-    GCTREEREFRESH = 'gcode.gcodeTree.refresh',
+    GCSTATSENABLE = 'gcode.views.stats.enable',
+    GCSTATSREFRESH = 'gcode.views.stats.refresh',
+    GCTREEREFRESH = 'gcode.views.navTree.refresh',
     GCTREESELECT = 'gcode.gcodeTree.selection',
     GCSUPPORT = 'gcode.supportGCode'
 }
