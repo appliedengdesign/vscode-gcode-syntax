@@ -18,7 +18,6 @@ import { Logger } from "../util/logger";
 import { ResourceType } from "./nodes/nodes";
 import { StatsNode, StatsType } from "./nodes/statsNode";
 import { GCodeRuntimeParser } from "./providers/gcodeRuntimeParser";
-import { defUnits, GCodeUnits } from "./providers/gcodeUtil";
 import { GView } from "./views";
 
 enum StatsViewInfo {
@@ -30,7 +29,7 @@ enum StatsViewInfo {
 export class StatsView extends GView<StatsNode> {
 
     private _children: StatsNode[] | undefined;
-    private _units: GCodeUnits;
+   // private _units: GCodeUnits;
 
     private _stats = {
         toolchanges: 0,
@@ -48,7 +47,7 @@ export class StatsView extends GView<StatsNode> {
 
         this._autoRefresh = configuration.getParam('stats.autoRefresh');
         
-        this._units = defUnits;
+       // this._units = defUnits;
 
         if (this._autoRefresh) {
             this.refresh();
@@ -99,25 +98,16 @@ export class StatsView extends GView<StatsNode> {
     }
 
     onActiveEditorChanged():void {
-        if (window.activeTextEditor) {
-            this._editor = window.activeTextEditor;
+        if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {            //this._editor = window.activeTextEditor;
 
-            if (this._editor.document.uri.scheme === 'file') {
+            const enabled = (this._editor.document.languageId === constants.langId);
+            commands.executeCommand('setContext', 'statsEnabled', enabled);
 
-                const enabled = this._editor.document.languageId === constants.langId;
-                commands.executeCommand('setContext', 'statsEnabled', enabled);
+            if (enabled) {
+                //this._editor = window.activeTextEditor;
+                //this._autoRefresh = configuration.getParam('stats.autoRefresh');
 
-                if (enabled) {
-                    this._editor = window.activeTextEditor;
-                    this._autoRefresh = configuration.getParam('stats.autoRefresh');
-
-                    if (this._autoRefresh) this.refresh();
-                }
-            } else {
-                commands.executeCommand('setContext', 'statsEnabled', false);
-
-                this._children = [];
-                this._onDidChangeTreeData.fire(undefined);
+                if (this._autoRefresh) this.refresh();
             }
         } else {
             commands.executeCommand('setContext', 'statsEnabled', false);
@@ -128,25 +118,16 @@ export class StatsView extends GView<StatsNode> {
     }
 
     onDocumentChanged(changeEvent: TextDocumentChangeEvent) {
-        if (window.activeTextEditor) {
-            this._editor = window.activeTextEditor;
+        if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {            //this._editor = window.activeTextEditor;
 
-            if (this._editor.document.uri.scheme === 'file') {
+            const enabled = (this._editor.document.languageId === constants.langId);
+            commands.executeCommand('setContext', 'statsEnabled', enabled);
 
-                const enabled = this._editor.document.languageId === constants.langId;
-                commands.executeCommand('setContext', 'statsEnabled', enabled);
+            if (enabled) {
+                //this._editor = window.activeTextEditor;
+                //this._autoRefresh = configuration.getParam('stats.autoRefresh');
 
-                if (enabled) {
-                    this._editor = window.activeTextEditor;
-                    this._autoRefresh = configuration.getParam('stats.autoRefresh');
-
-                    if (this._autoRefresh) this.refresh();
-                }
-            } else {
-                commands.executeCommand('setContext', 'statsEnabled', false);
-
-                this._children = [];
-                this._onDidChangeTreeData.fire(undefined);
+                if (this._autoRefresh) this.refresh();
             }
         } else {
             commands.executeCommand('setContext', 'statsEnabled', false);
@@ -285,7 +266,7 @@ export class StatsView extends GView<StatsNode> {
 
     private updateRunTime(text: string): boolean {
 
-        const rtparser = new GCodeRuntimeParser(text, this._units);
+        const rtparser = new GCodeRuntimeParser(text);
 
         if (rtparser.update()) {
             this._stats.runtime = rtparser.getRuntime();
