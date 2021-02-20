@@ -6,7 +6,6 @@
 'use strict';
 
 import { 
-    GCodeUnits, 
     stripComments 
 } from "./gcodeUtil";
 
@@ -20,13 +19,11 @@ export class GCodeRuntimeParser {
 
     private _code: string;
     private _runtime: number;
-    private _units: GCodeUnits;
 
-    constructor( readonly text: string, readonly units: GCodeUnits) {
+    constructor( readonly text: string) {
 
         this._code = text;
         this._runtime = 0;
-        this._units = units;
     }
 
 

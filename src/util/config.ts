@@ -15,7 +15,7 @@ import { constants } from './constants';
 import { Logger } from "./logger";
 
 export class Config {
-    private  config: WorkspaceConfiguration;
+    private  _config: WorkspaceConfiguration;
 
     private _onDidChange = new EventEmitter<ConfigurationChangeEvent>();
     readonly onDidChange: Event<ConfigurationChangeEvent> = this._onDidChange.event; 
@@ -29,33 +29,34 @@ export class Config {
     // Constructor
     constructor() {
         // Static reference to configuration
-        this.config = workspace.getConfiguration(constants.configId);
+        this._config = workspace.getConfiguration(constants.configId);
         
         // Initialize
         
     }
 
     private onConfigurationChanged(e: ConfigurationChangeEvent) {
+
         Logger.log('Configuration changed...');
 
         this._onDidChange.fire(e);
     }
 
     private reloadConfig() {
-        this.config = workspace.getConfiguration(constants.configId);
+        this._config = workspace.getConfiguration(constants.configId);
     } 
 
     // Get Parameter
     getParam(param: string): any {
         this.reloadConfig();
-        return this.config.get(param);
+        return this._config.get(param);
     }
 
     // Set Parameter
     setParam( param: string, value: any, global = true): boolean {
         
         try {
-            this.config.update(param, value, global);
+            this._config.update(param, value, global);
         }
         catch (err) {
             Logger.log('Error updating configuration');
@@ -64,7 +65,7 @@ export class Config {
 
         this.reloadConfig();
 
-        if (this.config !== undefined) {
+        if (this._config !== undefined) {
             return true;
         } else return false;
     }

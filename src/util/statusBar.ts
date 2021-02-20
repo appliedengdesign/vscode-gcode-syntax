@@ -33,7 +33,9 @@ export class StatusBarControl implements Disposable {
 
     constructor (private context: ExtensionContext) {
 
-        this._disposable = Disposable.from(configuration.onDidChange(this.onConfigurationChanged, this));
+        this._disposable = Disposable.from(
+            configuration.onDidChange(this.onConfigurationChanged, this)
+        );
 
         this. _enabled = configuration.getParam('general.statusBars.enabled');
 
@@ -87,7 +89,7 @@ export class StatusBarControl implements Disposable {
                 Object.keys(this._statusBars).forEach((key) => {
                     this._statusBars[key as keyof StatusBars] = window.createStatusBarItem(
                         this._align,
-                        this._align = StatusBarAlignment.Left ? 1 : 999
+                        this._align === StatusBarAlignment.Left ? 1 : 999
                     );
                 });
 

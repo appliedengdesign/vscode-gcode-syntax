@@ -3,7 +3,8 @@
  *  Licensed under the MIT License. See License.md in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 'use strict';
- import * as path from 'path';
+
+import * as path from 'path';
 import { extensions } from 'vscode';
 
  const publisher = 'appliedengdesign';
