@@ -6,7 +6,7 @@
 import { Range, TreeItemCollapsibleState } from 'vscode';
 import { NavTreeNode } from '../nodes/NavTreeNode';
 import { IconType } from '../nodes/nodes';
-import { stripComments } from './gcodeUtil';
+import { stripComments } from './helpers';
 
 export class GCodeTreeParser {
 
