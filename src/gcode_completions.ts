@@ -2,7 +2,7 @@
 
 import * as path from "path";
 import * as vscode from "vscode";
-import  { configuration } from "../../util/config";
+import  { configuration } from "./util/config";
 
 
 export class GcodeCompletionItemProvider implements vscode.CompletionItemProvider {

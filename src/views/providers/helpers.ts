@@ -4,29 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
-export enum GCodeUnits {
-    INCH = 'Imperial',
-    MM = 'Metric'
-}
-
-export const defUnits = GCodeUnits.INCH;
-
-const reInch = /(G20)/igm;
-const reMM = /(G21)/igm;
-
-
-export function getUnits(text: string): GCodeUnits {
-
-
-    // Check for Inch
-    if (text.match(reInch)) {
-        return GCodeUnits.INCH;
-    } else if (text.match(reMM)) {
-        return GCodeUnits.MM;
-    } else {
-        return defUnits;
-    }
-}
 
 export function stripComments(line: string): string {
 
