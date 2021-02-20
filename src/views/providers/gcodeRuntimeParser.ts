@@ -7,7 +7,7 @@
 
 import { 
     stripComments 
-} from "./gcodeUtil";
+} from "./helpers";
 
 interface Coords {
     x: number,
