@@ -19,6 +19,7 @@ import { NavTreeNode } from './nodes/navTreeNode';
 import { GView } from './views';
 import { constants } from '../util/constants';
 import { GCodeTreeParser } from './providers/gcodeTreeParser';
+import { Control } from '../control';
 
 const NavTreeViewInfo = {
     ID: 'gcode.views.navTree',
@@ -34,13 +35,14 @@ const NavTreeStatus = {
     TREECLEAN: 'Tree Up to Date'
 };
 
-const treeStatusBar: StatusBar = 'treeStatusBar';
+
 
 
 export class NavTreeView extends GView<NavTreeNode> {
 
     private _children: NavTreeNode[] | undefined;
     private _statusbar: StatusBarControl | undefined;
+    private readonly treeStatusBar: StatusBar = 'treeStatusBar';
 
     constructor(private context: ExtensionContext, statusbar: StatusBarControl | undefined) {
 
@@ -53,9 +55,7 @@ export class NavTreeView extends GView<NavTreeNode> {
         this.registerCommands();
 
         // Initialize StatusBar
-        if (statusbar) {
-            this._statusbar = statusbar;
-        }
+        this._statusbar = Control.statusBarController;
 
         this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
 
@@ -87,61 +87,54 @@ export class NavTreeView extends GView<NavTreeNode> {
 
     protected onActiveEditorChanged(): void {
     
-        if (window.activeTextEditor) {
-            this._editor = window.activeTextEditor;
+        if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {
+            //this._editor = window.activeTextEditor;
 
-            if (this._editor && this._editor.document.uri.scheme === 'file') {
+            const enabled = (this._editor.document.languageId === constants.langId);
+            commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, enabled);
 
-                const enabled = this._editor.document.languageId === constants.langId;
-                commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, enabled);
+            if (enabled) {
+                //this._editor = window.activeTextEditor;
+                //this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
 
-                if (enabled) {
-                    this._editor = window.activeTextEditor;
-                    this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
-                    if (this._statusbar) this._statusbar.updateStatusBar(NavTreeStatus.TREEDIRTY, treeStatusBar);
+                // Update Status Bar
+                if (this._statusbar) this._statusbar.updateStatusBar(NavTreeStatus.TREEDIRTY, this.treeStatusBar);
 
-                    if (this._autoRefresh) this.refresh();
-                }
-            } else {
-                commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, false);
-                if (this._statusbar) this._statusbar.hideStatusBars();
-
-                this._children = [];
-                this._onDidChangeTreeData.fire(undefined);
+                if (this._autoRefresh) this.refresh();
             }
         } else {
             commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, false);
+            if (this._statusbar) this._statusbar.hideStatusBars();
 
             this._children = [];
             this._onDidChangeTreeData.fire(undefined);
-
         }
     }
 
     protected onDocumentChanged(changeEvent: TextDocumentChangeEvent): void {
 
-        if (window.activeTextEditor) {
-            this._editor = window.activeTextEditor;
-            
-            if (this._editor && this._editor.document.uri.scheme === 'file') {
+        if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {
+            //this._editor = window.activeTextEditor;
 
-                const enabled = this._editor.document.languageId === constants.langId;
-                commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, enabled);
+            const enabled = (this._editor.document.languageId === constants.langId);
+            commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, enabled);
 
-                if (enabled) {
-                    this._editor = window.activeTextEditor;
-                    this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
-                    if (this._statusbar) this._statusbar.updateStatusBar(NavTreeStatus.TREEDIRTY, treeStatusBar);
+            if (enabled) {
+                //this._editor = window.activeTextEditor;
+                //this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
 
-                    if (this._autoRefresh) this.refresh();
-                }
-            } else {
-                commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, false);
-                
-                this._children = [];
-                this._onDidChangeTreeData.fire(undefined);
+                // Update Status Bar
+                if (this._statusbar) this._statusbar.updateStatusBar(NavTreeStatus.TREEDIRTY, this.treeStatusBar);
+
+                if (this._autoRefresh) this.refresh();
             }
-        } 
+        } else {
+            commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, false);
+            if (this._statusbar) this._statusbar.hideStatusBars();
+
+            this._children = [];
+            this._onDidChangeTreeData.fire(undefined);
+        }
     }
 
 
@@ -202,7 +195,7 @@ export class NavTreeView extends GView<NavTreeNode> {
 
             this._children = parsed.getTree();
 
-            if (this._statusbar) this._statusbar.updateStatusBar(NavTreeStatus.TREECLEAN, treeStatusBar);
+            if (this._statusbar) this._statusbar.updateStatusBar(NavTreeStatus.TREECLEAN, this.treeStatusBar);
 
             return true;
         } 
