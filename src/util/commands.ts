@@ -6,11 +6,9 @@
 'use strict';
 
 import { 
-    Command,
     commands, 
     Disposable, 
     ExtensionContext, 
-    window
 } from "vscode";
 import { Messages } from "./messages";
 import { constants } from './constants';
