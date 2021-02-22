@@ -8,7 +8,10 @@ import {
     ConfigurationChangeEvent,
     Disposable,
     ExtensionContext, 
-    window
+    TextDocumentChangeEvent, 
+    TextEditor, 
+    window,
+    workspace
 } from "vscode";
 import { Control } from "./control";
 import { configuration } from "./util/config";
@@ -18,29 +21,34 @@ import { StatusBar, StatusBarControl } from "./util/statusBar";
 
 
 export enum GCodeUnits {
-    INCH = 'Inch',
-    MM = 'Metric'
+    INCH = "Inch",
+    MM = "Metric",
+    AUTO = "Auto",
+    DEF = "Defautlt (Inch)"
 }
-
-export const defUnits = GCodeUnits.INCH;
-
 
 export class GCodeUnitsController implements Disposable {
 
     private readonly _disposable: Disposable | undefined;
+    private _editor: TextEditor | undefined;
     private _statusbar: StatusBarControl;
     private readonly unitsStatusBar: StatusBar = 'unitsBar';
-    private _units: GCodeUnits;
+    private  _units: GCodeUnits;
+    private _auto: boolean;
 
-    constructor(private context: ExtensionContext) {
+    constructor() {
 
-        this._disposable = Disposable.from(configuration.onDidChange(this.onConfigurationChanged, this));
+        //this._disposable = Disposable.from(configuration.onDidChange(this.onConfigurationChanged, this));
 
         this._statusbar = Control.statusBarController;
 
-        this._units = configuration.getParam('general.units');
+        this. _auto = (this._units = configuration.getParam('general.units')) === GCodeUnits.AUTO;
         
         this._statusbar.updateStatusBar(this._units, this.unitsStatusBar);
+
+        Control.context.subscriptions.push(configuration.onDidChange(this.onConfigurationChanged, this));
+        Control.context.subscriptions.push(window.onDidChangeActiveTextEditor( () => this.onActiveEditorChanged()));
+        Control.context.subscriptions.push(workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e), this));
     }
 
     dispose() {
@@ -52,33 +60,68 @@ export class GCodeUnitsController implements Disposable {
             if ((this._units = configuration.getParam('general.units')) !== 'Auto') {
                 
                 Logger.log('Units: ' + this._units);
+                this._auto = false;
                 this._statusbar.updateStatusBar(this._units, this.unitsStatusBar);
 
             } else {
                 Logger.log('Units: ' + this._units);
-                return;
+                this._auto = true;
+                this._statusbar.updateStatusBar(this._units, this.unitsStatusBar);
             }
         }
     }
 
     private onActiveEditorChanged(): void {
-        if (window.activeTextEditor) {
-            const editor = window.activeTextEditor;
+       
+        if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {
+            
+
+            if (this._auto) {
+
+                const text = this._editor.document.getText();
+
+                // Parse doc for units
+                this._units = this.parseUnits(text);
+
+                // Update Status Bar
+                this._statusbar.updateStatusBar(this._units, this.unitsStatusBar);
+
+            } else {
+                return;
+            }
         }
     }
 
-    private getUnits(text: string): GCodeUnits {
-        
-        const reInch = /(G20)/igm;
-        const reMM = /(G21)/igm;
+    private onDocumentChanged(changeEvent: TextDocumentChangeEvent): void {
 
+        if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {
+
+            if (this._auto) {
+
+                const text = this._editor.document.getText();
+                // Parse doc for units
+                this._units = this.parseUnits(text);
+
+                // Update Status Bar
+                this._statusbar.updateStatusBar(this._units, this.unitsStatusBar);
+            } else {
+                return;
+            }
+        }
+    }
+
+    private parseUnits(text: string): GCodeUnits {
+        
+        const reUnits = /(G20)|(G21)/im;
+        
+        const units = text.match(reUnits);
         // Check for Inch
-        if (text.match(reInch)) {
-            return GCodeUnits.INCH;
-        } else if (text.match(reMM)) {
+        if (units === null) {
+            return GCodeUnits.DEF;
+        } else if (units[0] === 'G21') {
             return GCodeUnits.MM;
         } else {
-            return defUnits;
+            return GCodeUnits.INCH;
         }
     }
     
