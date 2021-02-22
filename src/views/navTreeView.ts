@@ -17,7 +17,7 @@ import { configuration } from '../util/config';
 import { StatusBarControl, StatusBar } from '../util/statusBar';
 import { NavTreeNode } from './nodes/navTreeNode'; 
 import { GView } from './views';
-import { constants } from '../util/constants';
+import { constants, PIcon } from '../util/constants';
 import { GCodeTreeParser } from './providers/gcodeTreeParser';
 import { Control } from '../control';
 
@@ -31,8 +31,8 @@ const NavTreeViewInfo = {
 };
 
 const NavTreeStatus = {
-    TREEDIRTY: 'Tree Dirty',
-    TREECLEAN: 'Tree Up to Date'
+    TREEDIRTY: PIcon.ALERT + 'Tree Dirty',
+    TREECLEAN: PIcon.CHECK + 'Tree Up to Date'
 };
 
 

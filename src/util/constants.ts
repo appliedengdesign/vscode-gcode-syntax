@@ -30,3 +30,8 @@ import { extensions } from 'vscode';
         readme: 'https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/README.md',
     },
  };
+
+ export enum PIcon {
+     ALERT = "$(alert) ",
+     CHECK = "$(check) "
+ }
