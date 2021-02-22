@@ -41,10 +41,10 @@ const NavTreeStatus = {
 export class NavTreeView extends GView<NavTreeNode> {
 
     private _children: NavTreeNode[] | undefined;
-    private _statusbar: StatusBarControl | undefined;
+    private _statusbar: StatusBarControl;
     private readonly treeStatusBar: StatusBar = 'treeStatusBar';
 
-    constructor(private context: ExtensionContext, statusbar: StatusBarControl | undefined) {
+    constructor() {
 
         super( NavTreeViewInfo.ID, NavTreeViewInfo.NAME);
 
@@ -98,13 +98,13 @@ export class NavTreeView extends GView<NavTreeNode> {
                 //this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
 
                 // Update Status Bar
-                if (this._statusbar) this._statusbar.updateStatusBar(NavTreeStatus.TREEDIRTY, this.treeStatusBar);
+                this._statusbar.updateStatusBar(NavTreeStatus.TREEDIRTY, this.treeStatusBar);
 
                 if (this._autoRefresh) this.refresh();
             }
         } else {
             commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, false);
-            if (this._statusbar) this._statusbar.hideStatusBars();
+            this._statusbar.hideStatusBars();
 
             this._children = [];
             this._onDidChangeTreeData.fire(undefined);
@@ -124,13 +124,13 @@ export class NavTreeView extends GView<NavTreeNode> {
                 //this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
 
                 // Update Status Bar
-                if (this._statusbar) this._statusbar.updateStatusBar(NavTreeStatus.TREEDIRTY, this.treeStatusBar);
+                this._statusbar.updateStatusBar(NavTreeStatus.TREEDIRTY, this.treeStatusBar);
 
                 if (this._autoRefresh) this.refresh();
             }
         } else {
             commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, false);
-            if (this._statusbar) this._statusbar.hideStatusBars();
+            this._statusbar.hideStatusBars();
 
             this._children = [];
             this._onDidChangeTreeData.fire(undefined);

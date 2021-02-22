@@ -71,7 +71,7 @@ export class Control {
         // Load Nav Tree
         Logger.log('Loading Nav Tree...');
 
-        context.subscriptions.push((this._navTree = new NavTreeView(this._context, this._statusBarControl)));
+        context.subscriptions.push((this._navTree = new NavTreeView()));
 
         Logger.log('Nav Tree AutoRefresh: ' + (configuration.getParam('navTree.autoRefresh') ? 'Enabled' : 'Disabled') );
 
@@ -82,7 +82,7 @@ export class Control {
 
         if (config.getParam('stats.enabled')){
             Logger.log('Loading Stats View...');
-            context.subscriptions.push((this._statsView = new StatsView(this._context)));
+            context.subscriptions.push((this._statsView = new StatsView()));
         } else {
             let disposable: Disposable;
             // eslint-disable-next-line prefer-const
@@ -90,7 +90,7 @@ export class Control {
                 if (configuration.changed(e, 'stats.enabled')) {
                     disposable.dispose();
                     Logger.log('Loading Stats View...');
-                    context.subscriptions.push((this._statsView = new StatsView(this._context)));
+                    context.subscriptions.push((this._statsView = new StatsView()));
                 }
             });
         }
@@ -115,7 +115,7 @@ export class Control {
 
    static get navTree() {
         if (this._navTree === undefined) {
-            this._context.subscriptions.push((this._navTree = new NavTreeView(this._context, this._statusBarControl)));
+            this._context.subscriptions.push((this._navTree = new NavTreeView()));
         }
 
         return this._navTree;
@@ -123,7 +123,7 @@ export class Control {
 
     static get statsView() {
         if (this._statsView === undefined) {
-            this._context.subscriptions.push((this._statsView = new StatsView(this._context)));
+            this._context.subscriptions.push((this._statsView = new StatsView()));
         }
 
         return this._statsView;

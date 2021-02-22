@@ -36,7 +36,7 @@ export class StatsView extends GView<StatsNode> {
         runtime: 0
     };
 
-    constructor(private context: ExtensionContext) {
+    constructor() {
         super(StatsViewInfo.ID, StatsViewInfo.NAME);
 
         this._editor = window.activeTextEditor;
@@ -183,69 +183,65 @@ export class StatsView extends GView<StatsNode> {
 
         this._children = [];
 
-        if (window.activeTextEditor) {
-            this._editor = window.activeTextEditor;
+        if ((this._editor = window.activeTextEditor) && this._editor.document) {
+            //this._editor = window.activeTextEditor;
 
-            if (this._editor && this._editor.document) {
+            const text = this._editor.document.getText();
 
-                const text = this._editor.document.getText();
+            // Generate Tool Change Stats
 
-                // Generate Tool Change Stats
-
-                if (this.updateToolChanges(text)) {
-                    this._children.push(
-                        new StatsNode(
-                            StatsType.TOOLCHANGES,
-                            'Tool Changes: ' + this._stats.toolchanges,
-                            undefined,
-                            ResourceType.Stats,
-                            TreeItemCollapsibleState.None,
-                            'Tool Changes'
-                        )
-                    );
-                } else {
-                    this._children.push(
-                        new StatsNode(
-                            StatsType.ERROR,
-                            'Tool Changes: ' + 'Error',
-                            undefined,
-                            ResourceType.Stats,
-                            TreeItemCollapsibleState.None,
-                            'Error Generating Tool Change Stats'
-                        )
-                    );
-                }
-
-
-                // Generate Runtime Stats
-                if (this.updateRunTime(text)) {
-                    this._children.push(
-                        new StatsNode(
-                            StatsType.RUNTIME,
-                            'Est Runtime: ' + new Date( (this._stats.runtime) * 1000).toISOString().substr(11, 8),
-                            undefined,
-                            ResourceType.Stats,
-                            TreeItemCollapsibleState.None,
-                            'Runtime'
-                        )
-                    );
-                } else {
-                    this._children.push(
-                        new StatsNode(
-                            StatsType.ERROR,
-                            'Est Runtime: Error',
-                            undefined,
-                            ResourceType.Stats,
-                            TreeItemCollapsibleState.None,
-                            'Error Generating Runtime Stats'
-                        )
-                    );
-                }
-
-
-                return true;
-
+            if (this.updateToolChanges(text)) {
+                this._children.push(
+                    new StatsNode(
+                        StatsType.TOOLCHANGES,
+                        'Tool Changes: ' + this._stats.toolchanges,
+                        undefined,
+                        ResourceType.Stats,
+                        TreeItemCollapsibleState.None,
+                        'Tool Changes'
+                    )
+                );
+            } else {
+                this._children.push(
+                    new StatsNode(
+                        StatsType.ERROR,
+                        'Tool Changes: ' + 'Error',
+                        undefined,
+                        ResourceType.Stats,
+                        TreeItemCollapsibleState.None,
+                        'Error Generating Tool Change Stats'
+                    )
+                );
             }
+
+
+            // Generate Runtime Stats
+            if (this.updateRunTime(text)) {
+                this._children.push(
+                    new StatsNode(
+                        StatsType.RUNTIME,
+                        'Est Runtime: ' + new Date( (this._stats.runtime) * 1000).toISOString().substr(11, 8),
+                        undefined,
+                        ResourceType.Stats,
+                        TreeItemCollapsibleState.None,
+                        'Runtime'
+                    )
+                );
+            } else {
+                this._children.push(
+                    new StatsNode(
+                        StatsType.ERROR,
+                        'Est Runtime: Error',
+                        undefined,
+                        ResourceType.Stats,
+                        TreeItemCollapsibleState.None,
+                        'Error Generating Runtime Stats'
+                    )
+                );
+            }
+
+
+            return true;
 
         }
 
