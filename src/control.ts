@@ -47,7 +47,7 @@ export class Control {
          if (this._units === 'Auto') {
 
             // Load Units Monitor
-            context.subscriptions.push(this._unitsController = new GCodeUnitsController(this._context));
+            context.subscriptions.push(this._unitsController = new GCodeUnitsController());
 
          } else {
              let disposable: Disposable;
@@ -58,7 +58,7 @@ export class Control {
                     if (this._units === 'Auto') {
                         disposable.dispose();
                         Logger.log('Units: ' + this._units);
-                        context.subscriptions.push(this._unitsController = new GCodeUnitsController(this._context));
+                        context.subscriptions.push(this._unitsController = new GCodeUnitsController());
                     } else {
                         return;
                     }     
