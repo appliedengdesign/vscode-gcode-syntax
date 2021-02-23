@@ -15,6 +15,8 @@ import { StatusBarControl } from "./util/statusBar";
 import { NavTreeView } from "./views/navTreeView";
 import { GCodeUnitsController } from "./gcodeUnits";
 import { StatsView } from "./views/statsView";
+import { PIcon } from "./util/constants";
+import { Commands } from "./util/commands";
 
 export class Control {
 
@@ -96,6 +98,8 @@ export class Control {
         }
 
 
+        // Load Support Heart to Statusbar
+        this._statusBarControl.updateStatusBar(PIcon.HEART, 'support', 'Support G-Code Syntax ❤', undefined, Commands.GCSUPPORT);
         
 
     }
@@ -111,6 +115,10 @@ export class Control {
 
     static get context() {
         return this._context;
+    }
+
+    static get config() {
+        return this._config;
     }
 
    static get navTree() {
@@ -131,5 +139,9 @@ export class Control {
 
     static get statusBarController() {
         return this._statusBarControl;
+    }
+
+    static get gcodeUnitsController() {
+        return this._unitsController;
     }
 }
