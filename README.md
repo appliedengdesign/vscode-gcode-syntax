@@ -39,18 +39,14 @@ This extension adds language syntax for CNC G-Code, code snippets, and colorizat
 
 ### Current Supported File Extensions
 
-| `.001` | `.apt` | `.aptcl` | `.cls`   |
-| `.cnc` | `.din` | `.dnc`   | `.ecs`   |
-| `.eia` | `.fan` | `.fgc`   | `.fnc`   |
-| `.g00` | `.gc`  | `.gcd`   | `.gcode` |
-| `.gp`  | `.hnc` | `.knc`   | `.lib`   |
-| `.m`   | `.min` | `.mpf`   | `.mpr`   |
-| `.msb` | `.nc`  | `.ncc`   | `.ncd`   |
-| `.ncf` | `.ncg` | `.nci`   | `.ncp`   |
-| `.ngc` | `.out` | `.pim`   | `.pit`   |
-| `.plt` | `.ply` | `.prg`   | `.pu1`   |
-| `.rol` | `.sbp` | `.spf`   | `.ssb`   |
-| `.sub` | `.tap` | `.xpi`   |          |
+```text
+| .001 | .apt | .aptcl | .cls   | .cnc | .din | .dnc   | .ecs   |
+| .eia | .fan | .fgc   | .fnc   | .g00 | .gc  | .gcd   | .gcode |
+| .gp  | .hnc | .knc   | .lib   | .m   | .min | .mpf   | .mpr   |
+| .msb | .nc  | .ncc   | .ncd   | .ncf | .ncg | .nci   | .ncp   |
+| .ngc | .out | .pim   | .pit   | .plt | .ply | .prg   | .pu1   |
+| .rol | .sbp | .spf   | .ssb   | .sub | .tap | .xpi   |        |
+```
 
 If you would like another file extension supported by this extension, please [open an issue](https://github.com/appliedemgdesign/issues).
 
