@@ -32,6 +32,7 @@ import { extensions } from 'vscode';
  };
 
  export enum PIcon {
-     ALERT = "$(alert) ",
-     CHECK = "$(check) "
+     ALERT = " $(alert) ",
+     CHECK = " $(check) ",
+     HEART = " $(heart) "
  }
