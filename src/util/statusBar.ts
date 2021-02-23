@@ -10,14 +10,17 @@ import {
     ExtensionContext, 
     StatusBarAlignment, 
     StatusBarItem, 
+    ThemeColor, 
     window 
 } from "vscode";
+import { Commands } from "./commands";
 import { configuration } from "./config";
 import { Logger } from "./logger";
 
 export interface StatusBars {
     treeStatusBar?: StatusBarItem | undefined;
     unitsBar?: StatusBarItem | undefined;
+    support?: StatusBarItem | undefined;
 }
 
 export type StatusBar = keyof StatusBars;
@@ -41,7 +44,8 @@ export class StatusBarControl implements Disposable {
 
         this._statusBars = {
             treeStatusBar: undefined,
-            unitsBar: undefined
+            unitsBar: undefined,
+            support: undefined
         };
 
         this._align = 
@@ -111,15 +115,33 @@ export class StatusBarControl implements Disposable {
         
     }
 
-    updateStatusBar(message: string, bar: StatusBar): void {
+    updateStatusBar(message: string, bar: StatusBar, 
+        tooltip?: string, color?: string | ThemeColor, cmd?:Commands): boolean {
 
         if (!this._enabled) {
-            return;
+            return false;
         } else {
 
             if (this._statusBars !== undefined && bar in this._statusBars) {
+                
+                // Set Text
                 this._statusBars[bar]!.text = message;
+
+                // Set Tooltip
+                if (tooltip) this._statusBars[bar]!.tooltip = tooltip;
+
+                // Set Color
+                if (color) this._statusBars[bar]!.color = color;
+
+                // Set Command
+                if (cmd) this._statusBars[bar]!.command = cmd;
+
+                // Show Bars
                 this.showStatusBars();
+
+                return true;
+            } else {
+                return false;
             }
         }
     }
