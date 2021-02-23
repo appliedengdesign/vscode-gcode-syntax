@@ -155,7 +155,9 @@ export class NavTreeView extends GView<NavTreeNode> {
     protected onConfigurationChanged(e: ConfigurationChangeEvent) {
         if (configuration.changed(e, NavTreeViewInfo.CONFIG.AUTOREF)) {
             this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
-            Logger.log('Nav Tree AutoRefresh: ' + this._autoRefresh);
+            Logger.log('Nav Tree AutoRefresh: ' + 
+                this._autoRefresh ? 'Enabled' : 'Disabled'
+            );
         }
     }
 
