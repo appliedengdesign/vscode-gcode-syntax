@@ -11,9 +11,9 @@ import {
     ExtensionContext, 
 } from "vscode";
 import { Messages } from "./messages";
-import { constants } from './constants';
 
-enum Commands {
+
+export enum Commands {
 
     GCSTATSENABLE = 'gcode.views.stats.enable',
     GCSTATSREFRESH = 'gcode.views.stats.refresh',
