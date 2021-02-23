@@ -128,13 +128,25 @@ export class StatusBarControl implements Disposable {
                 this._statusBars[bar]!.text = message;
 
                 // Set Tooltip
-                if (tooltip) this._statusBars[bar]!.tooltip = tooltip;
+                if (tooltip) {
+                    this._statusBars[bar]!.tooltip = tooltip;
+                } else {
+                    this._statusBars[bar]!.tooltip = undefined;
+                }
 
                 // Set Color
-                if (color) this._statusBars[bar]!.color = color;
+                if (color) {
+                    this._statusBars[bar]!.color = color;
+                } else {
+                    this._statusBars[bar]!.color = undefined;
+                }
 
                 // Set Command
-                if (cmd) this._statusBars[bar]!.command = cmd;
+                if (cmd) {
+                    this._statusBars[bar]!.command = cmd;
+                } else {
+                    this._statusBars[bar]!.command = undefined;
+                }
 
                 // Show Bars
                 this.showStatusBars();

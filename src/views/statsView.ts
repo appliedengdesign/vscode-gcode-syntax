@@ -140,6 +140,7 @@ export class StatsView extends GView<StatsNode> {
     protected onConfigurationChanged(e: ConfigurationChangeEvent) {
         if (configuration.changed(e, 'stats.autoRefresh')) {
             this._autoRefresh = configuration.getParam('stats.autoRefresh');
+            Logger.log('Stats AutoRefresh: ' + this._autoRefresh);
         }
     }
    

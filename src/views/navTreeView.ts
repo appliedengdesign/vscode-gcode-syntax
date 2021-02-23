@@ -20,6 +20,8 @@ import { GView } from './views';
 import { constants, PIcon } from '../util/constants';
 import { GCodeTreeParser } from './providers/gcodeTreeParser';
 import { Control } from '../control';
+import { Commands } from '../util/commands';
+import { Logger } from '../util/logger';
 
 const NavTreeViewInfo = {
     ID: 'gcode.views.navTree',
@@ -98,7 +100,13 @@ export class NavTreeView extends GView<NavTreeNode> {
                 //this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
 
                 // Update Status Bar
-                this._statusbar.updateStatusBar(NavTreeStatus.TREEDIRTY, this.treeStatusBar);
+                this._statusbar.updateStatusBar(
+                    NavTreeStatus.TREEDIRTY, 
+                    this.treeStatusBar, 
+                    'Refresh', 
+                    undefined,
+                    Commands.GCTREEREFRESH
+                );
 
                 if (this._autoRefresh) this.refresh();
             }
@@ -124,7 +132,13 @@ export class NavTreeView extends GView<NavTreeNode> {
                 //this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
 
                 // Update Status Bar
-                this._statusbar.updateStatusBar(NavTreeStatus.TREEDIRTY, this.treeStatusBar);
+                this._statusbar.updateStatusBar(
+                    NavTreeStatus.TREEDIRTY, 
+                    this.treeStatusBar, 
+                    'Refresh', 
+                    undefined,
+                    Commands.GCTREEREFRESH
+                );
 
                 if (this._autoRefresh) this.refresh();
             }
@@ -141,6 +155,7 @@ export class NavTreeView extends GView<NavTreeNode> {
     protected onConfigurationChanged(e: ConfigurationChangeEvent) {
         if (configuration.changed(e, NavTreeViewInfo.CONFIG.AUTOREF)) {
             this._autoRefresh = configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
+            Logger.log('Nav Tree AutoRefresh: ' + this._autoRefresh);
         }
     }
 
