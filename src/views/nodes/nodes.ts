@@ -28,6 +28,7 @@ export const enum IconType {
     CCWCUTTING = "ccwcutting",
     COOLANTON = "coolanton",
     COOLANTOFF = "coolantoff",
+    DWELL = "dwell",
     EXTSUBPROG = "extsubprog",
     LOCALSUB = "localsubprog",
     SUBPROGRET = "subprogreturn",

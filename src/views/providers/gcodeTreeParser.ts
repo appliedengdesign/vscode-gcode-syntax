@@ -52,6 +52,7 @@ export class GCodeTreeParser {
         const blocks: NavTreeNode[] = [];
         let node: NavTreeNode;
         let x: number;
+        let tmp: any;
         const len = line.length;
         
         // Regexp to Pull key words
@@ -137,6 +138,31 @@ export class GCodeTreeParser {
                         );
                         node.tooltip = '[G03] CCW Interpolation';
                         node.setIcon(IconType.CCWCUTTING);
+                        node.command = {
+                            command: 'gcode.views.navTree.select',
+                            title: "",
+                            arguments: [new Range(lnum, 0, lnum, len)]
+                        };
+
+                        blocks.push(node);
+                        break;
+
+                    // Dwell
+                    case '04':
+                    case '4' :
+                        if (i == 0) { x = 1; } else { x = -1; }
+
+                        if (!(tmp = words[i + x].substr(1)).match(/\./)) {
+                            // Milliseconds
+                            tmp = ( Number(tmp) / 1000 );
+                        } 
+
+                        node = new NavTreeNode(
+                            'Dwell (' + tmp + 's)', 
+                            TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = '[G04] Dwell';
+                        node.setIcon(IconType.DWELL);
                         node.command = {
                             command: 'gcode.views.navTree.select',
                             title: "",
