@@ -31,7 +31,7 @@ import { extensions } from 'vscode';
     },
  };
 
- export enum PIcon {
+ export const enum PIcon {
      ALERT = " $(alert) ",
      CHECK = " $(check) ",
      HEART = " $(heart) "

@@ -13,7 +13,7 @@ import {
 import { Messages } from "./messages";
 
 
-export enum Commands {
+export const enum Commands {
 
     GCSTATSENABLE = 'gcode.views.stats.enable',
     GCSTATSREFRESH = 'gcode.views.stats.refresh',

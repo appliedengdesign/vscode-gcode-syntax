@@ -20,7 +20,7 @@ import { StatsNode, StatsType } from "./nodes/statsNode";
 import { GCodeRuntimeParser } from "./providers/gcodeRuntimeParser";
 import { GView } from "./views";
 
-enum StatsViewInfo {
+const enum StatsViewInfo {
     ID = 'gcode.views.stats',
     NAME = 'Stats'
 }

@@ -10,7 +10,7 @@ import { IconType, ResourceType, ViewNode } from "./nodes";
 import * as path from 'path';
 
 
-export enum StatsType {
+export const enum StatsType {
     ROOT,
     TOOLCHANGES,
     RUNTIME,

@@ -20,7 +20,7 @@ import { StatusBar, StatusBarControl } from "./util/statusBar";
 
 
 
-export enum GCodeUnits {
+export const enum GCodeUnits {
     INCH = "Inch",
     MM = "Metric",
     AUTO = "Auto",

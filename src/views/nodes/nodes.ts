@@ -15,7 +15,7 @@ import {
 import { StatsNode } from "./statsNode";
 import { NavTreeNode } from "./navTreeNode";
 
-export enum ResourceType {
+export const enum ResourceType {
     Stats = 'gcode:stats',
     Tree = 'gcode:tree'
 }
