@@ -14,6 +14,7 @@ import {
     workspace
 } from "vscode";
 import { Control } from "./control";
+import { Commands } from "./util/commands";
 import { configuration } from "./util/config";
 import { Logger } from "./util/logger";
 import { StatusBar, StatusBarControl } from "./util/statusBar";
@@ -61,12 +62,12 @@ export class GCodeUnitsController implements Disposable {
                 
                 Logger.log('Units: ' + this._units);
                 this._auto = false;
-                this._statusbar.updateStatusBar(this._units, this.unitsStatusBar);
+                this._statusbar.updateStatusBar(this._units, this.unitsStatusBar, undefined, undefined, Commands.GCSHOWSETTIGNS);
 
             } else {
                 Logger.log('Units: ' + this._units);
                 this._auto = true;
-                this._statusbar.updateStatusBar(this._units, this.unitsStatusBar);
+                this._statusbar.updateStatusBar(this._units, this.unitsStatusBar, undefined, undefined, Commands.GCSHOWSETTIGNS);
             }
         }
     }
@@ -84,7 +85,7 @@ export class GCodeUnitsController implements Disposable {
                 this._units = this.parseUnits(text);
 
                 // Update Status Bar
-                this._statusbar.updateStatusBar(this._units, this.unitsStatusBar);
+                this._statusbar.updateStatusBar(this._units, this.unitsStatusBar, undefined, undefined, Commands.GCSHOWSETTIGNS);
 
             } else {
                 return;
@@ -103,7 +104,7 @@ export class GCodeUnitsController implements Disposable {
                 this._units = this.parseUnits(text);
 
                 // Update Status Bar
-                this._statusbar.updateStatusBar(this._units, this.unitsStatusBar);
+                this._statusbar.updateStatusBar(this._units, this.unitsStatusBar, undefined, undefined, Commands.GCSHOWSETTIGNS);
             } else {
                 return;
             }

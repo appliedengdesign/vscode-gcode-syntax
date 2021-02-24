@@ -10,16 +10,17 @@ import {
     Disposable, 
     ExtensionContext, 
 } from "vscode";
+import { constants } from "./constants";
 import { Messages } from "./messages";
 
 
 export const enum Commands {
-
+    GCSHOWSETTIGNS = 'gcode.showSettings',
     GCSTATSENABLE = 'gcode.views.stats.enable',
     GCSTATSREFRESH = 'gcode.views.stats.refresh',
+    GCSUPPORT = 'gcode.supportGCode',
     GCTREEREFRESH = 'gcode.views.navTree.refresh',
-    GCTREESELECT = 'gcode.gcodeTree.selection',
-    GCSUPPORT = 'gcode.supportGCode'
+    GCTREESELECT = 'gcode.gcodeTree.selection'
 }
 
 export abstract class GCommand implements  Disposable{
@@ -49,7 +50,10 @@ export abstract class GCommand implements  Disposable{
 
     static registerCommands(context: ExtensionContext): void {
 
-        context.subscriptions.push(new SupportGCodeCmd());
+        context.subscriptions.push(
+            new SupportGCodeCmd(),
+            new ShowGCodeSettings()
+        );
     }
 }
 
@@ -61,5 +65,16 @@ class SupportGCodeCmd extends GCommand {
     
     execute() {
         return Messages.showSupportGCodeMessage();
+    }
+}
+
+class ShowGCodeSettings extends GCommand {
+
+    constructor() {
+        super(Commands.GCSHOWSETTIGNS);
+    }
+
+    execute() {
+        commands.executeCommand('workbench.action.openSettings', '@ext:' + constants.extensionQualifiedID);
     }
 }

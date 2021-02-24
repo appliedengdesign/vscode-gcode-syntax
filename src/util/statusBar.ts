@@ -116,7 +116,7 @@ export class StatusBarControl implements Disposable {
     }
 
     updateStatusBar(message: string, bar: StatusBar, 
-        tooltip?: string, color?: string | ThemeColor, cmd?:Commands): boolean {
+        tooltip?: string, color?: string | ThemeColor, cmd?: Commands | string): boolean {
 
         if (!this._enabled) {
             return false;

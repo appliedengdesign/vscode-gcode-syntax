@@ -22,6 +22,7 @@ import { extensions } from 'vscode';
         shortname: gcode?.packageJSON.shortName,
     },
     extensionOutputChannelName: gcode?.packageJSON.shortName,
+    extensionQualifiedID: extensionQualifiedID,
     iconsPath: path.join(__dirname, "..", "..", "resources", "icons"),
     iconExt: '.svg',
     langId: gcode?.packageJSON.contributes.languages[0].id,

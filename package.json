@@ -319,6 +319,15 @@
                     "light": "resources/icons/light/heart.svg",
                     "dark": "resources/icons/dark/heart.svg"
                 }
+            },
+            {
+                "command": "gcode.showSettings",
+                "title": "G-Code Settings",
+                "category": "G-Code",
+                "icon": {
+                    "light": "resources/icons/light/settings.svg",
+                    "dark": "resources/icons/dark/settings.svg"
+                }
             }
         ]
     },
