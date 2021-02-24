@@ -494,6 +494,7 @@ export class GCodeTreeParser {
                     // Coolant On
                     case '08':
                     case '8' :
+                    case '88':
                         node = new NavTreeNode(
                             'Coolant On', 
                             TreeItemCollapsibleState.None,
@@ -512,7 +513,8 @@ export class GCodeTreeParser {
 
                     // Coolant Off
                     case '09':
-                    case '9' : 
+                    case '9' :
+                    case '89': 
                         node = new NavTreeNode(
                             'Coolant Off', 
                             TreeItemCollapsibleState.None,
