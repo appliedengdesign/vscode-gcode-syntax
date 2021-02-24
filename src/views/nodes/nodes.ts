@@ -21,20 +21,27 @@ export const enum ResourceType {
 }
 
 export const enum IconType {
-    TOOLCHANGE = "toolchange",
-    RAPID = "rapid",
+    BORING = 'boring',
     CUTTING = "cutting",
     CWCUTTING = "cwcutting",
     CCWCUTTING = "ccwcutting",
     COOLANTON = "coolanton",
     COOLANTOFF = "coolantoff",
     DWELL = "dwell",
+    DRILL = "drill",
+    DRILLDWELL = "drill-dwell",
+    DRILLPECK = "drill-peck",
+    ENGRAVING = "engraving",
     EXTSUBPROG = "extsubprog",
     LOCALSUB = "localsubprog",
+    RAPID = "rapid",
     SUBPROGRET = "subprogreturn",
-    WORKOFFSET = "workoffset",
     SPINDLECW = "spindlecw",
-    SPINDLECCW = "spindleccw"
+    SPINDLECCW = "spindleccw",
+    TAPPINGRH = "tapping-rh",
+    TAPPINGLH = "tapping-lh",
+    TOOLCHANGE = "toolchange",
+    WORKOFFSET = "workoffset"
 }
 
 export interface Node {

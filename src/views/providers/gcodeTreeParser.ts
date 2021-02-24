@@ -93,6 +93,7 @@ export class GCodeTreeParser {
                         blocks.push(node);
                         break;
 
+
                     // Linear / Cutting
                     case '01':
                     case '1' : 
@@ -110,6 +111,7 @@ export class GCodeTreeParser {
 
                         blocks.push(node);
                         break;
+
 
                     // CW Motion
                     case '02':
@@ -129,6 +131,7 @@ export class GCodeTreeParser {
                         blocks.push(node);
                         break;
 
+
                     // CCW Motion
                     case '03':
                     case '3' :
@@ -146,6 +149,7 @@ export class GCodeTreeParser {
 
                         blocks.push(node);
                         break;
+
 
                     // Dwell
                     case '04':
@@ -171,6 +175,25 @@ export class GCodeTreeParser {
 
                         blocks.push(node);
                         break;
+
+
+                    // Engraving
+                    case '47':
+                        node = new NavTreeNode(
+                            'Engraving', 
+                            TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = '[G47] Engraving';
+                        node.setIcon(IconType.ENGRAVING);
+                        node.command = {
+                            command: 'gcode.views.navTree.select',
+                            title: "",
+                            arguments: [new Range(lnum, 0, lnum, len)]
+                        };
+
+                        blocks.push(node);
+                        break;
+
                     
                     // Standard Work Offsets
                     case '54':
@@ -213,6 +236,7 @@ export class GCodeTreeParser {
 
                         blocks.push(node);
                         break;
+
                     
                     // Extended Work Offsets
                     case '154':
@@ -231,6 +255,7 @@ export class GCodeTreeParser {
                         blocks.push(node);
                         break;
 
+
                     // Extended Work Offsets
                     case '54.1':
                         node = new NavTreeNode(
@@ -247,6 +272,7 @@ export class GCodeTreeParser {
     
                         blocks.push(node);
                         break;
+
                     
                     // Okuma Work Offsets
                     case '15':
@@ -264,6 +290,7 @@ export class GCodeTreeParser {
     
                         blocks.push(node);
                         break;
+
                     
                     // External Sub Program
                     case '65':
@@ -282,6 +309,120 @@ export class GCodeTreeParser {
                         blocks.push(node);
                         break;
 
+
+                    // LH Tapping Cycle
+                    case '74':
+                        node = new NavTreeNode(
+                            'LH Tapping Cycle', 
+                            TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = '[G74] LH Tapping Cycle';
+                        node.setIcon(IconType.TAPPINGLH);
+                        node.command = {
+                            command: 'gcode.views.navTree.select',
+                            title: "",
+                            arguments: [new Range(lnum, 0, lnum, len)]
+                        };
+
+                        blocks.push(node);
+                        break;
+
+
+                    // Drill Cycle
+                    case '81':
+                        node = new NavTreeNode(
+                            'Drill Cycle', 
+                            TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = '[G81] Drill Cycle';
+                        node.setIcon(IconType.DRILL);
+                        node.command = {
+                            command: 'gcode.views.navTree.select',
+                            title: "",
+                            arguments: [new Range(lnum, 0, lnum, len)]
+                        };
+
+                        blocks.push(node);
+                        break;
+
+                    
+                    // Spot Drill Cycle
+                    case '82':
+                        node = new NavTreeNode(
+                            'Spot Drill Cycle', 
+                            TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = '[G82] Spot Drill Cycle';
+                        node.setIcon(IconType.DRILLDWELL);
+                        node.command = {
+                            command: 'gcode.views.navTree.select',
+                            title: "",
+                            arguments: [new Range(lnum, 0, lnum, len)]
+                        };
+
+                        blocks.push(node);
+                        break;
+
+
+                    // Peck Drill Cycle
+                    case '83':
+                        node = new NavTreeNode(
+                            'Peck Drill Cycle', 
+                            TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = '[G83] Peck Drill Cycle';
+                        node.setIcon(IconType.DRILLPECK);
+                        node.command = {
+                            command: 'gcode.views.navTree.select',
+                            title: "",
+                            arguments: [new Range(lnum, 0, lnum, len)]
+                        };
+
+                        blocks.push(node);
+                        break;
+
+                    
+                    // RH Tapping Cycle
+                    case '84':
+                        node = new NavTreeNode(
+                            'RH Tapping Cycle', 
+                            TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = '[G84] RH Tapping Cycle';
+                        node.setIcon(IconType.TAPPINGRH);
+                        node.command = {
+                            command: 'gcode.views.navTree.select',
+                            title: "",
+                            arguments: [new Range(lnum, 0, lnum, len)]
+                        };
+
+                        blocks.push(node);
+                        break;
+
+
+                    // Boring Cycles
+                    case '85':
+                    case '86':
+                    case '87':
+                    case '88':
+                    case '89':
+                        node = new NavTreeNode(
+                            'Boring Cycle', 
+                            TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = '[G' + argument + '] Boring Cycle';
+                        node.setIcon(IconType.BORING);
+                        node.command = {
+                            command: 'gcode.views.navTree.select',
+                            title: "",
+                            arguments: [new Range(lnum, 0, lnum, len)]
+                        };
+
+                        blocks.push(node);
+                        break;
+
+
+                    // No Match
                     default: {
                         break;
                     }
@@ -310,6 +451,7 @@ export class GCodeTreeParser {
                         blocks.push(node);
                         break;
 
+
                     // Spindle CounterClockwise
                     case '04':
                     case '4':
@@ -328,6 +470,7 @@ export class GCodeTreeParser {
 
                         blocks.push(node);
                         break;
+
                         
                     // Tool Change
                     case '06':
@@ -366,6 +509,7 @@ export class GCodeTreeParser {
                         blocks.push(node);
                         break;
 
+
                     // Coolant Off
                     case '09':
                     case '9' : 
@@ -383,6 +527,7 @@ export class GCodeTreeParser {
                         
                         blocks.push(node);
                         break;
+
                     
                     // Local Subprogram
                     case '97':
@@ -401,6 +546,7 @@ export class GCodeTreeParser {
                         blocks.push(node);
                         break;
 
+
                     // Local Subprogram
                     case '99':
                         node = new NavTreeNode(
@@ -417,6 +563,7 @@ export class GCodeTreeParser {
                         
                         blocks.push(node);
                         break;
+                        
 
                     default:
                         break;
