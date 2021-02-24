@@ -432,6 +432,24 @@ export class GCodeTreeParser {
 
                 switch(argument) {
 
+                    // Tool Change
+                    case '00':
+                    case '01':
+                        node = new NavTreeNode(
+                            argument === '00' ? 'Program Stop' : 'Optional Stop', 
+                            TreeItemCollapsibleState.None,
+                        );
+                        node.tooltip = argument === '00' ? 'Program Stop' : 'Optional Stop';
+                        node.setIcon(IconType.STOP);
+                        node.command = {
+                            command: 'gcode.views.navTree.select',
+                            title: "",
+                            arguments: [new Range(lnum, 0, lnum, len)]
+                        };
+
+                        blocks.push(node);
+                        break;
+
                     // Spindle Clockwise
                     case '03':
                     case '3' :

@@ -38,6 +38,7 @@ export const enum IconType {
     SUBPROGRET = "subprogreturn",
     SPINDLECW = "spindlecw",
     SPINDLECCW = "spindleccw",
+    STOP = "stop",
     TAPPINGRH = "tapping-rh",
     TAPPINGLH = "tapping-lh",
     TOOLCHANGE = "toolchange",
