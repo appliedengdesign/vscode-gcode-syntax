@@ -1,19 +1,31 @@
 {
-	// Snippets for developing extensions
-
 	"Create Snippet": {
 		"scope": "json",
 		"prefix": "snip",
 		"body": [
 			"\"$1\": {",
-				"\t\"scope\": \"gcode\",",
-				"\t\"prefix\": \"$2\",",
-					"\t\"body\": [",
-						"\t\t\"$0\"",
-					"\t],",
-				"\t\"description\": \"$3\"",
+			"\t\"scope\": \"gcode\",",
+			"\t\"prefix\": \"$2\",",
+			"\t\"body\": [",
+			"\t\t\"$0\"",
+			"\t],",
+			"\t\"description\": \"$3\"",
 			"}"
 		],
 		"description": "Create Snippet"
+	},
+	"Add File Header": {
+		"scope": "typescript,javascript",
+		"prefix": [
+			"header",
+			"copyright"
+		],
+		"body": [
+			"/* ---------------------------------------------------------------------------------------------",
+			" *  Copyright (c) Applied Eng & Design All rights reserved.",
+			" *  Licensed under the MIT License. See License.md in the project root for license information.",
+			" * -------------------------------------------------------------------------------------------- */"
+		],
+		"description": "Adds Copyright Header..."
 	}
 }

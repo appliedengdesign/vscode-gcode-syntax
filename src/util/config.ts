@@ -1,42 +1,39 @@
-/*---------------------------------------------------------------------------------------------
+/* ---------------------------------------------------------------------------------------------
  *  Copyright (c) Applied Eng & Design All rights reserved.
  *  Licensed under the MIT License. See License.md in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
+ * -------------------------------------------------------------------------------------------- */
 'use strict';
-import { 
-    WorkspaceConfiguration, 
-    workspace, 
-    ExtensionContext, 
-    ConfigurationChangeEvent, 
-    EventEmitter, 
-    Event
-} from "vscode";
+import {
+    ConfigurationChangeEvent,
+    Event,
+    EventEmitter,
+    ExtensionContext,
+    workspace,
+    WorkspaceConfiguration,
+} from 'vscode';
 import { constants } from './constants';
-import { Logger } from "./logger";
-
+import { Logger } from './logger';
 export class Config {
-    private  _config: WorkspaceConfiguration;
+    private _config: WorkspaceConfiguration;
 
     private _onDidChange = new EventEmitter<ConfigurationChangeEvent>();
-    readonly onDidChange: Event<ConfigurationChangeEvent> = this._onDidChange.event; 
+    get onDidChange(): Event<ConfigurationChangeEvent> {
+        return this._onDidChange.event;
+    }
 
-    static initialize(context: ExtensionContext) {
-        context.subscriptions.push(
-            workspace.onDidChangeConfiguration(configuration.onConfigurationChanged, configuration)
-        );
+    static initialize(context: ExtensionContext, cfg: Config) {
+        context.subscriptions.push(workspace.onDidChangeConfiguration(cfg.onConfigurationChanged, cfg));
     }
 
     // Constructor
     constructor() {
         // Static reference to configuration
         this._config = workspace.getConfiguration(constants.configId);
-        
+
         // Initialize
-        
     }
 
     private onConfigurationChanged(e: ConfigurationChangeEvent) {
-
         Logger.log('Configuration changed...');
 
         this._onDidChange.fire(e);
@@ -44,21 +41,19 @@ export class Config {
 
     private reloadConfig() {
         this._config = workspace.getConfiguration(constants.configId);
-    } 
+    }
 
     // Get Parameter
-    getParam(param: string): any {
+    getParam(param: string): unknown {
         this.reloadConfig();
         return this._config.get(param);
     }
 
     // Set Parameter
-    setParam( param: string, value: any, global = true): boolean {
-        
+    async setParam(param: string, value: any, global = true): Promise<boolean> {
         try {
-            this._config.update(param, value, global);
-        }
-        catch (err) {
+            await this._config.update(param, value, global);
+        } catch (err) {
             Logger.log('Error updating configuration');
             return false;
         }
@@ -67,15 +62,16 @@ export class Config {
 
         if (this._config !== undefined) {
             return true;
-        } else return false;
+        } else {
+            return false;
+        }
     }
 
     changed(e: ConfigurationChangeEvent, ...args: any[]) {
-        const section: string = args[0];
+        const section: string = <string>args[0];
 
         return e.affectsConfiguration(`${constants.configId}.${section}`);
     }
-
 }
 
 export const configuration = new Config();

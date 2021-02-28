@@ -337,7 +337,7 @@
         "lint": "eslint --ext .ts src/**/*.ts --cache",
         "watch": "tsc -watch -p ./",
         "pretest": "npm run compile",
-        "pretty": "prettier --config .prettierrc --loglevel warn --write .",
+        "pretty": "prettier --config .prettierrc --loglevel warn .",
         "test": "node ./out/test/runTests.js"
     },
     "devDependencies": {

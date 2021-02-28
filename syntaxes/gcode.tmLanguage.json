@@ -2,22 +2,44 @@
     "scopeName": "source.gcode",
     "name": "VSCode GCode Syntax",
     "patterns": [
-        { "include": "#all" }
+        {
+            "include": "#all"
+        }
     ],
     "repository": {
         "all": {
             "patterns": [
-                { "include": "#comments" },
-                { "include": "#speedsfeeds" },
-                { "include": "#prognumbers" },
-                { "include": "#coords" },
-                { "include": "#tools" },
-                { "include": "#modifiers" },
-                { "include": "#macrovars" },
-                { "include": "#keywords" },
-                { "include": "#operators" },
-                { "include": "#bracket-expression"}
-            ]      
+                {
+                    "include": "#comments"
+                },
+                {
+                    "include": "#speedsfeeds"
+                },
+                {
+                    "include": "#prognumbers"
+                },
+                {
+                    "include": "#coords"
+                },
+                {
+                    "include": "#tools"
+                },
+                {
+                    "include": "#modifiers"
+                },
+                {
+                    "include": "#macrovars"
+                },
+                {
+                    "include": "#keywords"
+                },
+                {
+                    "include": "#operators"
+                },
+                {
+                    "include": "#bracket-expression"
+                }
+            ]
         },
         "comments": {
             "patterns": [
@@ -44,7 +66,7 @@
                 },
                 {
                     "match": "[gG]1[1-2][0-9]",
-                    "name": "constant.numeric.gcode"   
+                    "name": "constant.numeric.gcode"
                 },
                 {
                     "match": "[gG]15\\s?(H[0-9]{1,2})?",
@@ -61,14 +83,13 @@
                 {
                     "match": "([\\%])",
                     "name": "string.gcode"
-                }                
+                }
             ]
         },
         "operators": {
             "patterns": [
                 {
                     "match": "(SIN)|(COS)|(TAN)|(ASIN)|(ACOS)|(ATAN)|(FIX)|(FUP)|(LN)|(ROUND)|(SQRT)",
-
                     "name": "support.constant.math.gcode"
                 },
                 {
@@ -181,14 +202,21 @@
             "begin": "\\[",
             "end": "\\]",
             "beginCaptures": {
-                "0": { "name": "punctuation.paren.open" }
+                "0": {
+                    "name": "punctuation.paren.open"
+                }
             },
             "endCaptures": {
-                "0": { "name": "punctuation.paren.close" }
+                "0": {
+                    "name": "punctuation.paren.close"
+                }
             },
             "name": "expression.group",
-            "patterns": [{ "include": "#all"}]
+            "patterns": [
+                {
+                    "include": "#all"
+                }
+            ]
         }
     }
-
 }

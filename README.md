@@ -1,8 +1,12 @@
-[![MIT License](https://badgen.net/badge/license/MIT)](https://opensource.org/licenses/MIT)
-[![GitHub](https://badgen.net/github/release/appliedengdesign/vscode-gcode-syntax)](https://github.com/appliedengdesign/vscode-gcode-syntax)
+[![Version](https://vsmarketplacebadge.apphb.com/version/appliedengdesign.vscode-gcode-syntax.svg)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/appliedengdesign.vscode-gcode-syntax.svg)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
+[![Rating](https://vsmarketplacebadge.apphb.com/rating/appliedengdesign.vscode-gcode-syntax.svg)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
+
 [![GitHub Issues](https://badgen.net/github/open-issues/appliedengdesign/vscode-gcode-syntax)](https://github.com/appliedengdesign/vscode-gcode-syntax/issues)
-![Gihub Stars](https://badgen.net/github/stars/appliedengdesign/vscode-gcode-syntax)
-[![VS Marketplace Installs](https://badgen.net/vs-marketplace/i/appliedengdesign.vscode-gcode-syntax)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
+![Github Stars](https://badgen.net/github/stars/appliedengdesign/vscode-gcode-syntax)
+![Github Last Commit](https://badgen.net/github/last-commit/appliedengdesign/vscode-gcode-syntax/)
+[![MIT License](https://badgen.net/badge/license/MIT)](https://opensource.org/licenses/MIT)
+
 [![Follow @appliedengdesign](https://badgen.net/twitter/follow/appliedengdes)](https://twitter.com/appliedengdes)
 
 <p align="center">

@@ -1,21 +1,21 @@
-/*---------------------------------------------------------------------------------------------
+/* ---------------------------------------------------------------------------------------------
  *  Copyright (c) Applied Eng & Design All rights reserved.
  *  Licensed under the MIT License. See License.md in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
+ * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import { 
+import {
     ConfigurationChangeEvent,
     Disposable,
-    ExtensionContext, 
-    StatusBarAlignment, 
-    StatusBarItem, 
-    ThemeColor, 
-    window 
-} from "vscode";
-import { Commands } from "./commands";
-import { configuration } from "./config";
-import { Logger } from "./logger";
+    ExtensionContext,
+    StatusBarAlignment,
+    StatusBarItem,
+    ThemeColor,
+    window,
+} from 'vscode';
+import { Commands } from './commands';
+import { configuration } from './config';
+import { Logger } from './logger';
 
 export interface StatusBars {
     treeStatusBar?: StatusBarItem | undefined;
@@ -25,7 +25,6 @@ export interface StatusBars {
 
 export type StatusBar = keyof StatusBars;
 
-
 export class StatusBarControl implements Disposable {
     private _enabled: boolean;
     private _align: StatusBarAlignment;
@@ -34,43 +33,38 @@ export class StatusBarControl implements Disposable {
     // Status Bars
     private _statusBars: StatusBars;
 
-    constructor (private context: ExtensionContext) {
+    constructor(private context: ExtensionContext) {
+        this._disposable = Disposable.from(configuration.onDidChange(this.onConfigurationChanged, this));
 
-        this._disposable = Disposable.from(
-            configuration.onDidChange(this.onConfigurationChanged, this)
-        );
-
-        this. _enabled = configuration.getParam('general.statusBars.enabled');
+        this._enabled = <boolean>configuration.getParam('general.statusBars.enabled');
 
         this._statusBars = {
             treeStatusBar: undefined,
             unitsBar: undefined,
-            support: undefined
+            support: undefined,
         };
 
-        this._align = 
-            configuration.getParam('general.statusBars.alignment') === 'Left' ?
-            StatusBarAlignment.Left : StatusBarAlignment.Right;
+        this._align =
+            configuration.getParam('general.statusBars.alignment') === 'Left'
+                ? StatusBarAlignment.Left
+                : StatusBarAlignment.Right;
 
         if (this._enabled) {
-
             Logger.log('Loading Status Bars...');
 
-            Object.keys(this._statusBars).forEach((key) => {
+            Object.keys(this._statusBars).forEach(key => {
                 this._statusBars[key as keyof StatusBars] = window.createStatusBarItem(
                     this._align,
-                    this._align = StatusBarAlignment.Left ? 1 : 999
+                    (this._align = StatusBarAlignment.Left ? 1 : 999),
                 );
             });
 
             this.showStatusBars();
-
         }
     }
 
     dispose() {
-        
-        Object.keys(this._statusBars).forEach((key) => {
+        Object.keys(this._statusBars).forEach(key => {
             this._statusBars[key as keyof StatusBars]?.dispose();
         });
 
@@ -79,51 +73,45 @@ export class StatusBarControl implements Disposable {
 
     private onConfigurationChanged(e: ConfigurationChangeEvent) {
         if (configuration.changed(e, 'general.statusBars.enabled')) {
-
             if (this._enabled) {
-
                 // Disable & Dispose
-                Object.keys(this._statusBars).forEach((key) => {
+                Object.keys(this._statusBars).forEach(key => {
                     this._statusBars[key as keyof StatusBars]?.dispose();
                 });
-
             } else {
-
                 // Enable
-                Object.keys(this._statusBars).forEach((key) => {
+                Object.keys(this._statusBars).forEach(key => {
                     this._statusBars[key as keyof StatusBars] = window.createStatusBarItem(
                         this._align,
-                        this._align === StatusBarAlignment.Left ? 1 : 999
+                        this._align === StatusBarAlignment.Left ? 1 : 999,
                     );
                 });
 
                 this.showStatusBars();
-                
-
             }
 
-            this._enabled = configuration.getParam('general.statusBars.enabled');
-            
-            this._align = 
-            configuration.getParam('general.statusBars.alignment') === 'Left' ?
-            StatusBarAlignment.Left : StatusBarAlignment.Right;
+            this._enabled = <boolean>configuration.getParam('general.statusBars.enabled');
 
+            this._align =
+                configuration.getParam('general.statusBars.alignment') === 'Left'
+                    ? StatusBarAlignment.Left
+                    : StatusBarAlignment.Right;
         } else {
             return;
         }
-
-        
     }
 
-    updateStatusBar(message: string, bar: StatusBar, 
-        tooltip?: string, color?: string | ThemeColor, cmd?: Commands | string): boolean {
-
+    updateStatusBar(
+        message: string,
+        bar: StatusBar,
+        tooltip?: string,
+        color?: string | ThemeColor,
+        cmd?: Commands | string,
+    ): boolean {
         if (!this._enabled) {
             return false;
         } else {
-
             if (this._statusBars !== undefined && bar in this._statusBars) {
-                
                 // Set Text
                 this._statusBars[bar]!.text = message;
 
@@ -159,16 +147,14 @@ export class StatusBarControl implements Disposable {
     }
 
     showStatusBars() {
-        Object.keys(this._statusBars).forEach((key) => {
+        Object.keys(this._statusBars).forEach(key => {
             this._statusBars[key as keyof StatusBars]?.show();
         });
     }
 
     hideStatusBars() {
-        Object.keys(this._statusBars).forEach((key) => {
+        Object.keys(this._statusBars).forEach(key => {
             this._statusBars[key as keyof StatusBars]?.hide();
         });
     }
-
-
 }

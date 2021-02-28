@@ -1,39 +1,30 @@
-/*---------------------------------------------------------------------------------------------
+/* ---------------------------------------------------------------------------------------------
  *  Copyright (c) Applied Eng & Design All rights reserved.
  *  Licensed under the MIT License. See License.md in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
+ * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import { 
-    commands,
-    ConfigurationChangeEvent,
-    ExtensionContext,
-    TextDocumentChangeEvent,
-    TreeItemCollapsibleState,
-    window 
-} from "vscode";
-import { configuration } from "../util/config";
-import { constants } from "../util/constants";
-import { Logger } from "../util/logger";
-import { ResourceType } from "./nodes/nodes";
-import { StatsNode, StatsType } from "./nodes/statsNode";
-import { GCodeRuntimeParser } from "./providers/gcodeRuntimeParser";
-import { GView } from "./views";
+import { commands, ConfigurationChangeEvent, TextDocumentChangeEvent, TreeItemCollapsibleState, window } from 'vscode';
+import { configuration } from '../util/config';
+import { constants } from '../util/constants';
+import { Logger } from '../util/logger';
+import { ResourceType } from './nodes/nodes';
+import { StatsNode, StatsType } from './nodes/statsNode';
+import { GCodeRuntimeParser } from './providers/gcodeRuntimeParser';
+import { GView } from './views';
 
 const enum StatsViewInfo {
     ID = 'gcode.views.stats',
-    NAME = 'Stats'
+    NAME = 'Stats',
 }
 
-
 export class StatsView extends GView<StatsNode> {
-
     private _children: StatsNode[] | undefined;
-   // private _units: GCodeUnits;
+    // private _units: GCodeUnits;
 
     private _stats = {
         toolchanges: 0,
-        runtime: 0
+        runtime: 0,
     };
 
     constructor() {
@@ -45,14 +36,13 @@ export class StatsView extends GView<StatsNode> {
 
         this.registerCommands();
 
-        this._autoRefresh = configuration.getParam('stats.autoRefresh');
-        
-       // this._units = defUnits;
+        this._autoRefresh = <boolean>configuration.getParam('stats.autoRefresh');
+
+        // this._units = defUnits;
 
         if (this._autoRefresh) {
-            this.refresh();
+            void this.refresh();
         }
-
     }
 
     dispose() {
@@ -66,71 +56,65 @@ export class StatsView extends GView<StatsNode> {
             undefined,
             ResourceType.Stats,
             TreeItemCollapsibleState.None,
-            undefined
+            undefined,
         );
     }
 
-    getChildren(): StatsNode[] {
-
+    async getChildren(): Promise<StatsNode[]> {
         if (this._children === undefined) {
+            this._children = [
+                new StatsNode(
+                    StatsType.TOOLCHANGES,
+                    `Tool Changes: ${this._stats.toolchanges}`,
+                    undefined,
+                    ResourceType.Stats,
+                    TreeItemCollapsibleState.None,
+                    undefined,
+                ),
+                new StatsNode(
+                    StatsType.RUNTIME,
+                    `Runtime: ${this._stats.runtime}`,
+                    undefined,
+                    ResourceType.Stats,
+                    TreeItemCollapsibleState.None,
+                    undefined,
+                ),
+            ];
+        }
 
-            this._children = 
-            [new StatsNode(
-                StatsType.TOOLCHANGES,
-                'Tool Changes: ' + this._stats.toolchanges,
-                undefined,
-                ResourceType.Stats,
-                TreeItemCollapsibleState.None,
-                undefined
-            ),
-            new StatsNode(
-                StatsType.RUNTIME,
-                "Runtime: " + this._stats.runtime,
-                undefined,
-                ResourceType.Stats,
-                TreeItemCollapsibleState.None,
-                undefined
-            )
-        ];
-        } 
-        
-        return this._children;
+        return Promise.resolve(this._children);
     }
 
-    onActiveEditorChanged():void {
-        if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {            //this._editor = window.activeTextEditor;
-
-            const enabled = (this._editor.document.languageId === constants.langId);
-            commands.executeCommand('setContext', 'statsEnabled', enabled);
+    protected onActiveEditorChanged(): void {
+        if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {
+            const enabled = this._editor.document.languageId === constants.langId;
+            void commands.executeCommand('setContext', 'statsEnabled', enabled);
 
             if (enabled) {
-                //this._editor = window.activeTextEditor;
-                //this._autoRefresh = configuration.getParam('stats.autoRefresh');
-
-                if (this._autoRefresh) this.refresh();
+                if (this._autoRefresh) {
+                    void this.refresh();
+                }
             }
         } else {
-            commands.executeCommand('setContext', 'statsEnabled', false);
+            void commands.executeCommand('setContext', 'statsEnabled', false);
 
             this._children = [];
             this._onDidChangeTreeData.fire(undefined);
         }
     }
 
-    onDocumentChanged(changeEvent: TextDocumentChangeEvent) {
-        if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {            //this._editor = window.activeTextEditor;
-
-            const enabled = (this._editor.document.languageId === constants.langId);
-            commands.executeCommand('setContext', 'statsEnabled', enabled);
+    protected onDocumentChanged(_changeEvent: TextDocumentChangeEvent) {
+        if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {
+            const enabled = this._editor.document.languageId === constants.langId;
+            void commands.executeCommand('setContext', 'statsEnabled', enabled);
 
             if (enabled) {
-                //this._editor = window.activeTextEditor;
-                //this._autoRefresh = configuration.getParam('stats.autoRefresh');
-
-                if (this._autoRefresh) this.refresh();
+                if (this._autoRefresh) {
+                    void this.refresh();
+                }
             }
         } else {
-            commands.executeCommand('setContext', 'statsEnabled', false);
+            void commands.executeCommand('setContext', 'statsEnabled', false);
 
             this._children = [];
             this._onDidChangeTreeData.fire(undefined);
@@ -139,27 +123,25 @@ export class StatsView extends GView<StatsNode> {
 
     protected onConfigurationChanged(e: ConfigurationChangeEvent) {
         if (configuration.changed(e, 'stats.autoRefresh')) {
-            this._autoRefresh = configuration.getParam('stats.autoRefresh');
-            Logger.log('Stats AutoRefresh: ' + 
-                this._autoRefresh ? 'Enabled' : 'Disabled'
-            );
+            this._autoRefresh = <boolean>configuration.getParam('stats.autoRefresh');
+            Logger.log(`Stats AutoRefresh: ${this._autoRefresh ? 'Enabled' : 'Disabled'}`);
         }
     }
-   
+
     protected registerCommands() {
         // Refresh Command
         commands.registerCommand(
             this.getQualifiedCommand('refresh'),
             () => {
                 if (window.activeTextEditor?.document.languageId === constants.langId) {
-                    commands.executeCommand('setContext', 'StatsViewEnabled', true);
+                    void commands.executeCommand('setContext', 'StatsViewEnabled', true);
                 }
 
-                this.refresh();
+                void this.refresh();
             },
-            this
+            this,
         );
-        
+
         // Enable stats
         commands.registerCommand(
             this.getQualifiedCommand('enable'),
@@ -167,13 +149,12 @@ export class StatsView extends GView<StatsNode> {
                 Logger.log('Enabling Stats...');
                 configuration.setParam('stats.enabled', true);
             },
-            this
+            this,
         );
     }
 
-    protected async refresh( element?: StatsNode): Promise<void> {
+    protected refresh(element?: StatsNode): void {
         if (this.genStats()) {
-
             if (element) {
                 this._onDidChangeTreeData.fire(element);
             } else {
@@ -183,11 +164,10 @@ export class StatsView extends GView<StatsNode> {
     }
 
     private genStats(): boolean {
-
         this._children = [];
 
         if ((this._editor = window.activeTextEditor) && this._editor.document) {
-            //this._editor = window.activeTextEditor;
+            // this._editor = window.activeTextEditor;
 
             const text = this._editor.document.getText();
 
@@ -197,12 +177,12 @@ export class StatsView extends GView<StatsNode> {
                 this._children.push(
                     new StatsNode(
                         StatsType.TOOLCHANGES,
-                        'Tool Changes: ' + this._stats.toolchanges,
+                        `Tool Changes: ${this._stats.toolchanges}`,
                         undefined,
                         ResourceType.Stats,
                         TreeItemCollapsibleState.None,
-                        'Tool Changes'
-                    )
+                        'Tool Changes',
+                    ),
                 );
             } else {
                 this._children.push(
@@ -212,23 +192,22 @@ export class StatsView extends GView<StatsNode> {
                         undefined,
                         ResourceType.Stats,
                         TreeItemCollapsibleState.None,
-                        'Error Generating Tool Change Stats'
-                    )
+                        'Error Generating Tool Change Stats',
+                    ),
                 );
             }
-
 
             // Generate Runtime Stats
             if (this.updateRunTime(text)) {
                 this._children.push(
                     new StatsNode(
                         StatsType.RUNTIME,
-                        'Est Runtime: ' + new Date( (this._stats.runtime) * 1000).toISOString().substr(11, 8),
+                        `Est Runtime: ${new Date(this._stats.runtime * 1000).toISOString().substr(11, 8)}`,
                         undefined,
                         ResourceType.Stats,
                         TreeItemCollapsibleState.None,
-                        'Runtime'
-                    )
+                        'Runtime',
+                    ),
                 );
             } else {
                 this._children.push(
@@ -238,44 +217,35 @@ export class StatsView extends GView<StatsNode> {
                         undefined,
                         ResourceType.Stats,
                         TreeItemCollapsibleState.None,
-                        'Error Generating Runtime Stats'
-                    )
+                        'Error Generating Runtime Stats',
+                    ),
                 );
             }
 
-
             return true;
-
         }
 
         return false;
     }
 
     private updateToolChanges(text: string): boolean {
-
-        const re = /(M0?6)/igm;
+        const re = /(M0?6)/gim;
         const num = text.match(re)?.length || 0;
 
         this._stats.toolchanges = num;
 
         return true;
-
-
     }
 
     private updateRunTime(text: string): boolean {
-
         const rtparser = new GCodeRuntimeParser(text);
 
         if (rtparser.update()) {
             this._stats.runtime = rtparser.getRuntime();
-
-
 
             return true;
         } else {
             return false;
         }
     }
-
 }

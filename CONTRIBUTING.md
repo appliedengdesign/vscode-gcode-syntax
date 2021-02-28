@@ -19,8 +19,9 @@ If you would like to contribute to the vscode-gcode-syntax project, here are a c
 * Submit a pull request tot he development branch of the vscode-gcode-syntax respository.
 * Make sure to explicitly say not to complete pull request if you are still making changes.
 
-# Additional Resources
+## Additional Resources
 
 * [GitHub Docs](http://help.github.com/)
 * [GitHub Pull Request Docs](http://help.github.com/send-pull-requests/)
 * [Successful Git Branching Model](http://nvie.com/posts/a-successful-git-branching-model/)
+  

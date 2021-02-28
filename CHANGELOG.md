@@ -2,6 +2,48 @@
 
 All changes to vscode-code-syntax will be documented here.
 
+## v0.5.0 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.5.0)
+
+### New Features
+
+- Added basic runtime calculation to Stats View
+- Added Units to Status Bar ( Can manually set or set to Auto to detect ```G20/G21```)
+- Added Configuration for Units, Status Bar
+- Added support status bar Icon
+- Added commands to status bar for Nav Tree Refresh
+- Added file extensions: `.aptcl`, `.gp`, `.msb`, `.ncd`, `.ncf`, `.nci`, `.pim`, `.pit`, `.pu1`, `.spf`
+- Added `G04` Dwell to Nav Tree
+- Added `G74`, `G81`, `G82`, `G83`, `G84`, `G85`, `G86`, `G87`, `G88`, `G89` cycles to Nav Tree
+- Added `G47` engraving to Nav Tree
+- Added `M00` / `M01` to Nav Tree
+  
+### Fixes
+
+- Refactor Status Bar Code
+- Fixed command references ( [#18](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/14) )
+- Changes to events code
+- Removed unncessary context paremeter in classes
+- Major fixes to the syntax highlighting / colorization regex's
+- Fixed Nav Tree Coolant to include HPC / TSC ( `M88` / `M89` )
+- Updated all dependencies
+- Clicking on Units on Status bar brings you to G-Code Settings
+- Refactor all code to match eslint / prettier settings
+
+### Other
+
+- Updated markdownlint config
+- Added gitattributes file
+- Updated tsconfig to ES2019
+- Added CodeIcons to constants
+- Updated README
+- Added [SECURITY.md file](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/SECURITY.md)
+- Updated ProBot stale file
+- Updated vscodeignore file
+- Added prettier to clean up code
+- Updated `.eslintrc.js` and changed to `.eslintrc.json`
+- Converted all files to LF from CRLF
+- Updated eslint config
+
 ## v0.4.1 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.4.1)
 
 ### Fixes
