@@ -86,7 +86,7 @@ export class NavTreeView extends GView<NavTreeNode> {
                 this._statusbar.updateStatusBar(
                     NavTreeStatus.TREEDIRTY,
                     this.treeStatusBar,
-                    'Refresh',
+                    'Refresh Tree',
                     undefined,
                     Commands.GCTREEREFRESH,
                 );
@@ -114,7 +114,7 @@ export class NavTreeView extends GView<NavTreeNode> {
                 this._statusbar.updateStatusBar(
                     NavTreeStatus.TREEDIRTY,
                     this.treeStatusBar,
-                    'Refresh',
+                    'Refresh Tree',
                     undefined,
                     Commands.GCTREEREFRESH,
                 );
@@ -186,7 +186,13 @@ export class NavTreeView extends GView<NavTreeNode> {
             this._children = parsed.getTree();
 
             if (this._statusbar) {
-                this._statusbar.updateStatusBar(NavTreeStatus.TREECLEAN, this.treeStatusBar);
+                this._statusbar.updateStatusBar(
+                    NavTreeStatus.TREECLEAN,
+                    this.treeStatusBar,
+                    'Tree is Clean',
+                    undefined,
+                    undefined,
+                );
             }
 
             return true;
