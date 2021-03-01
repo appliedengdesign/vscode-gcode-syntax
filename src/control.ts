@@ -103,9 +103,9 @@ export class Control {
         this._statusBarControl?.dispose();
     }
 
-    static getLoadTime(start: [number, number]) {
+    static getLoadTime(start: [number, number]): number {
         const [secs, nanosecs] = process.hrtime(start);
-        return secs * 1000 + Math.floor(nanosecs / 1000000);
+        return secs * 1000 + nanosecs / 1000000;
     }
 
     static get context() {

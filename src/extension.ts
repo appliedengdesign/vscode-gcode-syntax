@@ -27,8 +27,11 @@ export function activate(context: ExtensionContext) {
     // Initialize Controller
     Control.initialize(context, configuration);
 
-    Logger.log(`${constants.extension.shortname} v${constants.extension.version} activated.`);
-    Logger.log(`${Control.getLoadTime(start)} ms`);
+    Logger.log(
+        `${constants.extension.shortname} v${constants.extension.version} activated in ${Control.getLoadTime(
+            start,
+        ).toFixed(3)}ms`,
+    );
     Logger.log(constants.copyright);
 }
 
