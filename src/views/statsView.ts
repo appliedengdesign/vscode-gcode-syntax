@@ -147,7 +147,7 @@ export class StatsView extends GView<StatsNode> {
             this.getQualifiedCommand('enable'),
             () => {
                 Logger.log('Enabling Stats...');
-                configuration.setParam('stats.enabled', true);
+                void configuration.setParam('stats.enabled', true);
             },
             this,
         );
