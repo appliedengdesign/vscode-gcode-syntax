@@ -12,6 +12,15 @@ interface Coords {
     z: number;
 }
 
+interface State {
+    distance: number;
+    feedrate: number;
+    rapid: boolean;
+    circ: boolean;
+    abs: boolean;
+    rt: number;
+}
+
 export class GCodeRuntimeParser {
     private _code: string;
     private _runtime: number;
@@ -32,11 +41,15 @@ export class GCodeRuntimeParser {
     private genRunTime(): boolean {
         const oldpt: Coords = { x: 0, y: 0, z: 0 };
         const newpt: Coords = { x: 0, y: 0, z: 0 };
-        let distance = 0;
-        let feedrate = 1;
-        let rapid = true;
-        let abs = true;
-        let rt = 0;
+        const ijk: Coords = { x: 0, y: 0, z: 0 };
+        const state: State = {
+            distance: 0,
+            feedrate: 1,
+            rapid: true,
+            circ: false,
+            abs: true,
+            rt: 0,
+        };
 
         // Split into lines
         const lines = this._code.match(/.*(?:\r\n|\r|\n)/g) || [];
@@ -62,28 +75,38 @@ export class GCodeRuntimeParser {
                 if (letter === 'G') {
                     switch (argument) {
                         case '90':
-                            abs = true;
+                            state.abs = true;
                             break;
 
                         case '91':
-                            abs = false;
+                            state.abs = false;
                             break;
 
                         case '00':
                         case '0':
-                            rapid = true;
+                            state.rapid = true;
+                            state.circ = false;
                             break;
 
                         case '01':
                         case '1':
-                            rapid = false;
+                            state.rapid = false;
+                            state.circ = false;
+                            break;
+
+                        case '02':
+                        case '2':
+                        case '03':
+                        case '3':
+                            state.rapid = false;
+                            state.circ = true;
                             break;
                     }
                 }
 
                 // Feed Rate
                 if (letter === 'E' || letter === 'F') {
-                    feedrate = +argument / 60.0; // Convert Per Min to Per Second
+                    state.feedrate = +argument / 60.0; // Convert Per Min to Per Second
                 }
 
                 // Coords
@@ -98,26 +121,39 @@ export class GCodeRuntimeParser {
                 if (letter === 'Z') {
                     newpt.z = +argument;
                 }
+
+                // Circular Interpolation
+                if (letter === 'I') {
+                    ijk.x = +argument;
+                }
+
+                if (letter === 'J') {
+                    ijk.y = +argument;
+                }
+
+                if (letter === 'K') {
+                    ijk.z = +argument;
+                }
             });
 
             // End of Line
 
             // Calculate Distance Moved
-            if (abs) {
-                distance = Math.sqrt(
+            if (state.abs) {
+                state.distance = Math.sqrt(
                     Math.pow(newpt.x - oldpt.x, 2) + Math.pow(newpt.y - oldpt.y, 2) + Math.pow(newpt.z - oldpt.z, 2),
                 );
 
                 Object.assign(oldpt, newpt);
             }
 
-            if (!rapid) {
+            if (!state.rapid) {
                 // Calculate Time :: t = d / v
-                rt += distance / feedrate;
+                state.rt += state.distance / state.feedrate;
             }
         }
 
-        this._runtime = rt;
+        this._runtime = state.rt;
 
         return true;
     }
