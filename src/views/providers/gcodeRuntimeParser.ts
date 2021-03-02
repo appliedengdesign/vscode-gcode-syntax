@@ -41,7 +41,7 @@ export class GCodeRuntimeParser {
     private genRunTime(): boolean {
         const oldpt: Coords = { x: 0, y: 0, z: 0 };
         const newpt: Coords = { x: 0, y: 0, z: 0 };
-        const ijk: Coords = { x: 0, y: 0, z: 0 };
+        const ijkr = { i: 0, j: 0, k: 0, r: -1 };
         const state: State = {
             distance: 0,
             feedrate: 1,
@@ -124,27 +124,54 @@ export class GCodeRuntimeParser {
 
                 // Circular Interpolation
                 if (letter === 'I') {
-                    ijk.x = +argument;
+                    ijkr.i = +argument;
                 }
-
                 if (letter === 'J') {
-                    ijk.y = +argument;
+                    ijkr.j = +argument;
                 }
 
                 if (letter === 'K') {
-                    ijk.z = +argument;
+                    ijkr.k = +argument;
+                }
+
+                if (letter === 'R') {
+                    ijkr.r = +argument;
                 }
             });
 
             // End of Line
 
             // Calculate Distance Moved
+
             if (state.abs) {
+                // Absolute Mode
                 state.distance = Math.sqrt(
                     Math.pow(newpt.x - oldpt.x, 2) + Math.pow(newpt.y - oldpt.y, 2) + Math.pow(newpt.z - oldpt.z, 2),
                 );
 
+                if (state.circ) {
+                    // Circular Interpolation
+                    const centerpt = [oldpt.x - ijkr.i, oldpt.y - ijkr.j, oldpt.z - ijkr.k];
+                    let radius: number;
+                    if (ijkr.r === -1) {
+                        // IJK Mode
+                        radius = Math.sqrt(
+                            Math.pow(centerpt[0], 2) + Math.pow(centerpt[1], 2) + Math.pow(centerpt[2], 2),
+                        );
+                    } else {
+                        // Radius Mode
+                        radius = ijkr.r;
+                    }
+
+                    // Arc Length: ( 2( arcsin(d / 2r) ) / 2)
+                    const arclen = 2 * Math.asin(state.distance / (2 * radius)) * radius;
+
+                    state.distance = arclen;
+                }
+
                 Object.assign(oldpt, newpt);
+            } else {
+                // Incremental Mode
             }
 
             if (!state.rapid) {
