@@ -111,15 +111,27 @@ export class GCodeRuntimeParser {
 
                 // Coords
                 if (letter === 'X') {
-                    newpt.x = +argument;
+                    if (!state.abs) {
+                        newpt.x = +argument + oldpt.x;
+                    } else {
+                        newpt.x = +argument;
+                    }
                 }
 
                 if (letter === 'Y') {
-                    newpt.y = +argument;
+                    if (!state.abs) {
+                        newpt.y = +argument + oldpt.y;
+                    } else {
+                        newpt.y = +argument;
+                    }
                 }
 
                 if (letter === 'Z') {
-                    newpt.z = +argument;
+                    if (!state.abs) {
+                        newpt.z = +argument + oldpt.z;
+                    } else {
+                        newpt.z = +argument;
+                    }
                 }
 
                 // Circular Interpolation
@@ -143,35 +155,29 @@ export class GCodeRuntimeParser {
 
             // Calculate Distance Moved
 
-            if (state.abs) {
-                // Absolute Mode
-                state.distance = Math.sqrt(
-                    Math.pow(newpt.x - oldpt.x, 2) + Math.pow(newpt.y - oldpt.y, 2) + Math.pow(newpt.z - oldpt.z, 2),
-                );
+            state.distance = Math.sqrt(
+                Math.pow(newpt.x - oldpt.x, 2) + Math.pow(newpt.y - oldpt.y, 2) + Math.pow(newpt.z - oldpt.z, 2),
+            );
 
-                if (state.circ) {
-                    // Circular Interpolation
-                    const centerpt = [oldpt.x - ijkr.i, oldpt.y - ijkr.j, oldpt.z - ijkr.k];
-                    let radius: number;
-                    if (ijkr.r === -1) {
-                        // IJK Mode
-                        radius = Math.sqrt(
-                            Math.pow(centerpt[0], 2) + Math.pow(centerpt[1], 2) + Math.pow(centerpt[2], 2),
-                        );
-                    } else {
-                        // Radius Mode
-                        radius = ijkr.r;
-                    }
-
-                    // Arc Length: ( 2( arcsin(d / 2r) ) / 2)
-                    const arclen = 2 * Math.asin(state.distance / (2 * radius)) * radius;
-
-                    state.distance = arclen;
+            if (state.circ) {
+                // Circular Interpolation
+                const centerpt = [oldpt.x - ijkr.i, oldpt.y - ijkr.j, oldpt.z - ijkr.k];
+                let radius: number;
+                if (ijkr.r === -1) {
+                    // IJK Mode
+                    radius = Math.sqrt(Math.pow(centerpt[0], 2) + Math.pow(centerpt[1], 2) + Math.pow(centerpt[2], 2));
+                } else {
+                    // Radius Mode
+                    radius = ijkr.r;
                 }
 
+                // Arc Length: ( 2( arcsin(d / 2r) ) / 2)
+                const arclen = 2 * Math.asin(state.distance / (2 * radius)) * radius;
+
+                state.distance = arclen;
+
+                // New Point -> Old Point
                 Object.assign(oldpt, newpt);
-            } else {
-                // Incremental Mode
             }
 
             if (!state.rapid) {
