@@ -54,7 +54,21 @@ export const constants: IConstants = {
 };
 
 export const enum PIcon {
-    ALERT = ' $(alert) ',
-    CHECK = ' $(check) ',
-    HEART = ' $(heart) ',
+    Alert = ' $(alert) ',
+    Check = ' $(check) ',
+    Heart = ' $(heart) ',
+}
+
+export const enum VSBuiltInCommands {
+    OpenSettings = 'workbench.action.openSettings',
+    SetContext = 'setContext',
+}
+
+export const enum Contexts {
+    NavTreeViewEnabled = 'gcode:navTree:enabled',
+}
+
+export const enum GlobalState {
+    PreviousVersion = 'gcode:previousVersion',
+    Version = 'gcode:version',
 }
