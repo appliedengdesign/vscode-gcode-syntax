@@ -28,12 +28,12 @@ const NavTreeViewInfo = {
     CONFIG: {
         AUTOREF: 'navTree.autoRefresh',
     },
-    CONTEXT: 'navTreeEnabled',
+    CONTEXT: 'gcode:navTree:enabled',
 };
 
 const NavTreeStatus = {
-    TREEDIRTY: `${PIcon.ALERT} Tree Dirty`,
-    TREECLEAN: `${PIcon.CHECK} Tree Up to Date`,
+    TREEDIRTY: `${PIcon.Alert} Tree Dirty`,
+    TREECLEAN: `${PIcon.Check} Tree Up to Date`,
 };
 
 export class NavTreeView extends GView<NavTreeNode> {

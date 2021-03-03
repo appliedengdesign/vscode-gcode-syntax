@@ -232,7 +232,7 @@
             {
                 "view": "gcode.views.navTree",
                 "contents": "Tree only available when viewing G-Code",
-                "when": "!navTreeEnabled"
+                "when": "!gcode:navTree:enabled"
             },
             {
                 "view": "gcode.views.stats",

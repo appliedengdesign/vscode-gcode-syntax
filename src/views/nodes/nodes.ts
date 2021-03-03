@@ -10,7 +10,7 @@ import { NavTreeNode } from './navTreeNode';
 
 export const enum ResourceType {
     Stats = 'gcode:stats',
-    Tree = 'gcode:tree',
+    Tree = 'gcode:navTree',
 }
 
 export const enum IconType {
