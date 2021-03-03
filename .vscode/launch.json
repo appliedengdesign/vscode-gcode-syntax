@@ -18,17 +18,18 @@
             "preLaunchTask": "${defaultBuildTask}"
         },
         {
-            "name": "Launch Extension Tests",
+            "name": "Extension Tests",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
+                "--disable-extensions",
                 "--extensionDevelopmentPath=${workspaceFolder}",
                 "--extensionsTestsPath=${workspaceFolder}/out/test/suite/index"
             ],
             "stopOnEntry": false,
             "outFiles": [
-                "${workspaceFolder}/out/**/*.js"
+                "${workspaceFolder}/out/test/**/*.js"
             ],
             "preLaunchTask": "${defaultBuildTask}"
         }
