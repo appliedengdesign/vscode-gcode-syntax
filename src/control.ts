@@ -5,15 +5,17 @@
 
 'use strict';
 
-import { Disposable, ExtensionContext } from 'vscode';
+import { commands, Disposable, ExtensionContext } from 'vscode';
 import { Config, configuration } from './util/config';
 import { Logger } from './util/logger';
 import { StatusBarControl } from './util/statusBar';
 import { NavTreeView } from './views/navTreeView';
 import { GCodeUnitsController } from './gcodeUnits';
 import { StatsView } from './views/statsView';
-import { PIcon } from './util/constants';
+import { constants, Contexts, GlobalState, PIcon, VSBuiltInCommands } from './util/constants';
 import { Commands } from './util/commands';
+import { LocalStorageService } from './util/localStorageService';
+import { Version } from './util/version';
 
 export class Control {
     private static _config: Config | undefined;
@@ -23,6 +25,7 @@ export class Control {
     // Controllers
     private static _statusBarControl: StatusBarControl;
     private static _unitsController: GCodeUnitsController | undefined;
+    private static _storageManager: LocalStorageService;
 
     // Views
     private static _statsView: StatsView | undefined;
@@ -31,6 +34,9 @@ export class Control {
     static initialize(context: ExtensionContext, config: Config) {
         this._context = context;
         this._config = config;
+
+        // Load GlobalState Storage Manager
+        this._storageManager = new LocalStorageService(context);
 
         // Load StatusBars
         context.subscriptions.push((this._statusBarControl = new StatusBarControl(this._context)));
@@ -88,7 +94,7 @@ export class Control {
 
         // Load Support Heart to Statusbar
         this._statusBarControl.updateStatusBar(
-            PIcon.HEART,
+            PIcon.Heart,
             'support',
             'Support G-Code Syntax ❤',
             undefined,
@@ -106,6 +112,28 @@ export class Control {
     static getLoadTime(start: [number, number]): number {
         const [secs, nanosecs] = process.hrtime(start);
         return secs * 1000 + nanosecs / 1000000;
+    }
+
+    static checkVersion() {
+        const localVer = new Version(constants.extension.version);
+
+        const prevVer = this._storageManager.getValue<Version>(GlobalState.PreviousVersion, 'global') ?? localVer;
+
+        const newVer = localVer.compareWith(prevVer.getVersion()) === 1 ? true : false;
+
+        if (newVer) {
+            // Extension has been updated
+        } else {
+            return;
+        }
+    }
+
+    static showWhatsNew() {
+        // Show Whats New Message
+    }
+
+    static setContext(key: Contexts | string, value: any) {
+        return commands.executeCommand(VSBuiltInCommands.SetContext, key, value);
     }
 
     static get context() {
