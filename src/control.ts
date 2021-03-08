@@ -15,7 +15,8 @@ import { StatsView } from './views/statsView';
 import { constants, Contexts, GlobalState, PIcon, VSBuiltInCommands } from './util/constants';
 import { Commands } from './util/commands';
 import { LocalStorageService } from './util/localStorageService';
-import { Version } from './util/version';
+import { IVersion, Version } from './util/version';
+import { Messages } from './util/messages';
 
 export class Control {
     private static _config: Config | undefined;
@@ -100,6 +101,9 @@ export class Control {
             undefined,
             Commands.GCSUPPORT,
         );
+
+        // Check Version
+        void this.checkVersion();
     }
 
     static terminate() {
@@ -114,22 +118,34 @@ export class Control {
         return secs * 1000 + nanosecs / 1000000;
     }
 
-    static checkVersion() {
-        const localVer = new Version(constants.extension.version);
+    private static async checkVersion() {
+        const gcodeVersion = new Version(constants.extension.version);
 
-        const prevVer = this._storageManager.getValue<Version>(GlobalState.PreviousVersion, 'global') ?? localVer;
+        const prevVer = new Version(
+            this._storageManager.getValue<IVersion>(GlobalState.PreviousVersion, 'global') ?? '0.0.0',
+        );
 
-        const newVer = localVer.compareWith(prevVer.getVersion()) === 1 ? true : false;
+        const newVer = gcodeVersion.compareWith(prevVer.getVersion()) === 1 ? true : false;
 
         if (newVer) {
             // Extension has been updated
+            Logger.log(`G-Code upgraded from ${prevVer.getVersionAsString()} to ${gcodeVersion.getVersionAsString()}`);
+            await this.showWhatsNew(gcodeVersion);
+
+            // Update globalState version
+            void this._storageManager.setValue<IVersion>(
+                GlobalState.PreviousVersion,
+                gcodeVersion.getVersion(),
+                'global',
+            );
         } else {
             return;
         }
     }
 
-    static showWhatsNew() {
+    private static async showWhatsNew(ver: Version) {
         // Show Whats New Message
+        await Messages.showWhatsNewMessage(ver);
     }
 
     static setContext(key: Contexts | string, value: any) {

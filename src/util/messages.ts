@@ -6,6 +6,7 @@
 'use strict';
 
 import { env, MessageItem, Uri, window } from 'vscode';
+import { Version } from './version';
 
 export class Messages {
     static async showSupportGCodeMessage() {
@@ -38,23 +39,21 @@ export class Messages {
         }
     }
 
-    static async showWhatsNewMessage(version: string) {
-        const actions: MessageItem[] = [{ title: "What's New" }, { title: 'Release Notes' }, { title: '❤' }];
+    static async showWhatsNewMessage(ver: Version) {
+        const actions: MessageItem[] = [{ title: "What's New" }, { title: '❤' }];
 
         const result = await Messages.showMessage(
             'info',
-            `G-Code Syntax has been updated to v${version} - Check out what's new!`,
+            `G-Code Syntax has been updated to v${ver.getVersionAsString()} - Check out what's new!`,
             ...actions,
         );
 
         if (result != null) {
             if (result === actions[0]) {
-                await env.openExternal(Uri.parse(''));
-            } else if (result === actions[1]) {
                 await env.openExternal(
                     Uri.parse('https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CHANGELOG.md'),
                 );
-            } else if (result === actions[2]) {
+            } else if (result === actions[1]) {
                 await env.openExternal(Uri.parse('https://github.com/sponsors/appliedengdesign'));
             }
         }
