@@ -78,9 +78,9 @@ G-Code Syntax is customizable and provides many configuration settings to allow 
 |                                       |                                                                                             |
 | `gcode.general.units`                 | Choose the units for the file. Options are Auto, Inch or Metric                             |
 |                                       |                                                                                             |
-| `gcode.tree.autoRefresh`              | Tree auto-refreshes as changes are made to the g-code. ( Disabled by default )              |
+| `gcode.navTree.autoRefresh`              | Tree auto-refreshes as changes are made to the g-code. ( Disabled by default )              |
 |                                       |                                                                                             |
-| `gcode.stats.enable`                  | Enable the statistics view. ( Disabled by default )                                         |
+| `gcode.stats.enabled`                  | Enable the statistics view. ( Disabled by default )                                         |
 |                                       |                                                                                             |
 | `gcode.stats.autoRefresh`             | Auto-refresh the stats view when changes are made to the g-code. (Disabled by default)      |
 |                                       |                                                                                             |
@@ -101,6 +101,8 @@ Please visit our [GitHub Issues](https://github.com/appliedengdesign/vscode-gcod
 - Backplotter
 - Semantic Highlighting
 - Programmatic Language Server
+
+Visit our [projects page](https://github.com/appliedengdesign/vscode-gcode-syntax/projects) for future roadmaps.
 
 ## Changelog
 
