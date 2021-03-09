@@ -106,7 +106,7 @@ Visit our [projects page](https://github.com/appliedengdesign/vscode-gcode-synta
 
 ## Changelog
 
-Latest Version: v0.4.1
+Latest Version: v0.5.0
 
 Please refer to our [CHANGELOG](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CHANGELOG.md) doc.
 
