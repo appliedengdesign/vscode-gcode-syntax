@@ -4,9 +4,10 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-export type LSSState = 'global' | 'workspace';
+export type LSSLoc = 'global' | 'workspace';
 
 import { ExtensionContext, Memento } from 'vscode';
+import { Logger } from './logger';
 
 export class LocalStorageService {
     private _wsState: Memento;
@@ -17,7 +18,7 @@ export class LocalStorageService {
         this._globalState = context.globalState;
     }
 
-    public getValue<T>(key: string, loc: LSSState): T | undefined {
+    public getValue<T>(key: string, loc: LSSLoc): T | undefined {
         if (loc === 'workspace') {
             return this._wsState.get<T>(key);
         } else {
@@ -25,11 +26,35 @@ export class LocalStorageService {
         }
     }
 
-    public async setValue<T>(key: string, value: T, loc: LSSState) {
+    public async setValue<T>(key: string, value: T, loc: LSSLoc): Promise<void> {
         if (loc === 'workspace') {
-            await this._wsState.update(key, value);
+            try {
+                await this._wsState.update(key, value);
+            } catch (reason) {
+                Logger.error(reason);
+            }
         } else {
-            await this._globalState.update(key, value);
+            try {
+                await this._globalState.update(key, value);
+            } catch (reason) {
+                Logger.error(reason);
+            }
+        }
+    }
+
+    public async deleteValue(key: string, loc: LSSLoc): Promise<void> {
+        if (loc === 'workspace') {
+            try {
+                await this._wsState.update(key, undefined);
+            } catch (reason) {
+                Logger.error(reason);
+            }
+        } else {
+            try {
+                await this._globalState.update(key, undefined);
+            } catch (reason) {
+                Logger.error(reason);
+            }
         }
     }
 }
