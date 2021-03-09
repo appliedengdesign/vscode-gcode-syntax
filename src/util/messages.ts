@@ -6,6 +6,7 @@
 'use strict';
 
 import { env, MessageItem, Uri, window } from 'vscode';
+import { constants } from './constants';
 import { Version } from './version';
 
 export class Messages {
@@ -25,12 +26,7 @@ export class Messages {
 
         if (result != null) {
             if (result === actions[0]) {
-                await env.openExternal(
-                    Uri.parse(
-                        'https://marketplace.visualstudio.com/items?' +
-                            'itemName=appliedengdesign.vscode-gcode-syntax&ssr=false#review-details',
-                    ),
-                );
+                await env.openExternal(Uri.parse(constants.urls.vsmpReviews));
             } else if (result === actions[1]) {
                 await env.openExternal(Uri.parse('https://github.com/sponsors/appliedengdesign'));
             } else if (result === actions[2]) {
@@ -50,9 +46,7 @@ export class Messages {
 
         if (result != null) {
             if (result === actions[0]) {
-                await env.openExternal(
-                    Uri.parse('https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CHANGELOG.md'),
-                );
+                await env.openExternal(Uri.parse(constants.urls.changeLog));
             } else if (result === actions[1]) {
                 await env.openExternal(Uri.parse('https://github.com/sponsors/appliedengdesign'));
             }
