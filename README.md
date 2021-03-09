@@ -1,8 +1,12 @@
-[![MIT License](https://badgen.net/badge/license/MIT)](https://opensource.org/licenses/MIT)
-[![GitHub](https://badgen.net/github/release/appliedengdesign/vscode-gcode-syntax)](https://github.com/appliedengdesign/vscode-gcode-syntax)
+[![Version](https://vsmarketplacebadge.apphb.com/version/appliedengdesign.vscode-gcode-syntax.svg)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/appliedengdesign.vscode-gcode-syntax.svg)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
+[![Rating](https://vsmarketplacebadge.apphb.com/rating/appliedengdesign.vscode-gcode-syntax.svg)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
+
 [![GitHub Issues](https://badgen.net/github/open-issues/appliedengdesign/vscode-gcode-syntax)](https://github.com/appliedengdesign/vscode-gcode-syntax/issues)
-![Gihub Stars](https://badgen.net/github/stars/appliedengdesign/vscode-gcode-syntax)
-[![VS Marketplace Installs](https://badgen.net/vs-marketplace/i/appliedengdesign.vscode-gcode-syntax)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
+![Github Stars](https://badgen.net/github/stars/appliedengdesign/vscode-gcode-syntax)
+![Github Last Commit](https://badgen.net/github/last-commit/appliedengdesign/vscode-gcode-syntax/)
+[![MIT License](https://badgen.net/badge/license/MIT)](https://opensource.org/licenses/MIT)
+
 [![Follow @appliedengdesign](https://badgen.net/twitter/follow/appliedengdes)](https://twitter.com/appliedengdes)
 
 <p align="center">
@@ -39,43 +43,14 @@ This extension adds language syntax for CNC G-Code, code snippets, and colorizat
 
 ### Current Supported File Extensions
 
-- .m
-- .apt
-- .nc
-- .cnc
-- .ncc
-- .ecs
-- .tap
-- .fnc
-- .ncg
-- .gc
-- .fan
-- .fgc
-- .din
-- .xpi
-- .hnc
-- .ncp
-- .min
-- .gcd
-- .rol
-- .mpr
-- .ply
-- .out
-- .eia
-- .plt
-- .sbp
-- .mpf
-- .gcode
-- .g00
-- .cls
-- .dnc
-- .knc
-- .prg
-- .001
-- .ngc
-- .ssb
-- .sub
-- .lib
+```text
+| .001 | .apt | .aptcl | .cls   | .cnc | .din | .dnc   | .ecs   |
+| .eia | .fan | .fgc   | .fnc   | .g00 | .gc  | .gcd   | .gcode |
+| .gp  | .hnc | .knc   | .lib   | .m   | .min | .mpf   | .mpr   |
+| .msb | .nc  | .ncc   | .ncd   | .ncf | .ncg | .nci   | .ncp   |
+| .ngc | .out | .pim   | .pit   | .plt | .ply | .prg   | .pu1   |
+| .rol | .sbp | .spf   | .ssb   | .sub | .tap | .xpi   |        |
+```
 
 If you would like another file extension supported by this extension, please [open an issue](https://github.com/appliedemgdesign/issues).
 
@@ -93,18 +68,22 @@ Tree view is enabled by default and can be access from the G icon on the activit
 
 G-Code Syntax is customizable and provides many configuration settings to allow the personalization of almost all features.
 
-| Name                          | Description                                                                                 |
-| ----------------------------- | ------------------------------------------------------------------------------------------- |
-| `gcode.general.colorizaztion` | **( Not Currently Active )**                                                                |
-|                               |                                                                                             |
-| `gcode.general.machineType`   | **( Not Currently Active )**                                                                |
-|                               |                                                                                             |
-| `gcode.tree.autoRefresh`      | Tree auto-refreshes as changes are made to the g-code. ( Disabled by default )              |
-|                               |                                                                                             |
-| `gcode.stats.enable`          | Enable the statistics view. ( Disabled by default )                                         |
-|                               |                                                                                             |
-| `gcode.stats.autoRefresh`     | Auto-refresh the stats view when changes are made to the g-code. (Disabled by default)      |
-|                               |                                                                                             |
+| Name                                  | Description                                                                                 |
+| ------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `gcode.general.machineType`           | **( Not Currently Active )**                                                                |
+|                                       |                                                                                             |
+| `gcode.general.statusBars.enabled`    | Enable or Disable the G-Code status bars                                                    |
+|                                       |                                                                                             |
+| `gcode.general.statusbars.alignment`  | Choose the alignment of the status bars (Left is default)                                   |
+|                                       |                                                                                             |
+| `gcode.general.units`                 | Choose the units for the file. Options are Auto, Inch or Metric                             |
+|                                       |                                                                                             |
+| `gcode.navTree.autoRefresh`              | Tree auto-refreshes as changes are made to the g-code. ( Disabled by default )              |
+|                                       |                                                                                             |
+| `gcode.stats.enabled`                  | Enable the statistics view. ( Disabled by default )                                         |
+|                                       |                                                                                             |
+| `gcode.stats.autoRefresh`             | Auto-refresh the stats view when changes are made to the g-code. (Disabled by default)      |
+|                                       |                                                                                             |
 
 ![Settings Screenshot](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/images/settings-screenshot.png?raw=true)
 
@@ -123,9 +102,11 @@ Please visit our [GitHub Issues](https://github.com/appliedengdesign/vscode-gcod
 - Semantic Highlighting
 - Programmatic Language Server
 
+Visit our [projects page](https://github.com/appliedengdesign/vscode-gcode-syntax/projects) for future roadmaps.
+
 ## Changelog
 
-Latest Version: v0.4.1
+Latest Version: v0.5.0
 
 Please refer to our [CHANGELOG](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CHANGELOG.md) doc.
 

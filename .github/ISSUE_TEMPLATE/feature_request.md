@@ -7,8 +7,7 @@ assignees: ''
 
 ---
 
-**Suggest a Feature you'd like to see**
-
+## Suggest a Feature you'd like to see
 
 **Additional context**
 Add any other context or screenshots about the feature request here.

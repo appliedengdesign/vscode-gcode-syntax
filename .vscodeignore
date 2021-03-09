@@ -6,13 +6,16 @@ test/**
 src/**
 **/*.map
 .gitignore
+.gitattributes
 tsconfig.json
-tslint.json
 package-lock.json
 vsc-extension-quickstart.md
 images/*.ai
 images/*.svg
 LICENSE
 CONTRIBUTING.md
+CODE_OF_CONDUCT.md
 node_modules/**
 .eslintignore
+.eslintcache
+webpack.config.js

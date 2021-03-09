@@ -1,48 +1,160 @@
-/*---------------------------------------------------------------------------------------------
+/* ---------------------------------------------------------------------------------------------
  *  Copyright (c) Applied Eng & Design All rights reserved.
  *  Licensed under the MIT License. See License.md in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
+ * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import { 
-    ExtensionContext, 
-    StatusBarAlignment, 
-    StatusBarItem, 
-    window 
-} from "vscode";
+import {
+    ConfigurationChangeEvent,
+    Disposable,
+    ExtensionContext,
+    StatusBarAlignment,
+    StatusBarItem,
+    ThemeColor,
+    window,
+} from 'vscode';
+import { Commands } from './commands';
+import { configuration } from './config';
+import { Logger } from './logger';
 
+export interface StatusBars {
+    treeStatusBar?: StatusBarItem | undefined;
+    unitsBar?: StatusBarItem | undefined;
+    support?: StatusBarItem | undefined;
+}
 
-export class StatusBar {
-    static statusBar: StatusBarItem
+export type StatusBar = keyof StatusBars;
 
-    static configure(context: ExtensionContext) {
-        this.statusBar = this.statusBar || window.createStatusBarItem( StatusBarAlignment.Right, 100 );
+export class StatusBarControl implements Disposable {
+    private _enabled: boolean;
+    private _align: StatusBarAlignment;
+    private readonly _disposable: Disposable | undefined;
 
-        context.subscriptions.push(this.statusBar);
-    }
+    // Status Bars
+    private _statusBars: StatusBars;
 
-    static updateStatusBar(message: string): void {
-        if (this.statusBar !== undefined) {
-            this.statusBar.text = message;
-            this.statusBar.show();
+    constructor(private context: ExtensionContext) {
+        this._disposable = Disposable.from(configuration.onDidChange(this.onConfigurationChanged, this));
+
+        this._enabled = <boolean>configuration.getParam('general.statusBars.enabled');
+
+        this._statusBars = {
+            treeStatusBar: undefined,
+            unitsBar: undefined,
+            support: undefined,
+        };
+
+        this._align =
+            configuration.getParam('general.statusBars.alignment') === 'Left'
+                ? StatusBarAlignment.Left
+                : StatusBarAlignment.Right;
+
+        if (this._enabled) {
+            Logger.log('Loading Status Bars...');
+
+            Object.keys(this._statusBars).forEach(key => {
+                this._statusBars[key as keyof StatusBars] = window.createStatusBarItem(
+                    this._align,
+                    (this._align = StatusBarAlignment.Left ? 1 : 999),
+                );
+            });
+
+            this.showStatusBars();
         }
     }
 
-    static showStatusBar (): void {
-        if (this.statusBar !== undefined) {
-            this.statusBar.show();
+    dispose() {
+        Object.keys(this._statusBars).forEach(key => {
+            this._statusBars[key as keyof StatusBars]?.dispose();
+        });
+
+        this._disposable && this._disposable.dispose();
+    }
+
+    private onConfigurationChanged(e: ConfigurationChangeEvent) {
+        if (configuration.changed(e, 'general.statusBars.enabled')) {
+            if (this._enabled) {
+                // Disable & Dispose
+                Object.keys(this._statusBars).forEach(key => {
+                    this._statusBars[key as keyof StatusBars]?.dispose();
+                });
+            } else {
+                // Enable
+                Object.keys(this._statusBars).forEach(key => {
+                    this._statusBars[key as keyof StatusBars] = window.createStatusBarItem(
+                        this._align,
+                        this._align === StatusBarAlignment.Left ? 1 : 999,
+                    );
+                });
+
+                this.showStatusBars();
+            }
+
+            this._enabled = <boolean>configuration.getParam('general.statusBars.enabled');
+
+            this._align =
+                configuration.getParam('general.statusBars.alignment') === 'Left'
+                    ? StatusBarAlignment.Left
+                    : StatusBarAlignment.Right;
+        } else {
+            return;
         }
     }
 
-    static hideStatusBar(): void {
-        if (this.statusBar !== undefined) {
-            this.statusBar.hide();
+    updateStatusBar(
+        message: string,
+        bar: StatusBar,
+        tooltip?: string,
+        color?: string | ThemeColor,
+        cmd?: Commands | string,
+    ): boolean {
+        if (!this._enabled) {
+            return false;
+        } else {
+            if (this._statusBars !== undefined && bar in this._statusBars) {
+                // Set Text
+                this._statusBars[bar]!.text = message;
+
+                // Set Tooltip
+                if (tooltip) {
+                    this._statusBars[bar]!.tooltip = tooltip;
+                } else {
+                    this._statusBars[bar]!.tooltip = undefined;
+                }
+
+                // Set Color
+                if (color) {
+                    this._statusBars[bar]!.color = color;
+                } else {
+                    this._statusBars[bar]!.color = undefined;
+                }
+
+                // Set Command
+                if (cmd) {
+                    this._statusBars[bar]!.command = cmd;
+                } else {
+                    this._statusBars[bar]!.command = undefined;
+                }
+
+                // Show Bars
+                this.showStatusBars();
+
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
-    static dispose(): void {
-        if (this.statusBar !== undefined) {
-            this.statusBar.dispose();
-        }
+    showStatusBars() {
+        Object.keys(this._statusBars).forEach(key => {
+            this._statusBars[key as keyof StatusBars]?.show();
+        });
+    }
+
+    hideStatusBars() {
+        Object.keys(this._statusBars).forEach(key => {
+            this._statusBars[key as keyof StatusBars]?.hide();
+        });
     }
 }

@@ -3,7 +3,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Extension",
+            "name": "Run G-Code (Sandbox)",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
@@ -12,23 +12,28 @@
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ],
             "stopOnEntry": false,
+            "sourceMaps": true,
+            "smartStep": true,
             "outFiles": [
                 "${workspaceFolder}/out/**/*.js"
             ],
             "preLaunchTask": "${defaultBuildTask}"
         },
         {
-            "name": "Launch Extension Tests",
+            "name": "Run G-Code Tests",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
+                "--disable-extensions",
                 "--extensionDevelopmentPath=${workspaceFolder}",
                 "--extensionsTestsPath=${workspaceFolder}/out/test/suite/index"
             ],
             "stopOnEntry": false,
+            "sourceMaps": true,
+            "smartStep": true,
             "outFiles": [
-                "${workspaceFolder}/out/**/*.js"
+                "${workspaceFolder}/out/test/**/*.js"
             ],
             "preLaunchTask": "${defaultBuildTask}"
         }

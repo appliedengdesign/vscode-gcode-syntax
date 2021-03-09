@@ -1,0 +1,173 @@
+{
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript",
+        "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 2019,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "impliedStrict": true
+        },
+        "project": "tsconfig.json"
+    },
+    "plugins": [
+        "import",
+        "@typescript-eslint",
+        "prettier"
+    ],
+    "root": true,
+    "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/indent": "off",
+        "@typescript-eslint/no-empty-function": [
+            "warn",
+            {
+                "allow": [
+                    "constructors"
+                ]
+            }
+        ],
+        "@typescript-eslint/no-empty-interface": "error",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-floating-promises": "error",
+        "@typescript-eslint/no-inferrable-types": [
+            "warn",
+            {
+                "ignoreParameters": true,
+                "ignoreProperties": true
+            }
+        ],
+        "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            {
+                "args": "after-used",
+                "argsIgnorePattern": "^_",
+                "ignoreRestSiblings": true,
+                "varsIgnorePattern": "^_$"
+            }
+        ],
+        "@typescript-eslint/no-use-before-define": "error",
+        "@typescript-eslint/semi": "error",
+        "@typescript-eslint/unbound-method": "off",
+        "arrow-parens": [
+            "error",
+            "as-needed"
+        ],
+        "brace-style": [
+            "warn",
+            "1tbs",
+            {
+                "allowSingleLine": true
+            }
+        ],
+        "comma-dangle": [
+            "error",
+            "only-multiline"
+        ],
+        "complexity": "off",
+        "curly": "error",
+        "dot-notation": "error",
+        "eqeqeq": [
+            "error",
+            "smart"
+        ],
+        "eol-last": "error",
+        "import/no-dynamic-require": "error",
+        "import/no-default-export": "error",
+        "import/no-duplicates": "error",
+        "import/no-self-import": "error",
+        "import/no-unresolved": [
+            "warn",
+            {
+                "ignore": [
+                    "vscode"
+                ]
+            }
+        ],
+        "max-classes-per-file": [
+            "error",
+            1
+        ],
+        "max-len": [
+            "error",
+            {
+                "code": 120
+            }
+        ],
+        "no-bitwise": "error",
+        "no-console": [
+            "error",
+            {
+                "allow": [
+                    "info",
+                    "error"
+                ]
+            }
+        ],
+        "no-duplicate-imports": "error",
+        "no-inner-declarations": "off",
+        "no-invalid-this": "error",
+        "no-trailing-spaces": "error",
+        "no-var": "error",
+        "prefer-arrow-callback": "error",
+        "prefer-const": "error",
+        "prefer-numeric-literals": "error",
+        "prefer-object-spread": "error",
+        "prefer-rest-params": "error",
+        "prefer-spread": "error",
+        "prefer-template": "error",
+        "prettier/prettier": "error",
+        "quotes": [
+            "error",
+            "single",
+            {
+                "avoidEscape": true
+            }
+        ],
+        "radix": "error",
+        "semi": [
+            "error",
+            "always"
+        ],
+        "semi-style": [
+            "error",
+            "last"
+        ],
+        "spaced-comment": [
+            "error",
+            "always"
+        ],
+        "space-in-parens": [
+            "error",
+            "never"
+        ],
+        "sort-imports": [
+            "error",
+            {
+                "ignoreCase": true,
+                "ignoreDeclarationSort": true,
+                "ignoreMemberSort": false,
+                "memberSyntaxSortOrder": [
+                    "none",
+                    "all",
+                    "multiple",
+                    "single"
+                ]
+            }
+        ],
+        "yoda": "error"
+    }
+}

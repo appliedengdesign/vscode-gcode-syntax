@@ -1,5 +1,7 @@
+.eslintcache
 node_modules
 releases
 *.vsix
 out
+dist
 images/*.ai
