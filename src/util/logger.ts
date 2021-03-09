@@ -34,4 +34,11 @@ export class Logger {
             this.output = undefined;
         }
     }
+
+    static error(err: Error, handled = false): void {
+        if (!err) {
+            return;
+        }
+        console.error(`${handled ? 'H' : 'Unh'}andled Error: ${err.stack || err.message || err.toString()}`);
+    }
 }
