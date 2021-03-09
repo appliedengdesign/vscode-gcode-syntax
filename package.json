@@ -12,7 +12,7 @@
     },
     "copyright": "Copyright (c) 2021 Applied Eng. & Design / Mike Centola",
     "engines": {
-        "vscode": "^1.52.0"
+        "vscode": "^1.54.0"
     },
     "categories": [
         "Programming Languages",
