@@ -16,6 +16,7 @@ All changes to vscode-code-syntax will be documented here.
 - Added `G74`, `G81`, `G82`, `G83`, `G84`, `G85`, `G86`, `G87`, `G88`, `G89` cycles to Nav Tree
 - Added `G47` engraving to Nav Tree
 - Added `M00` / `M01` to Nav Tree
+- New Version Welcome
   
 ### Fixes
 
@@ -28,6 +29,12 @@ All changes to vscode-code-syntax will be documented here.
 - Updated all dependencies
 - Clicking on Units on Status bar brings you to G-Code Settings
 - Refactor all code to match eslint / prettier settings
+- Fixed typo in [CONTRTIBUTING.md](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CONTRIBUTING.md) [#20](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/15)
+- Added incremental calculation to run-time
+- Fixed Run-Time stats to include circular interpolation
+- Fixed activation time logging
+- Moved URI's to constants
+- Updated [README.md](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/README.md)
 
 ### Other
 
@@ -43,6 +50,9 @@ All changes to vscode-code-syntax will be documented here.
 - Updated `.eslintrc.js` and changed to `.eslintrc.json`
 - Converted all files to LF from CRLF
 - Updated eslint config
+- Updated Logger to log errors
+- Refactor `globalState` management into `StateController`
+- Added pull request & issue templatea
 
 ## v0.4.1 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.4.1)
 
