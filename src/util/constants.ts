@@ -31,6 +31,7 @@ interface IConstants {
     readonly urls: {
         readonly changeLog: string;
         readonly readme: string;
+        readonly vsmpReviews: string;
     };
 }
 
@@ -50,6 +51,9 @@ export const constants: IConstants = {
     urls: {
         changeLog: 'https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CHANGELOG.md',
         readme: 'https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/README.md',
+        vsmpReviews:
+            'https://marketplace.visualstudio.com/items?' +
+            'itemName=appliedengdesign.vscode-gcode-syntax&ssr=false#review-details',
     },
 };
 
@@ -66,9 +70,4 @@ export const enum VSBuiltInCommands {
 
 export const enum Contexts {
     NavTreeViewEnabled = 'gcode:navTree:enabled',
-}
-
-export const enum GlobalState {
-    PreviousVersion = 'gcode:previousVersion',
-    Version = 'gcode:version',
 }

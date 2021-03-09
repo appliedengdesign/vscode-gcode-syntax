@@ -32,7 +32,7 @@ export class Version {
         };
     }
 
-    public getVersion(): IVersion {
+    getVersion(): IVersion {
         return this._version;
     }
 

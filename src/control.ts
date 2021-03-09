@@ -12,11 +12,11 @@ import { StatusBarControl } from './util/statusBar';
 import { NavTreeView } from './views/navTreeView';
 import { GCodeUnitsController } from './gcodeUnits';
 import { StatsView } from './views/statsView';
-import { constants, Contexts, GlobalState, PIcon, VSBuiltInCommands } from './util/constants';
+import { constants, Contexts, PIcon, VSBuiltInCommands } from './util/constants';
 import { Commands } from './util/commands';
-import { LocalStorageService } from './util/localStorageService';
-import { IVersion, Version } from './util/version';
+import { Version } from './util/version';
 import { Messages } from './util/messages';
+import { StateControl } from './util/stateControl';
 
 export class Control {
     private static _config: Config | undefined;
@@ -26,7 +26,7 @@ export class Control {
     // Controllers
     private static _statusBarControl: StatusBarControl;
     private static _unitsController: GCodeUnitsController | undefined;
-    private static _storageManager: LocalStorageService;
+    private static _stateController: StateControl;
 
     // Views
     private static _statsView: StatsView | undefined;
@@ -36,8 +36,8 @@ export class Control {
         this._context = context;
         this._config = config;
 
-        // Load GlobalState Storage Manager
-        this._storageManager = new LocalStorageService(context);
+        // Load State Controller
+        this._stateController = new StateControl(context);
 
         // Load StatusBars
         context.subscriptions.push((this._statusBarControl = new StatusBarControl(this._context)));
@@ -121,23 +121,19 @@ export class Control {
     private static async checkVersion() {
         const gcodeVersion = new Version(constants.extension.version);
 
-        const prevVer = new Version(
-            this._storageManager.getValue<IVersion>(GlobalState.PreviousVersion, 'global') ?? '0.0.0',
-        );
+        const prevVer = this._stateController.getVersion();
 
         const newVer = gcodeVersion.compareWith(prevVer.getVersion()) === 1 ? true : false;
 
         if (newVer) {
             // Extension has been updated
-            Logger.log(`G-Code upgraded from ${prevVer.getVersionAsString()} to ${gcodeVersion.getVersionAsString()}`);
-            await this.showWhatsNew(gcodeVersion);
 
             // Update globalState version
-            void this._storageManager.setValue<IVersion>(
-                GlobalState.PreviousVersion,
-                gcodeVersion.getVersion(),
-                'global',
-            );
+            Logger.log('Updating...');
+            void this._stateController.updateVer(gcodeVersion);
+
+            Logger.log(`G-Code upgraded from ${prevVer.getVersionAsString()} to ${gcodeVersion.getVersionAsString()}`);
+            await this.showWhatsNew(gcodeVersion);
         } else {
             return;
         }
@@ -182,5 +178,9 @@ export class Control {
 
     static get gcodeUnitsController() {
         return this._unitsController;
+    }
+
+    static get stateController() {
+        return this._stateController;
     }
 }
