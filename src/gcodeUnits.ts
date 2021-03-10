@@ -6,16 +6,16 @@
 
 import { ConfigurationChangeEvent, Disposable, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
 import { Control } from './control';
-import { Commands } from './util/commands';
+import { UtilCommands } from './util/commands/common';
 import { configuration } from './util/config';
 import { Logger } from './util/logger';
 import { StatusBar, StatusBarControl } from './util/statusBar';
 
 export const enum GCodeUnits {
-    INCH = 'Inch',
+    Inch = 'Inch',
     MM = 'Metric',
-    AUTO = 'Auto',
-    DEF = 'Defautlt (Inch)',
+    Auto = 'Auto',
+    Default = 'Defautlt (Inch)',
 }
 
 export class GCodeUnitsController implements Disposable {
@@ -29,7 +29,7 @@ export class GCodeUnitsController implements Disposable {
     constructor() {
         this._statusbar = Control.statusBarController;
 
-        this._auto = (this._units = <GCodeUnits>configuration.getParam('general.units')) === GCodeUnits.AUTO;
+        this._auto = (this._units = <GCodeUnits>configuration.getParam('general.units')) === GCodeUnits.Auto;
 
         this._statusbar.updateStatusBar(this._units, this.unitsStatusBar);
 
@@ -52,7 +52,7 @@ export class GCodeUnitsController implements Disposable {
                     this.unitsStatusBar,
                     undefined,
                     undefined,
-                    Commands.GCSHOWSETTIGNS,
+                    UtilCommands.ShowGCodeSettings,
                 );
             } else {
                 Logger.log(`Units: ${this._units}`);
@@ -62,7 +62,7 @@ export class GCodeUnitsController implements Disposable {
                     this.unitsStatusBar,
                     undefined,
                     undefined,
-                    Commands.GCSHOWSETTIGNS,
+                    UtilCommands.ShowGCodeSettings,
                 );
             }
         }
@@ -82,7 +82,7 @@ export class GCodeUnitsController implements Disposable {
                     this.unitsStatusBar,
                     undefined,
                     undefined,
-                    Commands.GCSHOWSETTIGNS,
+                    UtilCommands.ShowGCodeSettings,
                 );
             } else {
                 return;
@@ -103,7 +103,7 @@ export class GCodeUnitsController implements Disposable {
                     this.unitsStatusBar,
                     undefined,
                     undefined,
-                    Commands.GCSHOWSETTIGNS,
+                    UtilCommands.ShowGCodeSettings,
                 );
             } else {
                 return;
@@ -118,11 +118,11 @@ export class GCodeUnitsController implements Disposable {
 
         // Check for Inch
         if (units === null) {
-            return GCodeUnits.DEF;
+            return GCodeUnits.Default;
         } else if (units[0] === 'G21') {
             return GCodeUnits.MM;
         } else {
-            return GCodeUnits.INCH;
+            return GCodeUnits.Inch;
         }
     }
 }

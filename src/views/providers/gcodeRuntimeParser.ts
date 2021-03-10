@@ -178,6 +178,10 @@ export class GCodeRuntimeParser {
 
                 // New Point -> Old Point
                 Object.assign(oldpt, newpt);
+
+                // Reset IJK
+                ijkr.i = ijkr.j = ijkr.k = 0;
+                ijkr.r = -1;
             }
 
             if (!state.rapid) {
@@ -185,9 +189,12 @@ export class GCodeRuntimeParser {
                 state.rt += state.distance / state.feedrate;
             }
         }
-
-        this._runtime = state.rt;
-
-        return true;
+        if (!isNaN(state.rt)) {
+            this._runtime = state.rt;
+            return true;
+        } else {
+            this._runtime = 0;
+            return false;
+        }
     }
 }

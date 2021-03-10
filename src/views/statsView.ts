@@ -5,22 +5,27 @@
 'use strict';
 
 import { commands, ConfigurationChangeEvent, TextDocumentChangeEvent, TreeItemCollapsibleState, window } from 'vscode';
+import { Control } from '../control';
 import { configuration } from '../util/config';
-import { constants } from '../util/constants';
+import { constants, Contexts } from '../util/constants';
 import { Logger } from '../util/logger';
 import { ResourceType } from './nodes/nodes';
 import { StatsNode, StatsType } from './nodes/statsNode';
 import { GCodeRuntimeParser } from './providers/gcodeRuntimeParser';
+import { ViewCommands } from './viewCommands';
 import { GView } from './views';
 
-const enum StatsViewInfo {
-    ID = 'gcode.views.stats',
-    NAME = 'Stats',
-}
+const StatsViewInfo = {
+    ViewId: 'gcode.views.stats',
+    ViewName: 'Stats',
+    Config: {
+        AutoRefresh: 'stats.autoRefresh',
+    },
+    Context: Contexts.ViewsStatsEnabled,
+};
 
 export class StatsView extends GView<StatsNode> {
     private _children: StatsNode[] | undefined;
-    // private _units: GCodeUnits;
 
     private _stats = {
         toolchanges: 0,
@@ -28,7 +33,7 @@ export class StatsView extends GView<StatsNode> {
     };
 
     constructor() {
-        super(StatsViewInfo.ID, StatsViewInfo.NAME);
+        super(StatsViewInfo.ViewId, StatsViewInfo.ViewName);
 
         this._editor = window.activeTextEditor;
 
@@ -36,9 +41,7 @@ export class StatsView extends GView<StatsNode> {
 
         this.registerCommands();
 
-        this._autoRefresh = <boolean>configuration.getParam('stats.autoRefresh');
-
-        // this._units = defUnits;
+        this._autoRefresh = <boolean>configuration.getParam(StatsViewInfo.Config.AutoRefresh);
 
         if (this._autoRefresh) {
             void this.refresh();
@@ -51,7 +54,7 @@ export class StatsView extends GView<StatsNode> {
 
     getRoot() {
         return new StatsNode(
-            StatsType.ROOT,
+            StatsType.Root,
             'Statistics',
             undefined,
             ResourceType.Stats,
@@ -64,7 +67,7 @@ export class StatsView extends GView<StatsNode> {
         if (this._children === undefined) {
             this._children = [
                 new StatsNode(
-                    StatsType.TOOLCHANGES,
+                    StatsType.ToolChanges,
                     `Tool Changes: ${this._stats.toolchanges}`,
                     undefined,
                     ResourceType.Stats,
@@ -72,7 +75,7 @@ export class StatsView extends GView<StatsNode> {
                     undefined,
                 ),
                 new StatsNode(
-                    StatsType.RUNTIME,
+                    StatsType.RunTime,
                     `Runtime: ${this._stats.runtime}`,
                     undefined,
                     ResourceType.Stats,
@@ -88,7 +91,7 @@ export class StatsView extends GView<StatsNode> {
     protected onActiveEditorChanged(): void {
         if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {
             const enabled = this._editor.document.languageId === constants.langId;
-            void commands.executeCommand('setContext', 'statsEnabled', enabled);
+            void Control.setContext(Contexts.ViewsStatsEnabled, enabled);
 
             if (enabled) {
                 if (this._autoRefresh) {
@@ -96,7 +99,7 @@ export class StatsView extends GView<StatsNode> {
                 }
             }
         } else {
-            void commands.executeCommand('setContext', 'statsEnabled', false);
+            void Control.setContext(Contexts.ViewsStatsEnabled, false);
 
             this._children = [];
             this._onDidChangeTreeData.fire(undefined);
@@ -106,7 +109,7 @@ export class StatsView extends GView<StatsNode> {
     protected onDocumentChanged(_changeEvent: TextDocumentChangeEvent) {
         if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {
             const enabled = this._editor.document.languageId === constants.langId;
-            void commands.executeCommand('setContext', 'statsEnabled', enabled);
+            void Control.setContext(Contexts.ViewsStatsEnabled, enabled);
 
             if (enabled) {
                 if (this._autoRefresh) {
@@ -114,7 +117,7 @@ export class StatsView extends GView<StatsNode> {
                 }
             }
         } else {
-            void commands.executeCommand('setContext', 'statsEnabled', false);
+            void Control.setContext(Contexts.ViewsStatsEnabled, false);
 
             this._children = [];
             this._onDidChangeTreeData.fire(undefined);
@@ -131,10 +134,10 @@ export class StatsView extends GView<StatsNode> {
     protected registerCommands() {
         // Refresh Command
         commands.registerCommand(
-            this.getQualifiedCommand('refresh'),
+            ViewCommands.RefreshStats,
             () => {
                 if (window.activeTextEditor?.document.languageId === constants.langId) {
-                    void commands.executeCommand('setContext', 'StatsViewEnabled', true);
+                    void Control.setContext(Contexts.ViewsStatsEnabled, true);
                 }
 
                 void this.refresh();
@@ -144,7 +147,7 @@ export class StatsView extends GView<StatsNode> {
 
         // Enable stats
         commands.registerCommand(
-            this.getQualifiedCommand('enable'),
+            ViewCommands.EnableStats,
             () => {
                 Logger.log('Enabling Stats...');
                 void configuration.setParam('stats.enabled', true);
@@ -176,7 +179,7 @@ export class StatsView extends GView<StatsNode> {
             if (this.updateToolChanges(text)) {
                 this._children.push(
                     new StatsNode(
-                        StatsType.TOOLCHANGES,
+                        StatsType.ToolChanges,
                         `Tool Changes: ${this._stats.toolchanges}`,
                         undefined,
                         ResourceType.Stats,
@@ -187,7 +190,7 @@ export class StatsView extends GView<StatsNode> {
             } else {
                 this._children.push(
                     new StatsNode(
-                        StatsType.ERROR,
+                        StatsType.Error,
                         'Tool Changes: ' + 'Error',
                         undefined,
                         ResourceType.Stats,
@@ -201,7 +204,7 @@ export class StatsView extends GView<StatsNode> {
             if (this.updateRunTime(text)) {
                 this._children.push(
                     new StatsNode(
-                        StatsType.RUNTIME,
+                        StatsType.RunTime,
                         `Est Runtime: ${new Date(this._stats.runtime * 1000).toISOString().substr(11, 8)}`,
                         undefined,
                         ResourceType.Stats,
@@ -212,7 +215,7 @@ export class StatsView extends GView<StatsNode> {
             } else {
                 this._children.push(
                     new StatsNode(
-                        StatsType.ERROR,
+                        StatsType.Error,
                         'Est Runtime: Error',
                         undefined,
                         ResourceType.Stats,

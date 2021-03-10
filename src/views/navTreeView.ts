@@ -16,19 +16,19 @@ import { configuration } from '../util/config';
 import { StatusBar, StatusBarControl } from '../util/statusBar';
 import { NavTreeNode } from './nodes/navTreeNode';
 import { GView } from './views';
-import { constants, PIcon } from '../util/constants';
+import { constants, Contexts, PIcon } from '../util/constants';
 import { GCodeTreeParser } from './providers/gcodeTreeParser';
 import { Control } from '../control';
-import { Commands } from '../util/commands';
 import { Logger } from '../util/logger';
+import { ViewCommands } from './viewCommands';
 
 const NavTreeViewInfo = {
-    ID: 'gcode.views.navTree',
-    NAME: 'Nav Tree',
+    ViewId: 'gcode.views.navTree',
+    ViewName: 'Nav Tree',
     CONFIG: {
         AUTOREF: 'navTree.autoRefresh',
     },
-    CONTEXT: 'gcode:navTree:enabled',
+    Context: Contexts.ViewsNavTreeEnabled,
 };
 
 const NavTreeStatus = {
@@ -42,7 +42,7 @@ export class NavTreeView extends GView<NavTreeNode> {
     private readonly treeStatusBar: StatusBar = 'treeStatusBar';
 
     constructor() {
-        super(NavTreeViewInfo.ID, NavTreeViewInfo.NAME);
+        super(NavTreeViewInfo.ViewId, NavTreeViewInfo.ViewName);
 
         // Initialize View
         this.initialize();
@@ -79,7 +79,7 @@ export class NavTreeView extends GView<NavTreeNode> {
     protected onActiveEditorChanged(): void {
         if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {
             const enabled = this._editor.document.languageId === constants.langId;
-            void commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, enabled);
+            void Control.setContext(Contexts.ViewsNavTreeEnabled, enabled);
 
             if (enabled) {
                 // Update Status Bar
@@ -88,7 +88,7 @@ export class NavTreeView extends GView<NavTreeNode> {
                     this.treeStatusBar,
                     'Refresh Tree',
                     undefined,
-                    Commands.GCTREEREFRESH,
+                    ViewCommands.RefreshTree,
                 );
 
                 if (this._autoRefresh) {
@@ -96,7 +96,7 @@ export class NavTreeView extends GView<NavTreeNode> {
                 }
             }
         } else {
-            void commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, false);
+            void Control.setContext(Contexts.ViewsNavTreeEnabled, false);
             this._statusbar.hideStatusBars();
 
             this._children = [];
@@ -107,7 +107,7 @@ export class NavTreeView extends GView<NavTreeNode> {
     protected onDocumentChanged(_changeEvent: TextDocumentChangeEvent): void {
         if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {
             const enabled = this._editor.document.languageId === constants.langId;
-            void commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, enabled);
+            void Control.setContext(Contexts.ViewsNavTreeEnabled, enabled);
 
             if (enabled) {
                 // Update Status Bar
@@ -116,7 +116,7 @@ export class NavTreeView extends GView<NavTreeNode> {
                     this.treeStatusBar,
                     'Refresh Tree',
                     undefined,
-                    Commands.GCTREEREFRESH,
+                    ViewCommands.RefreshTree,
                 );
 
                 if (this._autoRefresh) {
@@ -124,7 +124,7 @@ export class NavTreeView extends GView<NavTreeNode> {
                 }
             }
         } else {
-            void commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, false);
+            void Control.setContext(Contexts.ViewsNavTreeEnabled, false);
             this._statusbar.hideStatusBars();
 
             this._children = [];
@@ -142,11 +142,11 @@ export class NavTreeView extends GView<NavTreeNode> {
     protected registerCommands() {
         // Refresh Command
         commands.registerCommand(
-            this.getQualifiedCommand('refresh'),
+            ViewCommands.RefreshTree,
             () => {
                 if (this._editor && this._editor.document) {
                     if (this._editor.document.languageId === constants.langId) {
-                        void commands.executeCommand('setContext', NavTreeViewInfo.CONTEXT, true);
+                        void Control.setContext(Contexts.ViewsNavTreeEnabled, true);
                     }
 
                     this.refresh();
@@ -157,7 +157,7 @@ export class NavTreeView extends GView<NavTreeNode> {
 
         // Selection Command
         commands.registerCommand(
-            this.getQualifiedCommand('select'),
+            ViewCommands.TreeSelect,
             range => {
                 this.select(range);
             },
