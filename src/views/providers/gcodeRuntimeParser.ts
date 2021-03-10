@@ -106,7 +106,7 @@ export class GCodeRuntimeParser {
 
                 // Feed Rate
                 if (letter === 'E' || letter === 'F') {
-                    state.feedrate = +argument / 60.0; // Convert Per Min to Per Second
+                    state.feedrate = +argument;
                 }
 
                 // Coords
@@ -184,9 +184,12 @@ export class GCodeRuntimeParser {
                 ijkr.r = -1;
             }
 
+            // New Point -> Old Point
+            Object.assign(oldpt, newpt);
+
             if (!state.rapid) {
-                // Calculate Time :: t = d / v
-                state.rt += state.distance / state.feedrate;
+                // Calculate Time :: t = d / v :: Convert Feedrate from IPM to Per Second
+                state.rt += state.distance / (state.feedrate / 60);
             }
         }
         if (!isNaN(state.rt)) {
