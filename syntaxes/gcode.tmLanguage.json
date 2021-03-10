@@ -157,15 +157,15 @@
         "tools": {
             "patterns": [
                 {
-                    "match": "([dD])(\\d+|(?=[#\\[]))",
+                    "match": "([dD])\\s?(\\d+\\.?\\d*|(?=[#\\[]))",
                     "name": "constant.character.gcode"
                 },
                 {
-                    "match": "([hH])(\\d+|(?=[#\\[]))",
+                    "match": "([hH])\\s?(\\d+\\.?\\d*|(?=[#\\[]))",
                     "name": "constant.character.gcode"
                 },
                 {
-                    "match": "([tT])(\\d+|(?=[#\\[]))",
+                    "match": "([tT])\\s?(\\d+\\.?\\d*|(?=[#\\[]))",
                     "name": "constant.character.gcode"
                 }
             ]
