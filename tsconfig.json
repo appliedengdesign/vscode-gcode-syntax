@@ -11,10 +11,14 @@
 		"rootDir": "src",
 		"strict": true,
 		"resolveJsonModule": true,
-		"newLine": "lf"
+		"newLine": "lf",
+		"removeComments": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"skipLibCheck": true
 	},
 	"exclude": [
 		"node_modules",
-		".vscode-test"
+		"samplenc",
 	]
 }

@@ -18,9 +18,3 @@ suite('Extension Test Suite', () => {
         assert.strictEqual(-1, [1, 2, 3].indexOf(0));
     });
 });
-
-function sleep(ms: number): Promise<void> {
-    return new Promise(resolve => {
-        setTimeout(resolve, ms);
-    });
-}
