@@ -13,7 +13,7 @@ import { NavTreeView } from './views/navTreeView';
 import { GCodeUnitsController } from './gcodeUnits';
 import { StatsView } from './views/statsView';
 import { constants, Contexts, PIcon, VSBuiltInCommands } from './util/constants';
-import { Commands } from './util/commands';
+import { UtilCommands } from './util/commands/common';
 import { Version } from './util/version';
 import { Messages } from './util/messages';
 import { StateControl } from './util/stateControl';
@@ -32,6 +32,33 @@ export class Control {
     private static _statsView: StatsView | undefined;
     private static _navTree: NavTreeView | undefined;
 
+    private static async checkVersion() {
+        const gcodeVersion = new Version(constants.extension.version);
+
+        const prevVer = this._stateController.getVersion();
+
+        const newVer = gcodeVersion.compareWith(prevVer.getVersion()) === 1 ? true : false;
+
+        if (newVer) {
+            // Extension has been updated
+
+            // Update globalState version
+            Logger.log('Updating...');
+            void this._stateController.updateVer(gcodeVersion);
+
+            Logger.log(`G-Code upgraded from ${prevVer.getVersionAsString()} to ${gcodeVersion.getVersionAsString()}`);
+            await this.showWhatsNew(gcodeVersion);
+        } else {
+            return;
+        }
+    }
+
+    private static async showWhatsNew(ver: Version) {
+        // Show Whats New Message
+        await Messages.showWhatsNewMessage(ver);
+    }
+
+    // Static Methods
     static initialize(context: ExtensionContext, config: Config) {
         this._context = context;
         this._config = config;
@@ -99,7 +126,7 @@ export class Control {
             'support',
             'Support G-Code Syntax ❤',
             undefined,
-            Commands.GCSUPPORT,
+            UtilCommands.ShowSupportGCode,
         );
 
         // Check Version
@@ -116,32 +143,6 @@ export class Control {
     static getLoadTime(start: [number, number]): number {
         const [secs, nanosecs] = process.hrtime(start);
         return secs * 1000 + nanosecs / 1000000;
-    }
-
-    private static async checkVersion() {
-        const gcodeVersion = new Version(constants.extension.version);
-
-        const prevVer = this._stateController.getVersion();
-
-        const newVer = gcodeVersion.compareWith(prevVer.getVersion()) === 1 ? true : false;
-
-        if (newVer) {
-            // Extension has been updated
-
-            // Update globalState version
-            Logger.log('Updating...');
-            void this._stateController.updateVer(gcodeVersion);
-
-            Logger.log(`G-Code upgraded from ${prevVer.getVersionAsString()} to ${gcodeVersion.getVersionAsString()}`);
-            await this.showWhatsNew(gcodeVersion);
-        } else {
-            return;
-        }
-    }
-
-    private static async showWhatsNew(ver: Version) {
-        // Show Whats New Message
-        await Messages.showWhatsNewMessage(ver);
     }
 
     static setContext(key: Contexts | string, value: any) {

@@ -87,10 +87,6 @@ export abstract class GView<TRoot extends ViewNode<NodeTypes>> implements TreeDa
 
     protected abstract refresh(element?: ViewNode): void;
 
-    getQualifiedCommand(cmd: string) {
-        return `${this.id}.${cmd}`;
-    }
-
     protected abstract onConfigurationChanged(e: ConfigurationChangeEvent): void;
 
     protected abstract onActiveEditorChanged(): void;

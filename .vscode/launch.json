@@ -20,6 +20,25 @@
             "preLaunchTask": "${defaultBuildTask}"
         },
         {
+            "name": "Run G-Code (Sandbox) - Open Samples",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--disable-extensions",
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "${workspaceFolder}/samplenc/sample-colors.nc",
+                "${workspaceFolder}/samplenc/sample-profile.nc"
+            ],
+            "stopOnEntry": false,
+            "sourceMaps": true,
+            "smartStep": true,
+            "outFiles": [
+                "${workspaceFolder}/out/**/*.js"
+            ],
+            "preLaunchTask": "${defaultBuildTask}"
+        },
+        {
             "name": "Run G-Code Tests",
             "type": "extensionHost",
             "request": "launch",

@@ -1,7 +1,8 @@
 .eslintcache
-node_modules
-releases
 *.vsix
-out
 dist
 images/*.ai
+node_modules
+out
+releases
+tsconfig.tsbuildinfo

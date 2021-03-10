@@ -10,10 +10,10 @@ import { IconType, ResourceType, ViewNode } from './nodes';
 import * as path from 'path';
 
 export const enum StatsType {
-    ROOT,
-    TOOLCHANGES,
-    RUNTIME,
-    ERROR,
+    Root,
+    ToolChanges,
+    RunTime,
+    Error,
 }
 
 export class StatsNode extends ViewNode {
@@ -32,11 +32,19 @@ export class StatsNode extends ViewNode {
 
     setIcon(): void {
         switch (this.type) {
-            case StatsType.TOOLCHANGES:
+            case StatsType.ToolChanges:
                 this.iconPath = {
-                    light: path.join(constants.iconsPath, 'light', IconType.TOOLCHANGE + constants.iconExt),
-                    dark: path.join(constants.iconsPath, 'dark', IconType.TOOLCHANGE + constants.iconExt),
+                    light: path.join(constants.iconsPath, 'light', `${IconType.ToolChange}${constants.iconExt}`),
+                    dark: path.join(constants.iconsPath, 'dark', `${IconType.ToolChange}${constants.iconExt}`),
                 };
+                break;
+
+            case StatsType.RunTime:
+                this.iconPath = {
+                    light: path.join(constants.iconsPath, 'light', `${IconType.Dwell}${constants.iconExt}`),
+                    dark: path.join(constants.iconsPath, 'dark', `${IconType.Dwell}${constants.iconExt}`),
+                };
+                break;
         }
     }
 

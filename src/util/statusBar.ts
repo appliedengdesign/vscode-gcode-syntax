@@ -13,7 +13,7 @@ import {
     ThemeColor,
     window,
 } from 'vscode';
-import { Commands } from './commands';
+import { UtilCommands } from './commands/common';
 import { configuration } from './config';
 import { Logger } from './logger';
 
@@ -106,7 +106,7 @@ export class StatusBarControl implements Disposable {
         bar: StatusBar,
         tooltip?: string,
         color?: string | ThemeColor,
-        cmd?: Commands | string,
+        cmd?: UtilCommands | string,
     ): boolean {
         if (!this._enabled) {
             return false;

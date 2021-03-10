@@ -69,5 +69,6 @@ export const enum VSBuiltInCommands {
 }
 
 export const enum Contexts {
-    NavTreeViewEnabled = 'gcode:navTree:enabled',
+    ViewsNavTreeEnabled = 'gcode:navTree:enabled',
+    ViewsStatsEnabled = 'gcode:stats:enabled',
 }
