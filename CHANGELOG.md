@@ -2,6 +2,19 @@
 
 All changes to vscode-code-syntax will be documented here.
 
+## v0.5.1 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.5.1)
+
+### Fixes
+
+- Fixed Runtime Stats error in circular interpolation [#22](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/22)
+- Fixed Runtime Stats Error with incorrect Values [#22](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/22)
+- Fixed colorization of H/T/D codes with period at the end
+
+### Other
+
+- Added extra launch debugging configurations
+- Updated [README.md](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/README.md)
+
 ## v0.5.0 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.5.0)
 
 ### New Features
