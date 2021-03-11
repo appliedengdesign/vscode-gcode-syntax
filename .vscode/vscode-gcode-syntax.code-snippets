@@ -27,5 +27,27 @@
 			" * -------------------------------------------------------------------------------------------- */"
 		],
 		"description": "Adds Copyright Header..."
+	},
+	"Issues Link": {
+		"scope": "markdown",
+		"prefix": [
+			"issues",
+			"gh",
+			"ghissues",
+			"link"
+		],
+		"body": "https://github.com/appliedengdesign/vscode-gcode-syntax/issues/$1",
+		"description": "Insert link to GH issue"
+	},
+	"Tag Link": {
+		"scope": "markdown",
+		"prefix": [
+			"tag",
+			"ghtag",
+			"release",
+			"link"
+		],
+		"body": "(https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/$1",
+		"description": "Insert link to release"
 	}
 }
