@@ -6,14 +6,7 @@
 
 'use strict';
 
-import { ExtensionContext } from 'vscode';
-import * as Commands from './commands/cmds';
-
-export function registerCommands(context: ExtensionContext): void {
-    context.subscriptions.push(
-        new Commands.ShowGCodeSettings(),
-        new Commands.ShowSupportGCode(),
-        new Commands.AddComment(),
-        new Commands.RemoveComment(),
-    );
-}
+export * from './addComment';
+export * from './removeComment';
+export * from './showGCodeSettings';
+export * from './showSupportGCode';

@@ -289,6 +289,16 @@
                     "when": "resourceLangId == gcode",
                     "command": "gcode.views.stats.refresh",
                     "group": "gcode"
+                },
+                {
+                    "when": "resourceLangId == gcode",
+                    "command": "gcode.addComment",
+                    "group": "gcode"
+                },
+                {
+                    "when": "resourceLangId == gcode",
+                    "command": "gcode.removeComment",
+                    "group": "gcode"
                 }
             ]
         },
@@ -322,12 +332,22 @@
             },
             {
                 "command": "gcode.showSettings",
-                "title": "G-Code Settings",
+                "title": "G-Code: Settings",
                 "category": "G-Code",
                 "icon": {
                     "light": "resources/icons/light/settings.svg",
                     "dark": "resources/icons/dark/settings.svg"
                 }
+            },
+            {
+                "command": "gcode.addComment",
+                "title": "G-Code: Add Comment",
+                "category": "G-Code"
+            },
+            {
+                "command": "gcode.removeComment",
+                "title": "G-Code: Remove Comment",
+                "category": "G-Code"
             }
         ]
     },
