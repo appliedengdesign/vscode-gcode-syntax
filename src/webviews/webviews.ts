@@ -4,14 +4,27 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import { commands, ConfigurationChangeEvent, Disposable, Uri, ViewColumn, Webview, WebviewPanel, window } from 'vscode';
+import {
+    commands,
+    ConfigurationChangeEvent,
+    Disposable,
+    Uri,
+    ViewColumn,
+    Webview,
+    WebviewPanel,
+    WebviewPanelOnDidChangeViewStateEvent,
+    window,
+} from 'vscode';
 import { configuration } from '../util/config';
 import { WebViewCommands } from './webviewCommands';
 import { constants } from '../util/constants';
+import * as path from 'path';
+import { Control } from '../control';
 
 export abstract class GWebView implements Disposable {
     protected _disposable: Disposable;
     private _panel: WebviewPanel | undefined;
+    private _dPanel: Disposable | undefined;
 
     constructor(
         public readonly id: string,
@@ -27,6 +40,7 @@ export abstract class GWebView implements Disposable {
 
     dispose() {
         this._disposable && this._disposable.dispose();
+        this._dPanel && this._dPanel.dispose();
     }
 
     hide() {
@@ -49,6 +63,17 @@ export abstract class GWebView implements Disposable {
         void this.show(this._column);
     }
 
+    private onPanelDisposed() {
+        this._panel?.dispose();
+        this._panel = undefined;
+    }
+
+    private onViewStateChanged(e: WebviewPanelOnDidChangeViewStateEvent) {
+        if (e.webviewPanel.active) {
+            // View State Changed
+        }
+    }
+
     async show(column: ViewColumn = ViewColumn.Beside): Promise<void> {
         if (this._panel == null) {
             this._panel = window.createWebviewPanel(
@@ -60,10 +85,17 @@ export abstract class GWebView implements Disposable {
                     enableFindWidget: true,
                     enableCommandUris: true,
                     enableScripts: true,
+                    localResourceRoots: [Uri.file(path.join(Control.context.extensionPath, 'resources'))],
                 },
             );
 
             this._panel.iconPath = Uri.file(constants.gcodeIcon);
+
+            this._dPanel = Disposable.from(
+                this._panel,
+                this._panel.onDidDispose(this.onPanelDisposed, this),
+                this._panel.onDidChangeViewState(this.onViewStateChanged, this),
+            );
 
             this._panel.webview.html = await this.getHtml(this._panel.webview);
         } else {

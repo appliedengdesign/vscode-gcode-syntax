@@ -5,7 +5,8 @@
 
 'use strict';
 
-import { ConfigurationChangeEvent, Webview } from 'vscode';
+import { ConfigurationChangeEvent, Uri, Webview, workspace } from 'vscode';
+import { Control } from '../control';
 import { WebViewCommands } from './webviewCommands';
 import { GWebView } from './webviews';
 
@@ -14,7 +15,7 @@ const GCodesWebviewInfo = {
     Title: 'G/M Code Reference',
 };
 
-class CodesWebview extends GWebView {
+export class CodesWebview extends GWebView {
     constructor() {
         super(GCodesWebviewInfo.ViewId, GCodesWebviewInfo.Title, WebViewCommands.ShowCodesWebview);
     }
@@ -25,5 +26,12 @@ class CodesWebview extends GWebView {
 
     async getHtml(webview: Webview): Promise<string> {
         // DO SOMETHING
+        const jsonUri = Uri.joinPath(Control.context.extensionUri, 'resources', 'reference', 'milling', 'gcodes.json');
+
+        return Promise.resolve(
+            await workspace.fs.readFile(jsonUri).then(value => {
+                return value.toString();
+            }),
+        );
     }
 }

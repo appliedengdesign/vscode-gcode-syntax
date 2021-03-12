@@ -362,6 +362,11 @@
                 "command": "gcode.removeComment",
                 "title": "G-Code: Remove Comment",
                 "category": "G-Code"
+            },
+            {
+                "command": "gcode.webviews.codes.show",
+                "title": "G-Code: Show Code Reference",
+                "category": "G-Code"
             }
         ]
     },

@@ -17,6 +17,7 @@ import { UtilCommands } from './util/commands/common';
 import { Version } from './util/version';
 import { Messages } from './util/messages';
 import { StateControl } from './util/stateControl';
+import { CodesWebview } from './webviews/codesWebview';
 
 export class Control {
     private static _config: Config | undefined;
@@ -31,6 +32,9 @@ export class Control {
     // Views
     private static _statsView: StatsView | undefined;
     private static _navTree: NavTreeView | undefined;
+
+    // Webviews
+    private static _codesWebview: CodesWebview | undefined;
 
     private static async checkVersion() {
         const gcodeVersion = new Version(constants.extension.version);
@@ -131,6 +135,9 @@ export class Control {
 
         // Check Version
         void this.checkVersion();
+
+        // Set Up Webviews
+        context.subscriptions.push((this._codesWebview = new CodesWebview()));
     }
 
     static terminate() {
