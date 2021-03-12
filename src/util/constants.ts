@@ -25,6 +25,7 @@ interface IConstants {
     };
     readonly extensionOutputChannelName: string;
     readonly extensionQualifiedId: string;
+    readonly gcodeIcon: string;
     readonly iconsPath: string;
     readonly iconExt: string;
     readonly langId: string;
@@ -45,6 +46,7 @@ export const constants: IConstants = {
     },
     extensionOutputChannelName: gcode.packageJSON.shortName,
     extensionQualifiedId: extensionQualifiedId,
+    gcodeIcon: path.join(__dirname, '..', '..', 'resources', 'icons', 'gcode.svg'),
     iconsPath: path.join(__dirname, '..', '..', 'resources', 'icons'),
     iconExt: '.svg',
     langId: gcode.packageJSON.contributes.languages[0].id,
