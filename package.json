@@ -2,7 +2,7 @@
     "name": "vscode-gcode-syntax",
     "displayName": "G-Code Syntax",
     "shortName": "G-Code",
-    "description": "CNC G-Code Syntax Langauge",
+    "description": "Turn VSCode into a fully capable G-Code editor, including language support & more.",
     "version": "0.5.1",
     "license": "MIT",
     "publisher": "appliedengdesign",
@@ -16,6 +16,8 @@
     },
     "categories": [
         "Programming Languages",
+        "Formatters",
+        "Visualization",
         "Snippets",
         "Other"
     ],
@@ -28,6 +30,18 @@
     ],
     "icon": "images/logo.png",
     "preview": false,
+    "badges": [
+        {
+            "url": "https://badgen.net/twitter/follow/appliedengdes",
+            "href": "https://twitter.com/appliedengdes",
+            "description": "Follow us on Twitter!"
+        },
+        {
+            "url": "https://badgen.net/badge/license/MIT",
+            "href": "https://opensource.org/licenses/MIT",
+            "description": "Licensed under MIT Open Source"
+        }
+    ],
     "galleryBanner": {
         "color": "#666666",
         "theme": "dark"
