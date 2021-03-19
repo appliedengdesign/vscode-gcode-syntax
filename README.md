@@ -1,6 +1,7 @@
 [![Version](https://vsmarketplacebadge.apphb.com/version/appliedengdesign.vscode-gcode-syntax.svg)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
 [![Installs](https://vsmarketplacebadge.apphb.com/installs-short/appliedengdesign.vscode-gcode-syntax.svg)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
 [![Rating](https://vsmarketplacebadge.apphb.com/rating/appliedengdesign.vscode-gcode-syntax.svg)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
+![CodeQL](https://github.com/appliedengdesign/vscode-gcode-syntax/actions/workflows/codeql-analysis.yml/badge.svg)
 
 [![GitHub Issues](https://badgen.net/github/open-issues/appliedengdesign/vscode-gcode-syntax)](https://github.com/appliedengdesign/vscode-gcode-syntax/issues)
 ![Github Stars](https://badgen.net/github/stars/appliedengdesign/vscode-gcode-syntax)
@@ -68,22 +69,22 @@ Tree view is enabled by default and can be access from the G icon on the activit
 
 G-Code Syntax is customizable and provides many configuration settings to allow the personalization of almost all features.
 
-| Name                                  | Description                                                                                 |
-| ------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `gcode.general.machineType`           | **( Not Currently Active )**                                                                |
-|                                       |                                                                                             |
-| `gcode.general.statusBars.enabled`    | Enable or Disable the G-Code status bars                                                    |
-|                                       |                                                                                             |
-| `gcode.general.statusbars.alignment`  | Choose the alignment of the status bars (Left is default)                                   |
-|                                       |                                                                                             |
-| `gcode.general.units`                 | Choose the units for the file. Options are Auto, Inch or Metric                             |
-|                                       |                                                                                             |
-| `gcode.navTree.autoRefresh`              | Tree auto-refreshes as changes are made to the g-code. ( Disabled by default )              |
-|                                       |                                                                                             |
-| `gcode.stats.enabled`                  | Enable the statistics view. ( Disabled by default )                                         |
-|                                       |                                                                                             |
-| `gcode.stats.autoRefresh`             | Auto-refresh the stats view when changes are made to the g-code. (Disabled by default)      |
-|                                       |                                                                                             |
+| Name                                 | Description                                                                            |
+| ------------------------------------ | -------------------------------------------------------------------------------------- |
+| `gcode.general.machineType`          | **( Not Currently Active )**                                                           |
+|                                      |                                                                                        |
+| `gcode.general.statusBars.enabled`   | Enable or Disable the G-Code status bars                                               |
+|                                      |                                                                                        |
+| `gcode.general.statusbars.alignment` | Choose the alignment of the status bars (Left is default)                              |
+|                                      |                                                                                        |
+| `gcode.general.units`                | Choose the units for the file. Options are Auto, Inch or Metric                        |
+|                                      |                                                                                        |
+| `gcode.navTree.autoRefresh`          | Tree auto-refreshes as changes are made to the g-code. ( Disabled by default )         |
+|                                      |                                                                                        |
+| `gcode.stats.enabled`                | Enable the statistics view. ( Disabled by default )                                    |
+|                                      |                                                                                        |
+| `gcode.stats.autoRefresh`            | Auto-refresh the stats view when changes are made to the g-code. (Disabled by default) |
+|                                      |                                                                                        |
 
 ![Settings Screenshot](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/images/settings-screenshot.png?raw=true)
 
