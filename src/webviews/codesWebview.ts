@@ -25,7 +25,7 @@ export class CodesWebview extends GWebView {
     }
 
     async getHtml(webview: Webview): Promise<string> {
-        // DO SOMETHING
+        const csps = webview.cspSource;
         const jsonUri = Uri.joinPath(Control.context.extensionUri, 'resources', 'reference', 'milling', 'gcodes.json');
 
         return Promise.resolve(
