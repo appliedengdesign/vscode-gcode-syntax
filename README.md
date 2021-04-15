@@ -71,7 +71,9 @@ G-Code Syntax is customizable and provides many configuration settings to allow 
 
 | Name                                 | Description                                                                            |
 | ------------------------------------ | -------------------------------------------------------------------------------------- |
-| `gcode.general.machineType`          | **( Not Currently Active )**                                                           |
+| `gcode.general.hovers.enabled`       | Enable or Disable the hovers to show G-Code information                                |
+|                                      |                                                                                        |
+| `gcode.general.machineType`          | Choose the machine type for extension (Mill is default)                                |
 |                                      |                                                                                        |
 | `gcode.general.statusBars.enabled`   | Enable or Disable the G-Code status bars                                               |
 |                                      |                                                                                        |
