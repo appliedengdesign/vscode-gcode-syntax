@@ -7,6 +7,7 @@
 import { ConfigurationChangeEvent, Disposable, languages, TextEditor, Uri, window } from 'vscode';
 import { configuration } from '../util/config';
 import { constants } from '../util/constants';
+import { Logger } from '../util/logger';
 import { GCodeHoverProvider } from './gcodeHoverProvider';
 
 export class GCodeHoverControl implements Disposable {
@@ -19,6 +20,11 @@ export class GCodeHoverControl implements Disposable {
         this._disposable = Disposable.from(configuration.onDidChange(this.onConfigurationChanged, this));
 
         this._enabled = <boolean>configuration.getParam('general.hovers.enabled');
+
+        if (this._enabled) {
+            Logger.log('Loading Hover Controller...');
+            this.register(window.activeTextEditor);
+        }
     }
 
     dispose() {
@@ -29,9 +35,11 @@ export class GCodeHoverControl implements Disposable {
         if (configuration.changed(e, 'general.hovers.enabled')) {
             if (this._enabled) {
                 // Disable and Dispose
+                Logger.log('Disabling Hover Controller...');
                 this.unregister();
             } else {
                 // Enable
+                Logger.log('Enabling Hover Controller...');
                 this.register(window.activeTextEditor);
             }
         }

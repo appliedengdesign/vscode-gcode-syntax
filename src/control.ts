@@ -18,6 +18,8 @@ import { Version } from './util/version';
 import { Messages } from './util/messages';
 import { StateControl } from './util/stateControl';
 import { CodesWebview } from './webviews/codesWebview';
+import { MachineTypeControl } from './util/machineType';
+import { GCodeHoverControl } from './hovers/gcodeHoverControl';
 
 export class Control {
     private static _config: Config | undefined;
@@ -25,9 +27,11 @@ export class Control {
     private static _units: string | undefined;
 
     // Controllers
+    private static _machineTypeControl: MachineTypeControl | undefined;
     private static _statusBarControl: StatusBarControl;
     private static _unitsController: GCodeUnitsController | undefined;
     private static _stateController: StateControl;
+    private static _hoverController: GCodeHoverControl;
 
     // Views
     private static _statsView: StatsView | undefined;
@@ -67,11 +71,17 @@ export class Control {
         this._context = context;
         this._config = config;
 
+        // Load Machine Type
+        context.subscriptions.push((this._machineTypeControl = new MachineTypeControl()));
+
         // Load State Controller
         this._stateController = new StateControl(context);
 
         // Load StatusBars
         context.subscriptions.push((this._statusBarControl = new StatusBarControl(this._context)));
+
+        // Load Hover Controller
+        context.subscriptions.push((this._hoverController = new GCodeHoverControl()));
 
         // Units
         this._units = <string>config.getParam('general.units');
@@ -143,7 +153,15 @@ export class Control {
     static terminate() {
         Logger.log('Terminating Extension...');
 
-        // Dispose of status bars
+        // Dispose Views
+        this._codesWebview?.dispose();
+        this._statsView?.dispose();
+        this._statsView?.dispose();
+
+        // Dispose Controllers
+        this._hoverController.dispose();
+        this._unitsController?.dispose();
+        this._machineTypeControl?.dispose();
         this._statusBarControl?.dispose();
     }
 
@@ -162,6 +180,10 @@ export class Control {
 
     static get config() {
         return this._config;
+    }
+
+    static get machineType() {
+        return this._machineTypeControl;
     }
 
     static get navTree() {
