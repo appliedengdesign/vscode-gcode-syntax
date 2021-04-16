@@ -12,7 +12,7 @@
     },
     "copyright": "Copyright (c) 2021 Applied Eng. & Design / Mike Centola",
     "engines": {
-        "vscode": "^1.54.0"
+        "vscode": "^1.55.0"
     },
     "categories": [
         "Programming Languages",
@@ -55,7 +55,7 @@
     "bugs": {
         "url": "https://github.com/appliedengdesign/vscode-gcode-syntax/issues"
     },
-    "main": "./out/extension.js",
+    "main": "./dist/extension.js",
     "activationEvents": [
         "onLanguage:gcode",
         "onView:gcode.gcodeTree",
@@ -379,32 +379,47 @@
         ]
     },
     "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "clean": "shx rm -rf out/*",
+        "analyze:bundle": "webpack --env analyzeBundle",
+        "bundle": "webpack --mode production",
+        "clean": "shx rm -rf out/* && rm -rf dist/*",
         "compile": "tsc -p ./",
         "lint": "eslint --ext .ts src/**/*.ts --cache",
         "watch": "tsc -watch -p ./",
+        "pack": "vsce package",
         "pretest": "npm run compile",
         "pretty": "prettier --config .prettierrc --loglevel warn .",
-        "test": "node ./out/test/runTests.js"
+        "pub": "vsce publish",
+        "test": "node ./out/test/runTests.js",
+        "test:unit": "mocha --require ts-node/register test/unit/*.test.ts",
+        "vscode:prepublish": "npm run compile",
+        "webpack": "webpack --mode development",
+        "webpack-dev": "webpack --mode development --watch"
     },
     "devDependencies": {
+        "@types/chai": "^4.2.16",
         "@types/glob": "^7.1.3",
         "@types/mocha": "^8.2.2",
         "@types/node": "^14.14.39",
         "@types/vscode": "^1.55.0",
         "@typescript-eslint/eslint-plugin": "^4.22.0",
         "@typescript-eslint/parser": "^4.22.0",
+        "chai": "^4.3.4",
         "eslint": "^7.24.0",
         "eslint-config-prettier": "^8.2.0",
         "eslint-plugin-import": "^2.22.1",
         "eslint-plugin-prettier": "^3.4.0",
+        "fork-ts-checker-webpack-plugin": "^6.2.1",
         "glob": "^7.1.6",
         "mocha": "^8.3.2",
         "prettier": "^2.2.1",
         "shx": "^0.3.3",
+        "ts-loader": "^8.1.0",
+        "ts-node": "^9.1.1",
         "typescript": "^4.2.4",
-        "vscode-test": "^1.5.2"
+        "vscode-test": "^1.5.2",
+        "webpack": "^5.33.2",
+        "webpack-bundle-analyzer": "^4.4.1",
+        "webpack-cli": "^4.6.0"
     },
     "dependencies": {
         "@appliedengdesign/gcode-reference": "^0.0.3"

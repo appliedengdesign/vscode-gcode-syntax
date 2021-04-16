@@ -3,25 +3,8 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run G-Code (Sandbox)",
-            "type": "extensionHost",
-            "request": "launch",
-            "runtimeExecutable": "${execPath}",
-            "args": [
-                "--disable-extensions",
-                "--extensionDevelopmentPath=${workspaceFolder}"
-            ],
-            "stopOnEntry": false,
-            "sourceMaps": true,
-            "smartStep": true,
-            "outFiles": [
-                "${workspaceFolder}/out/**/*.js"
-            ],
-            "preLaunchTask": "${defaultBuildTask}"
-        },
-        {
-            "name": "Run G-Code (Sandbox) - Open Samples",
-            "type": "extensionHost",
+            "name": "Run G-Code (Sandbox) - Samples",
+            "type": "pwa-extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
@@ -30,31 +13,72 @@
                 "${workspaceFolder}/samplenc/sample-colors.nc",
                 "${workspaceFolder}/samplenc/sample-profile.nc"
             ],
-            "stopOnEntry": false,
-            "sourceMaps": true,
-            "smartStep": true,
             "outFiles": [
-                "${workspaceFolder}/out/**/*.js"
+                "${workspaceFolder}/dist/**/*.js"
             ],
-            "preLaunchTask": "${defaultBuildTask}"
+            "presentation": {
+                "hidden": false,
+                "group": "Launch Extension",
+                "order": 1
+            },
+            "preLaunchTask": "npm: webpack",
+            "skipFiles": [
+                "<node_internals>/**",
+                "**/node_modules/**"
+            ],
+            "smartStep": true,
+            "sourceMaps": true,
+            "trace": true
         },
         {
-            "name": "Run G-Code Tests",
-            "type": "extensionHost",
+            "name": "Run G-Code (Sandbox)",
+            "type": "pwa-extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--disable-extensions",
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionsTestsPath=${workspaceFolder}/out/test/suite/index"
+                "${workspaceFolder}/samplenc/sample-colors.nc",
+                "${workspaceFolder}/samplenc/sample-profile.nc"
             ],
-            "stopOnEntry": false,
-            "sourceMaps": true,
-            "smartStep": true,
             "outFiles": [
-                "${workspaceFolder}/out/test/**/*.js"
+                "${workspaceFolder}/dist/**/*.js"
             ],
-            "preLaunchTask": "${defaultBuildTask}"
+            "presentation": {
+                "hidden": false,
+                "group": "Launch Extension",
+                "order": 2
+            },
+            "preLaunchTask": "npm: webpack",
+            "skipFiles": [
+                "<node_internals>/**",
+                "**/node_modules/**"
+            ],
+            "smartStep": true,
+            "sourceMaps": true,
+            "trace": true
+        },
+        {
+            "name": "G-Code Mocha Unit Tests",
+            "type": "pwa-node",
+            "request": "launch",
+            "internalConsoleOptions": "openOnSessionStart",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "--no-timeouts",
+                "--colors",
+                "--require",
+                "ts-node/register",
+                "${workspaceFolder}/test/unit/*.test.ts"
+            ],
+            "skipFiles": [
+                "<node_internals>/**",
+                "**/node_modules/**"
+            ],
+            "env": {
+                "NODE_ENV": "testing"
+            },
+            "sourceMaps": true
         }
     ]
 }
