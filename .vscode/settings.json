@@ -41,5 +41,15 @@
         "typescript",
         "javascript"
     ],
-    "prettier.requireConfig": true
+    "prettier.requireConfig": true,
+    "cSpell.words": [
+        "Statusbars",
+        "aptcl",
+        "loglevel",
+        "mcode",
+        "prettierrc",
+        "rtparser",
+        "toolchanges",
+        "webviews"
+    ]
 }
