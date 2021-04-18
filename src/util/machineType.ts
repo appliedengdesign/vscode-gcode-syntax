@@ -8,10 +8,15 @@ import { ConfigurationChangeEvent, Disposable, Event, EventEmitter, workspace } 
 import { GReference, MachineTypes } from '@appliedengdesign/gcode-reference';
 import { configuration } from './config';
 import { Logger } from './logger';
+import { StatusBar, StatusBarControl } from './statusBar';
+import { Control } from '../control';
+import { UtilCommands } from './commands/common';
 
 export class MachineTypeControl implements Disposable {
     private readonly _dispoable: Disposable | undefined;
     private _machineType: MachineTypes | undefined;
+    private _statusbar: StatusBarControl;
+    private readonly mtypeStatusBar: StatusBar = 'machineTypeBar';
     private _gReference: GReference;
 
     private _onDidChange = new EventEmitter<ConfigurationChangeEvent>();
@@ -20,8 +25,9 @@ export class MachineTypeControl implements Disposable {
     }
 
     constructor() {
+        this._statusbar = Control.statusBarController;
+        this._gReference = new GReference();
         this.update();
-        this._gReference = new GReference(this._machineType);
 
         this._dispoable = Disposable.from(workspace.onDidChangeConfiguration(this.onConfigurationChanged, this));
     }
@@ -57,6 +63,16 @@ export class MachineTypeControl implements Disposable {
             default:
                 return;
         }
+
+        this._statusbar.updateStatusBar(
+            cfgMachineType,
+            this.mtypeStatusBar,
+            undefined,
+            undefined,
+            UtilCommands.ShowGCodeSettings,
+        );
+
+        this._gReference.setType(this._machineType);
     }
 
     get gReference() {

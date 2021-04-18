@@ -71,14 +71,14 @@ export class Control {
         this._context = context;
         this._config = config;
 
+        // Load StatusBars
+        context.subscriptions.push((this._statusBarControl = new StatusBarControl(this._context)));
+
         // Load Machine Type
         context.subscriptions.push((this._machineTypeControl = new MachineTypeControl()));
 
         // Load State Controller
         this._stateController = new StateControl(context);
-
-        // Load StatusBars
-        context.subscriptions.push((this._statusBarControl = new StatusBarControl(this._context)));
 
         // Load Hover Controller
         context.subscriptions.push((this._hoverController = new GCodeHoverControl()));

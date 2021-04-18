@@ -31,7 +31,13 @@ export class GCodeUnitsController implements Disposable {
 
         this._auto = (this._units = <GCodeUnits>configuration.getParam('general.units')) === GCodeUnits.Auto;
 
-        this._statusbar.updateStatusBar(this._units, this.unitsStatusBar);
+        this._statusbar.updateStatusBar(
+            this._units,
+            this.unitsStatusBar,
+            undefined,
+            undefined,
+            UtilCommands.ShowGCodeSettings,
+        );
 
         Control.context.subscriptions.push(configuration.onDidChange(this.onConfigurationChanged, this));
         Control.context.subscriptions.push(window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged()));
