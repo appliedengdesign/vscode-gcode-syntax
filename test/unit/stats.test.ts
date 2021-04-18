@@ -19,4 +19,13 @@ describe('G-Code Stats', () => {
 
         expect(gcr.getRuntime()).to.be.equal(59.74464683955828);
     });
+
+    it('calculates the correct runtime', () => {
+        const gcr = new GCodeRuntimeParser(
+            fs.readFileSync(path.resolve(__dirname, '..', '..', 'samplenc', 'sample-circular-pocket.nc')).toString(),
+        );
+        gcr.update();
+
+        expect(gcr.getRuntime()).to.be.equal(430.00882725574473);
+    });
 });
