@@ -11,6 +11,7 @@ import {
     Uri,
     ViewColumn,
     Webview,
+    WebviewOptions,
     WebviewPanel,
     WebviewPanelOnDidChangeViewStateEvent,
     window,
@@ -18,13 +19,13 @@ import {
 import { configuration } from '../util/config';
 import { WebViewCommands } from './webviewCommands';
 import { constants } from '../util/constants';
-import * as path from 'path';
 import { Control } from '../control';
 
 export abstract class GWebView implements Disposable {
     protected _disposable: Disposable;
     private _panel: WebviewPanel | undefined;
     private _dPanel: Disposable | undefined;
+    private _enabled: boolean;
 
     constructor(
         public readonly id: string,
@@ -36,6 +37,14 @@ export abstract class GWebView implements Disposable {
             configuration.onDidChange(this.onConfigurationChanged, this),
             commands.registerCommand(showCommand, this.onShowCommand, this),
         );
+
+        this._enabled = <boolean>configuration.getParam('webviews.enabled');
+    }
+
+    private onConfigurationChanged(e: ConfigurationChangeEvent) {
+        if (e.affectsConfiguration('webviews.enabled')) {
+            this._enabled = <boolean>configuration.getParam('webviews.enabled');
+        }
     }
 
     dispose() {
@@ -60,7 +69,9 @@ export abstract class GWebView implements Disposable {
     }
 
     protected onShowCommand() {
-        void this.show(this._column);
+        if (this._enabled) {
+            void this.show(this._column);
+        }
     }
 
     private onPanelDisposed() {
@@ -80,13 +91,7 @@ export abstract class GWebView implements Disposable {
                 this.id,
                 this.title,
                 { viewColumn: column, preserveFocus: false },
-                {
-                    retainContextWhenHidden: false,
-                    enableFindWidget: true,
-                    enableCommandUris: true,
-                    enableScripts: true,
-                    localResourceRoots: [Uri.file(path.join(Control.context.extensionPath, 'resources'))],
-                },
+                this.getWebviewOptions(),
             );
 
             this._panel.iconPath = Uri.file(constants.gcodeIcon);
@@ -108,7 +113,24 @@ export abstract class GWebView implements Disposable {
         }
     }
 
-    protected abstract onConfigurationChanged(e: ConfigurationChangeEvent): void;
-
     protected abstract getHtml(webview: Webview): Promise<string>;
+
+    protected getNonce(): string {
+        let text = '';
+
+        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+        for (let i = 0; i < 32; i++) {
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+        return text;
+    }
+
+    private getWebviewOptions(): WebviewOptions {
+        return {
+            enableScripts: true,
+            enableCommandUris: true,
+            localResourceRoots: [Uri.joinPath(Control.context.extensionUri, 'resources', 'webviews')],
+        };
+    }
 }
