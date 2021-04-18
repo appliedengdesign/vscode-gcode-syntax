@@ -4,6 +4,7 @@
 .gitattributes
 .github/**
 .gitignore
+.markdownlint.json
 .prettierignore
 .prettierrc
 .vscode-test/**
@@ -11,15 +12,14 @@
 **/*.map
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
-images/*.ai
-images/*.svg
+images/**
 LICENSE
-node_modules/**
 out/test/**
 package-lock.json
 samplenc/**
 src/**
 test/**
+out/**
 tsconfig.json
 tsconfig.tsbuildinfo
 webpack.config.js
