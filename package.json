@@ -209,19 +209,25 @@
                 "gcode.navTree.autoRefresh": {
                     "type": "boolean",
                     "default": true,
-                    "markdowndescription": "Enable G-Code Tree Auto Refresh",
+                    "markdownDescription": "Enable G-Code Tree Auto Refresh",
                     "scope": "window"
                 },
                 "gcode.stats.enabled": {
                     "type": "boolean",
                     "default": false,
-                    "markdowndescription": "Enable G-Code Statistics Panel",
+                    "markdownDescription": "Enable G-Code Statistics Panel",
                     "scope": "window"
                 },
                 "gcode.stats.autoRefresh": {
                     "type": "boolean",
                     "default": false,
-                    "markdowndescription": "Enable G-Code Stats Auto Refresh",
+                    "markdownDescription": "Enable G-Code Stats Auto Refresh",
+                    "scope": "window"
+                },
+                "gcode.webviews.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Enable or Disable WebViews",
                     "scope": "window"
                 }
             }
@@ -391,7 +397,7 @@
         "pub": "vsce publish",
         "test": "node ./out/test/runTests.js",
         "test:unit": "mocha --require ts-node/register test/unit/*.test.ts",
-        "vscode:prepublish": "npm run compile",
+        "vscode:prepublish": "npm run bundle",
         "webpack": "webpack --mode development",
         "webpack-dev": "webpack --mode development --watch"
     },
@@ -399,7 +405,7 @@
         "@types/chai": "^4.2.16",
         "@types/glob": "^7.1.3",
         "@types/mocha": "^8.2.2",
-        "@types/node": "^14.14.39",
+        "@types/node": "^14.14.41",
         "@types/vscode": "^1.55.0",
         "@typescript-eslint/eslint-plugin": "^4.22.0",
         "@typescript-eslint/parser": "^4.22.0",
@@ -413,7 +419,7 @@
         "mocha": "^8.3.2",
         "prettier": "^2.2.1",
         "shx": "^0.3.3",
-        "ts-loader": "^8.1.0",
+        "ts-loader": "^9.0.0",
         "ts-node": "^9.1.1",
         "typescript": "^4.2.4",
         "vscode-test": "^1.5.2",
