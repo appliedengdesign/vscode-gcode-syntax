@@ -44,12 +44,16 @@
     "prettier.requireConfig": true,
     "cSpell.words": [
         "Statusbars",
+        "TREECLEAN",
+        "TREEDIRTY",
         "aptcl",
         "loglevel",
         "mcode",
+        "nanosecs",
         "prettierrc",
         "rtparser",
         "toolchanges",
+        "vsmp",
         "webviews"
     ]
 }
