@@ -6,7 +6,6 @@
 'use strict';
 
 export const enum ViewCommands {
-    EnableStats = 'gcode.views.stats.enable',
     RefreshStats = 'gcode.views.stats.refresh',
     RefreshTree = 'gcode.views.navTree.refresh',
     TreeSelect = 'gcode.views.navTree.select',

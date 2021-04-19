@@ -53,6 +53,28 @@ export class Messages {
         }
     }
 
+    static async showRefreshWarningMessage(): Promise<boolean> {
+        // Show Warning message about large file refresh
+
+        const actions: MessageItem[] = [{ title: 'Continue' }, { title: 'Abort' }];
+
+        const result = await Messages.showMessage(
+            'warn',
+            'File size is above 10K lines. Tree / Stats refresh may not work.',
+            ...actions,
+        );
+
+        if (result != null) {
+            if (result === actions[0]) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     private static async showMessage(
         type: 'info' | 'warn' | 'error',
         msg: string,

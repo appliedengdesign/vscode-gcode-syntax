@@ -113,20 +113,22 @@ export class Control {
 
         context.subscriptions.push((this._navTree = new NavTreeView()));
 
-        Logger.log(`Nav Tree AutoRefresh: ${configuration.getParam('navTree.autoRefresh') ? 'Enabled' : 'Disabled'}`);
+        Logger.log(
+            `Nav Tree AutoRefresh: ${configuration.getParam('views.navTree.autoRefresh') ? 'Enabled' : 'Disabled'}`,
+        );
 
         // Load Stats View
-        Logger.log(`Stats: ${configuration.getParam('stats.enabled') ? 'Enabled' : 'Disabled'}`);
-        Logger.log(`Stats AutoRefresh: ${configuration.getParam('stats.autoRefresh') ? 'Enabled' : 'Disabled'}`);
+        Logger.log(`Stats: ${configuration.getParam('views.stats.enabled') ? 'Enabled' : 'Disabled'}`);
+        Logger.log(`Stats AutoRefresh: ${configuration.getParam('views.stats.autoRefresh') ? 'Enabled' : 'Disabled'}`);
 
-        if (config.getParam('stats.enabled')) {
+        if (config.getParam('views.stats.enabled')) {
             Logger.log('Loading Stats View...');
             context.subscriptions.push((this._statsView = new StatsView()));
         } else {
             let disposable: Disposable;
             // eslint-disable-next-line prefer-const
             disposable = configuration.onDidChange(e => {
-                if (configuration.changed(e, 'stats.enabled')) {
+                if (configuration.changed(e, 'views.stats.enabled')) {
                     disposable.dispose();
                     Logger.log('Loading Stats View...');
                     context.subscriptions.push((this._statsView = new StatsView()));

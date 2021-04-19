@@ -72,6 +72,6 @@ export const enum VSBuiltInCommands {
 
 export const enum Contexts {
     MachineType = 'gcode:general:machineType',
-    ViewsNavTreeEnabled = 'gcode:navTree:enabled',
-    ViewsStatsEnabled = 'gcode:stats:enabled',
+    ViewsNavTreeEnabled = 'gcode:views:navTree:enabled',
+    ViewsStatsEnabled = 'gcode:views:stats:enabled',
 }

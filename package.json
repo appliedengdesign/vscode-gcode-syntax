@@ -206,19 +206,19 @@
                     ],
                     "markdownDescription": "Configure Units for G-Code Files. Choose Auto to have G-Code parse for ```G20/G21```"
                 },
-                "gcode.navTree.autoRefresh": {
+                "gcode.views.maxAutoRefresh": {
+                    "type": "integer",
+                    "default": "10000",
+                    "markdownDescription": "Maximum Number of Lines in Editor to allow Auto Refresh",
+                    "scope": "window"
+                },
+                "gcode.views.navTree.autoRefresh": {
                     "type": "boolean",
                     "default": true,
                     "markdownDescription": "Enable G-Code Tree Auto Refresh",
                     "scope": "window"
                 },
-                "gcode.stats.enabled": {
-                    "type": "boolean",
-                    "default": false,
-                    "markdownDescription": "Enable G-Code Statistics Panel",
-                    "scope": "window"
-                },
-                "gcode.stats.autoRefresh": {
+                "gcode.views.stats.autoRefresh": {
                     "type": "boolean",
                     "default": false,
                     "markdownDescription": "Enable G-Code Stats Auto Refresh",
@@ -251,7 +251,6 @@
                 {
                     "id": "gcode.views.stats",
                     "name": "Stats",
-                    "when": "config.gcode.statsEnable",
                     "contextualTitle": "G-Code"
                 }
             ]
@@ -260,12 +259,12 @@
             {
                 "view": "gcode.views.navTree",
                 "contents": "Tree only available when viewing G-Code",
-                "when": "!gcode:navTree:enabled"
+                "when": "!gcode:views:navTree:enabled"
             },
             {
                 "view": "gcode.views.stats",
                 "contents": "G-Code Stats only available when viewing G-Code",
-                "when": "!gcode:stats:enabled"
+                "when": "!gcode:views:stats:enabled"
             }
         ],
         "menus": {
