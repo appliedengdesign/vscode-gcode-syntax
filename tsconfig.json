@@ -5,9 +5,9 @@
 		"incremental": true,
 		"isolatedModules": true,
 		"lib": [
-			"es2019"
+			"es2020"
 		],
-		"module": "commonjs",
+		"module": "esnext",
 		"moduleResolution": "node",
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitReturns": true,

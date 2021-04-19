@@ -1,9 +1,7 @@
-// @ts-check
-
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* ---------------------------------------------------------------------------------------------
+ *  Copyright (c) Applied Eng & Design All rights reserved.
+ *  Licensed under the MIT License. See License.md in the project root for license information.
+ * -------------------------------------------------------------------------------------------- */
 
 'use strict';
 
@@ -11,6 +9,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const path = require('path');
 
+// @ts-check
 /** @typedef {import('webpack').Configuration} */
 
 function getExtensionConfig(mode, env) {
@@ -89,7 +88,6 @@ module.exports = function (env, argv) {
     env = {
         analyzeBundle: false,
         analyzeDeps: false,
-        esbuild: true,
         ...env,
     };
 

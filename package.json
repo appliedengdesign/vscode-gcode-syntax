@@ -396,7 +396,7 @@
         "pretty": "prettier --config .prettierrc --loglevel warn .",
         "pub": "vsce publish",
         "test": "node ./out/test/runTests.js",
-        "test:unit": "mocha --require ts-node/register test/unit/*.test.ts",
+        "test:unit": "SET TS_NODE_PROJECT=./tsconfig.tests.json&& mocha -r ts-node/register test/unit/*.test.ts",
         "vscode:prepublish": "npm run bundle",
         "webpack": "webpack --mode development",
         "webpack-dev": "webpack --mode development --watch"

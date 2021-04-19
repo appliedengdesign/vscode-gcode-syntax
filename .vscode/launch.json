@@ -76,7 +76,8 @@
                 "**/node_modules/**"
             ],
             "env": {
-                "NODE_ENV": "testing"
+                "NODE_ENV": "testing",
+                "TS_NODE_PROJECT": "./tsconfig.tests.json"
             },
             "sourceMaps": true
         }

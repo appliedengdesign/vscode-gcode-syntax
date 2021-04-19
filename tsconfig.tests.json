@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "lib": [
+            "es2020"
+        ],
+        "module": "commonjs",
+        "outDir": "out",
+        "tsBuildInfoFile": "tsconfig.tests.tsbuildinfo"
+    }
+}
