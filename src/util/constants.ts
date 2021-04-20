@@ -25,6 +25,7 @@ interface IConstants {
     };
     readonly extensionOutputChannelName: string;
     readonly extensionQualifiedId: string;
+    readonly gcodeIcon: string;
     readonly iconsPath: string;
     readonly iconExt: string;
     readonly langId: string;
@@ -45,6 +46,7 @@ export const constants: IConstants = {
     },
     extensionOutputChannelName: gcode.packageJSON.shortName,
     extensionQualifiedId: extensionQualifiedId,
+    gcodeIcon: path.join(__dirname, '..', '..', 'resources', 'icons', 'gcode.svg'),
     iconsPath: path.join(__dirname, '..', '..', 'resources', 'icons'),
     iconExt: '.svg',
     langId: gcode.packageJSON.contributes.languages[0].id,
@@ -69,6 +71,7 @@ export const enum VSBuiltInCommands {
 }
 
 export const enum Contexts {
-    ViewsNavTreeEnabled = 'gcode:navTree:enabled',
-    ViewsStatsEnabled = 'gcode:stats:enabled',
+    MachineType = 'gcode:general:machineType',
+    ViewsNavTreeEnabled = 'gcode:views:navTree:enabled',
+    ViewsStatsEnabled = 'gcode:views:stats:enabled',
 }

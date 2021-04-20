@@ -9,6 +9,7 @@ import { Control } from '../control';
 import { configuration } from '../util/config';
 import { constants, Contexts } from '../util/constants';
 import { Logger } from '../util/logger';
+import { Messages } from '../util/messages';
 import { ResourceType } from './nodes/nodes';
 import { StatsNode, StatsType } from './nodes/statsNode';
 import { GCodeRuntimeParser } from './providers/gcodeRuntimeParser';
@@ -19,7 +20,9 @@ const StatsViewInfo = {
     ViewId: 'gcode.views.stats',
     ViewName: 'Stats',
     Config: {
-        AutoRefresh: 'stats.autoRefresh',
+        AutoRefresh: 'views.stats.autoRefresh',
+        Enabled: 'views.stats.enabled',
+        MaxAutoRefresh: 'views.maxAutoRefresh',
     },
     Context: Contexts.ViewsStatsEnabled,
 };
@@ -125,8 +128,8 @@ export class StatsView extends GView<StatsNode> {
     }
 
     protected onConfigurationChanged(e: ConfigurationChangeEvent) {
-        if (configuration.changed(e, 'stats.autoRefresh')) {
-            this._autoRefresh = <boolean>configuration.getParam('stats.autoRefresh');
+        if (configuration.changed(e, StatsViewInfo.Config.AutoRefresh)) {
+            this._autoRefresh = <boolean>configuration.getParam(StatsViewInfo.Config.AutoRefresh);
             Logger.log(`Stats AutoRefresh: ${this._autoRefresh ? 'Enabled' : 'Disabled'}`);
         }
     }
@@ -144,24 +147,28 @@ export class StatsView extends GView<StatsNode> {
             },
             this,
         );
-
-        // Enable stats
-        commands.registerCommand(
-            ViewCommands.EnableStats,
-            () => {
-                Logger.log('Enabling Stats...');
-                void configuration.setParam('stats.enabled', true);
-            },
-            this,
-        );
     }
 
-    protected refresh(element?: StatsNode): void {
-        if (this.genStats()) {
-            if (element) {
-                this._onDidChangeTreeData.fire(element);
+    protected async refresh(element?: StatsNode): Promise<void> {
+        if (this._editor && this._editor.document) {
+            if (this._editor.document.lineCount > <number>configuration.getParam(StatsViewInfo.Config.MaxAutoRefresh)) {
+                if (await Messages.showRefreshWarningMessage()) {
+                    if (this.genStats()) {
+                        if (element) {
+                            this._onDidChangeTreeData.fire(element);
+                        } else {
+                            this._onDidChangeTreeData.fire(undefined);
+                        }
+                    }
+                }
             } else {
-                this._onDidChangeTreeData.fire(undefined);
+                if (this.genStats()) {
+                    if (element) {
+                        this._onDidChangeTreeData.fire(element);
+                    } else {
+                        this._onDidChangeTreeData.fire(undefined);
+                    }
+                }
             }
         }
     }

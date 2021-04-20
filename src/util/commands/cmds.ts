@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 /* ---------------------------------------------------------------------------------------------
  *  Copyright (c) Applied Eng & Design All rights reserved.
  *  Licensed under the MIT License. See License.md in the project root for license information.
@@ -5,8 +6,7 @@
 
 'use strict';
 
-export const enum ViewCommands {
-    RefreshStats = 'gcode.views.stats.refresh',
-    RefreshTree = 'gcode.views.navTree.refresh',
-    TreeSelect = 'gcode.views.navTree.select',
-}
+export * from './addComment';
+export * from './removeComment';
+export * from './showGCodeSettings';
+export * from './showSupportGCode';

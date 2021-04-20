@@ -1,3 +1,4 @@
-vscode.proposed.d.ts
 out/*
 dist/*
+tsconfig.tsbuildinfo
+webpack.config.js

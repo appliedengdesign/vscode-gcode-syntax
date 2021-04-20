@@ -5,8 +5,6 @@
 
 'use strict';
 
-export const enum ViewCommands {
-    RefreshStats = 'gcode.views.stats.refresh',
-    RefreshTree = 'gcode.views.navTree.refresh',
-    TreeSelect = 'gcode.views.navTree.select',
+export const enum WebViewCommands {
+    ShowCodesWebview = 'gcode.webviews.codes.show',
 }

@@ -7,9 +7,13 @@
 'use strict';
 
 import { ExtensionContext } from 'vscode';
-import { ShowGCodeSettings } from './commands/showGCodeSettings';
-import { ShowSupportGCode } from './commands/showSupportGCode';
+import * as Commands from './commands/cmds';
 
 export function registerCommands(context: ExtensionContext): void {
-    context.subscriptions.push(new ShowGCodeSettings(), new ShowSupportGCode());
+    context.subscriptions.push(
+        new Commands.ShowGCodeSettings(),
+        new Commands.ShowSupportGCode(),
+        new Commands.AddComment(),
+        new Commands.RemoveComment(),
+    );
 }

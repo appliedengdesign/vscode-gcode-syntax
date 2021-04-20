@@ -1,22 +1,31 @@
 {
 	"compilerOptions": {
-		"module": "commonjs",
-		"moduleResolution": "node",
-		"target": "ES2019",
-		"outDir": "out",
-		"lib": [
-			"ES2019"
-		],
-		"sourceMap": true,
-		"rootDir": "src",
-		"strict": true,
-		"resolveJsonModule": true,
-		"newLine": "lf",
-		"removeComments": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
-		"skipLibCheck": true
+		"incremental": true,
+		"isolatedModules": true,
+		"lib": [
+			"es2020"
+		],
+		"module": "esnext",
+		"moduleResolution": "node",
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": false,
+		"newLine": "lf",
+		"outDir": "out",
+		"resolveJsonModule": true,
+		"rootDir": ".",
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true,
+		"target": "es2019",
+		"useDefineForClassFields": true
 	},
+	"include": [
+		"src/**/*.ts",
+		"test/**/*.ts"
+	],
 	"exclude": [
 		"node_modules",
 		"samplenc",

@@ -41,5 +41,5 @@
         "typescript",
         "javascript"
     ],
-    "prettier.requireConfig": true
+    "prettier.requireConfig": true,
 }

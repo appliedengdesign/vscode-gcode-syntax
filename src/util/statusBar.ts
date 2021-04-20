@@ -20,6 +20,7 @@ import { Logger } from './logger';
 export interface StatusBars {
     treeStatusBar?: StatusBarItem | undefined;
     unitsBar?: StatusBarItem | undefined;
+    machineTypeBar?: StatusBarItem | undefined;
     support?: StatusBarItem | undefined;
 }
 
@@ -41,6 +42,7 @@ export class StatusBarControl implements Disposable {
         this._statusBars = {
             treeStatusBar: undefined,
             unitsBar: undefined,
+            machineTypeBar: undefined,
             support: undefined,
         };
 

@@ -2,8 +2,8 @@
     "name": "vscode-gcode-syntax",
     "displayName": "G-Code Syntax",
     "shortName": "G-Code",
-    "description": "CNC G-Code Syntax Langauge",
-    "version": "0.5.1",
+    "description": "Turn VSCode into a fully capable G-Code editor, including language support & more.",
+    "version": "0.6.0",
     "license": "MIT",
     "publisher": "appliedengdesign",
     "author": {
@@ -12,10 +12,12 @@
     },
     "copyright": "Copyright (c) 2021 Applied Eng. & Design / Mike Centola",
     "engines": {
-        "vscode": "^1.54.0"
+        "vscode": "^1.55.0"
     },
     "categories": [
         "Programming Languages",
+        "Formatters",
+        "Visualization",
         "Snippets",
         "Other"
     ],
@@ -28,6 +30,18 @@
     ],
     "icon": "images/logo.png",
     "preview": false,
+    "badges": [
+        {
+            "url": "https://badgen.net/twitter/follow/appliedengdes",
+            "href": "https://twitter.com/appliedengdes",
+            "description": "Follow us on Twitter!"
+        },
+        {
+            "url": "https://badgen.net/badge/license/MIT",
+            "href": "https://opensource.org/licenses/MIT",
+            "description": "Licensed under MIT Open Source"
+        }
+    ],
     "galleryBanner": {
         "color": "#666666",
         "theme": "dark"
@@ -41,7 +55,7 @@
     "bugs": {
         "url": "https://github.com/appliedengdesign/vscode-gcode-syntax/issues"
     },
-    "main": "./out/extension.js",
+    "main": "./dist/extension.js",
     "activationEvents": [
         "onLanguage:gcode",
         "onView:gcode.gcodeTree",
@@ -55,6 +69,7 @@
             {
                 "id": "gcode",
                 "aliases": [
+                    "G-Code",
                     "gcode",
                     "GCODE",
                     "nc",
@@ -75,6 +90,7 @@
                     ".fan",
                     ".fgc",
                     ".fnc",
+                    ".g",
                     ".g00",
                     ".gc",
                     ".gcd",
@@ -144,7 +160,8 @@
                     "default": "Mill",
                     "enum": [
                         "Mill",
-                        "Lathe"
+                        "Lathe",
+                        "3D Printer"
                     ],
                     "enumDescriptions": [
                         "Configure G-Code Extension for CNC Mill",
@@ -152,6 +169,12 @@
                         "Configure G-Code Extension for 3D Printers"
                     ],
                     "markdownDescription": "Configure G-Code Extension for a Specific Machine Type",
+                    "scope": "window"
+                },
+                "gcode.general.hovers.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Enable G-Code Hovers",
                     "scope": "window"
                 },
                 "gcode.general.statusBars.enabled": {
@@ -184,22 +207,28 @@
                     ],
                     "markdownDescription": "Configure Units for G-Code Files. Choose Auto to have G-Code parse for ```G20/G21```"
                 },
-                "gcode.navTree.autoRefresh": {
+                "gcode.views.maxAutoRefresh": {
+                    "type": "integer",
+                    "default": "10000",
+                    "markdownDescription": "Maximum Number of Lines in Editor to allow Auto Refresh",
+                    "scope": "window"
+                },
+                "gcode.views.navTree.autoRefresh": {
                     "type": "boolean",
                     "default": true,
-                    "markdowndescription": "Enable G-Code Tree Auto Refresh",
+                    "markdownDescription": "Enable G-Code Tree Auto Refresh",
                     "scope": "window"
                 },
-                "gcode.stats.enabled": {
+                "gcode.views.stats.autoRefresh": {
                     "type": "boolean",
                     "default": false,
-                    "markdowndescription": "Enable G-Code Statistics Panel",
+                    "markdownDescription": "Enable G-Code Stats Auto Refresh",
                     "scope": "window"
                 },
-                "gcode.stats.autoRefresh": {
+                "gcode.webviews.enabled": {
                     "type": "boolean",
-                    "default": false,
-                    "markdowndescription": "Enable G-Code Stats Auto Refresh",
+                    "default": true,
+                    "markdownDescription": "Enable or Disable WebViews",
                     "scope": "window"
                 }
             }
@@ -223,7 +252,6 @@
                 {
                     "id": "gcode.views.stats",
                     "name": "Stats",
-                    "when": "config.gcode.statsEnable",
                     "contextualTitle": "G-Code"
                 }
             ]
@@ -232,12 +260,12 @@
             {
                 "view": "gcode.views.navTree",
                 "contents": "Tree only available when viewing G-Code",
-                "when": "!gcode:navTree:enabled"
+                "when": "!gcode:views:navTree:enabled"
             },
             {
                 "view": "gcode.views.stats",
                 "contents": "G-Code Stats only available when viewing G-Code",
-                "when": "!gcode:stats:enabled"
+                "when": "!gcode:views:stats:enabled"
             }
         ],
         "menus": {
@@ -289,6 +317,16 @@
                     "when": "resourceLangId == gcode",
                     "command": "gcode.views.stats.refresh",
                     "group": "gcode"
+                },
+                {
+                    "when": "resourceLangId == gcode",
+                    "command": "gcode.addComment",
+                    "group": "gcode"
+                },
+                {
+                    "when": "resourceLangId == gcode",
+                    "command": "gcode.removeComment",
+                    "group": "gcode"
                 }
             ]
         },
@@ -322,39 +360,74 @@
             },
             {
                 "command": "gcode.showSettings",
-                "title": "G-Code Settings",
+                "title": "G-Code: Settings",
                 "category": "G-Code",
                 "icon": {
                     "light": "resources/icons/light/settings.svg",
                     "dark": "resources/icons/dark/settings.svg"
                 }
+            },
+            {
+                "command": "gcode.addComment",
+                "title": "G-Code: Add Comment",
+                "category": "G-Code"
+            },
+            {
+                "command": "gcode.removeComment",
+                "title": "G-Code: Remove Comment",
+                "category": "G-Code"
+            },
+            {
+                "command": "gcode.webviews.codes.show",
+                "title": "G-Code: Show Code Reference",
+                "category": "G-Code"
             }
         ]
     },
     "scripts": {
-        "vscode:prepublish": "npm run compile",
+        "analyze:bundle": "webpack --env analyzeBundle",
+        "bundle": "webpack --mode production",
+        "clean": "shx rm -rf out/* && rm -rf dist/*",
         "compile": "tsc -p ./",
         "lint": "eslint --ext .ts src/**/*.ts --cache",
         "watch": "tsc -watch -p ./",
+        "pack": "vsce package",
         "pretest": "npm run compile",
         "pretty": "prettier --config .prettierrc --loglevel warn .",
-        "test": "node ./out/test/runTests.js"
+        "pub": "vsce publish",
+        "test": "node ./out/test/runTests.js",
+        "test:unit": "SET TS_NODE_PROJECT=./tsconfig.tests.json&& mocha -r ts-node/register test/unit/*.test.ts",
+        "vscode:prepublish": "npm run bundle",
+        "webpack": "webpack --mode development",
+        "webpack-dev": "webpack --mode development --watch"
     },
     "devDependencies": {
+        "@types/chai": "^4.2.16",
         "@types/glob": "^7.1.3",
-        "@types/mocha": "^8.2.1",
-        "@types/node": "^14.14.33",
-        "@types/vscode": "^1.54.0",
-        "@typescript-eslint/eslint-plugin": "^4.17.0",
-        "@typescript-eslint/parser": "^4.17.0",
-        "eslint": "^7.21.0",
-        "eslint-config-prettier": "^8.1.0",
+        "@types/mocha": "^8.2.2",
+        "@types/node": "^14.14.41",
+        "@types/vscode": "^1.55.0",
+        "@typescript-eslint/eslint-plugin": "^4.22.0",
+        "@typescript-eslint/parser": "^4.22.0",
+        "chai": "^4.3.4",
+        "eslint": "^7.24.0",
+        "eslint-config-prettier": "^8.2.0",
         "eslint-plugin-import": "^2.22.1",
-        "eslint-plugin-prettier": "^3.3.1",
+        "eslint-plugin-prettier": "^3.4.0",
+        "fork-ts-checker-webpack-plugin": "^6.2.1",
         "glob": "^7.1.6",
-        "mocha": "^8.3.1",
+        "mocha": "^8.3.2",
         "prettier": "^2.2.1",
-        "typescript": "^4.2.3",
-        "vscode-test": "^1.5.1"
+        "shx": "^0.3.3",
+        "ts-loader": "^9.0.1",
+        "ts-node": "^9.1.1",
+        "typescript": "^4.2.4",
+        "vscode-test": "^1.5.2",
+        "webpack": "^5.34.0",
+        "webpack-bundle-analyzer": "^4.4.1",
+        "webpack-cli": "^4.6.0"
+    },
+    "dependencies": {
+        "@appliedengdesign/gcode-reference": "^0.0.3"
     }
 }

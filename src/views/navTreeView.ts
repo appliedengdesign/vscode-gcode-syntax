@@ -21,12 +21,14 @@ import { GCodeTreeParser } from './providers/gcodeTreeParser';
 import { Control } from '../control';
 import { Logger } from '../util/logger';
 import { ViewCommands } from './viewCommands';
+import { Messages } from '../util/messages';
 
 const NavTreeViewInfo = {
     ViewId: 'gcode.views.navTree',
     ViewName: 'Nav Tree',
-    CONFIG: {
-        AUTOREF: 'navTree.autoRefresh',
+    Config: {
+        AutoRefresh: 'views.navTree.autoRefresh',
+        MaxAutoRefresh: 'views.maxAutoRefresh',
     },
     Context: Contexts.ViewsNavTreeEnabled,
 };
@@ -53,10 +55,10 @@ export class NavTreeView extends GView<NavTreeNode> {
         // Initialize StatusBar
         this._statusbar = Control.statusBarController;
 
-        this._autoRefresh = <boolean>configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
+        this._autoRefresh = <boolean>configuration.getParam(NavTreeViewInfo.Config.AutoRefresh);
 
         if (this._autoRefresh) {
-            this.refresh();
+            void this.refresh();
         }
     }
 
@@ -92,7 +94,7 @@ export class NavTreeView extends GView<NavTreeNode> {
                 );
 
                 if (this._autoRefresh) {
-                    this.refresh();
+                    void this.refresh();
                 }
             }
         } else {
@@ -120,7 +122,7 @@ export class NavTreeView extends GView<NavTreeNode> {
                 );
 
                 if (this._autoRefresh) {
-                    this.refresh();
+                    void this.refresh();
                 }
             }
         } else {
@@ -133,8 +135,8 @@ export class NavTreeView extends GView<NavTreeNode> {
     }
 
     protected onConfigurationChanged(e: ConfigurationChangeEvent) {
-        if (configuration.changed(e, NavTreeViewInfo.CONFIG.AUTOREF)) {
-            this._autoRefresh = <boolean>configuration.getParam(NavTreeViewInfo.CONFIG.AUTOREF);
+        if (configuration.changed(e, NavTreeViewInfo.Config.AutoRefresh)) {
+            this._autoRefresh = <boolean>configuration.getParam(NavTreeViewInfo.Config.AutoRefresh);
             Logger.log(`Nav Tree AutoRefresh: ${this._autoRefresh ? 'Enabled' : 'Disabled'}`);
         }
     }
@@ -149,7 +151,7 @@ export class NavTreeView extends GView<NavTreeNode> {
                         void Control.setContext(Contexts.ViewsNavTreeEnabled, true);
                     }
 
-                    this.refresh();
+                    void this.refresh();
                 }
             },
             this,
@@ -165,12 +167,28 @@ export class NavTreeView extends GView<NavTreeNode> {
         );
     }
 
-    protected refresh(element?: NavTreeNode): void {
-        if (this.parseTree()) {
-            if (element) {
-                this._onDidChangeTreeData.fire(element);
+    protected async refresh(element?: NavTreeNode): Promise<void> {
+        if (this._editor && this._editor.document) {
+            if (
+                this._editor.document.lineCount > <number>configuration.getParam(NavTreeViewInfo.Config.MaxAutoRefresh)
+            ) {
+                if (await Messages.showRefreshWarningMessage()) {
+                    if (this.parseTree()) {
+                        if (element) {
+                            this._onDidChangeTreeData.fire(element);
+                        } else {
+                            this._onDidChangeTreeData.fire(undefined);
+                        }
+                    }
+                }
             } else {
-                this._onDidChangeTreeData.fire(undefined);
+                if (this.parseTree()) {
+                    if (element) {
+                        this._onDidChangeTreeData.fire(element);
+                    } else {
+                        this._onDidChangeTreeData.fire(undefined);
+                    }
+                }
             }
         }
     }

@@ -10,6 +10,8 @@ import { commands, Disposable } from 'vscode';
 export const enum UtilCommands {
     ShowGCodeSettings = 'gcode.showSettings',
     ShowSupportGCode = 'gcode.supportGCode',
+    AddComment = 'gcode.addComment',
+    RemoveComment = 'gcode.removeComment',
 }
 
 export abstract class GCommand implements Disposable {
