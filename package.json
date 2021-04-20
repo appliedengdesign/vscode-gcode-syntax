@@ -419,11 +419,11 @@
         "mocha": "^8.3.2",
         "prettier": "^2.2.1",
         "shx": "^0.3.3",
-        "ts-loader": "^9.0.0",
+        "ts-loader": "^9.0.1",
         "ts-node": "^9.1.1",
         "typescript": "^4.2.4",
         "vscode-test": "^1.5.2",
-        "webpack": "^5.33.2",
+        "webpack": "^5.34.0",
         "webpack-bundle-analyzer": "^4.4.1",
         "webpack-cli": "^4.6.0"
     },
