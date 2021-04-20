@@ -12,6 +12,8 @@
 **/*.map
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
+SECURITY.md
+CHANGELOG.md
 images/**
 LICENSE
 out/test/**
@@ -20,6 +22,6 @@ samplenc/**
 src/**
 test/**
 out/**
-tsconfig.json
+tsconfig**
 tsconfig.tsbuildinfo
 webpack.config.js
