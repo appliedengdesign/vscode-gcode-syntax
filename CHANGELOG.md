@@ -1,6 +1,31 @@
 # Change Log
 
-All changes to vscode-code-syntax will be documented here.
+All changes to G-Code Language Extension will be documented here.
+
+## v0.6.0 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.6.0)
+
+### New Features
+
+- Added new command that will turn selected text into a comment or revese (Available in Context menu)
+- Hover over G/M code to get a short description of the code (Relies on [gcode-reference](https://github.com/appliedengdesign/gcode-reference) package for info)
+- Machine Type selection in configuration selectively loads features
+- Machine Type shown in status bar
+- Added check for file over 10K lines, disables autorefresh of tree/stats, shows warning message ( [#23](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/23))
+- Added `.g` extension ( [#24](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/24) )
+
+### Fixes
+
+- Fixed block comment definition
+- Removed stats enable setting
+
+### Other
+
+- Updated package description & badges
+- Extension now packed with webpack for efficiency/speed
+- Created some Mocha Unit tests
+- Updated TypeScript config to use ES2020 and ESNext configuration
+- Updated all dependencies
+- Updated README
 
 ## v0.5.1 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.5.1)
 
@@ -23,7 +48,7 @@ All changes to vscode-code-syntax will be documented here.
 - Added Units to Status Bar ( Can manually set or set to Auto to detect ```G20/G21```)
 - Added Configuration for Units, Status Bar
 - Added support status bar Icon
-- Added commands to status bar for Nav Tree Refresh
+- Added commands to context menu for Nav Tree Refresh
 - Added file extensions: `.aptcl`, `.gp`, `.msb`, `.ncd`, `.ncf`, `.nci`, `.pim`, `.pit`, `.pu1`, `.spf`
 - Added `G04` Dwell to Nav Tree
 - Added `G74`, `G81`, `G82`, `G83`, `G84`, `G85`, `G86`, `G87`, `G88`, `G89` cycles to Nav Tree

@@ -1,7 +1,6 @@
 [![Version](https://vsmarketplacebadge.apphb.com/version/appliedengdesign.vscode-gcode-syntax.svg)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
 [![Installs](https://vsmarketplacebadge.apphb.com/installs-short/appliedengdesign.vscode-gcode-syntax.svg)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
 [![Rating](https://vsmarketplacebadge.apphb.com/rating/appliedengdesign.vscode-gcode-syntax.svg)](https://marketplace.visualstudio.com/items?itemName=appliedengdesign.vscode-gcode-syntax)
-![CodeQL](https://github.com/appliedengdesign/vscode-gcode-syntax/actions/workflows/codeql-analysis.yml/badge.svg)
 
 [![GitHub Issues](https://badgen.net/github/open-issues/appliedengdesign/vscode-gcode-syntax)](https://github.com/appliedengdesign/vscode-gcode-syntax/issues)
 ![Github Stars](https://badgen.net/github/stars/appliedengdesign/vscode-gcode-syntax)
@@ -36,21 +35,55 @@ You can also subscribe to our videos over on [YouTube](https://youtube.com/c/App
 
 This extension adds language syntax for CNC G-Code, code snippets, and colorization.
 
-- Tree View
-  - Tree View shows an overview of the operations in the G-Code Program
-- Stats View
-  - Stats View shows a number of stats like tool changes, runtime, etc.
-- Status Bar messages about code status.
+### Tree View
 
-### Current Supported File Extensions
+- Tree View shows an overview of the operations in the G-Code Program
+
+![Tree Screenshot](https://raw.githubusercontent.com/appliedengdesign/vscode-gcode-syntax/master/images/tree-screenshot.png)
+
+### Stats View
+
+- Stats View shows a number of stats like tool changes, runtime, etc.
+
+![Stats Screenshot](https://raw.githubusercontent.com/appliedengdesign/vscode-gcode-syntax/master/images/stats-screenshot.png)
+
+### Hovers
+
+- Hovering over G/M codes will show a short description of the code
+- Descriptions for the codes are taken from the sister project: [gcode-reference](https://github.com/appliedengdesign/gcode-reference)
+- Hovers are dependent on the machine type selected
+
+![Hovers Screenshot](https://raw.githubusercontent.com/appliedengdesign/vscode-gcode-syntax/master/images/hovers-screenshot.png)
+
+### Status Bars
+
+- G-Code adds three informative sections to the VSCode status bar area
+  - Tree Status (Dirty or Up to Date) depending on Refresh needed
+  - Current units as set by settings (Auto, Inch or Metric)
+  - Machine Type as set by settings
+  - Ok there's a little heart there too.
+
+![Status Bar Screenshot](https://raw.githubusercontent.com/appliedengdesign/vscode-gcode-syntax/master/images/statusbar-screenshot.png)
+
+### Context Menu
+
+- G-Code adds several commands to the context menu when viewing g-code
+  - Change selected code into a comment
+  - Refresh Stats
+  - Refresh Tree
+  - Remove Comment from selected code
+
+![Context Menu Screenshot](https://raw.githubusercontent.com/appliedengdesign/vscode-gcode-syntax/master/images/context-menu-screenshot.png)
+
+## Current Supported File Extensions
 
 ```text
-| .001 | .apt | .aptcl | .cls   | .cnc | .din | .dnc   | .ecs   |
-| .eia | .fan | .fgc   | .fnc   | .g00 | .gc  | .gcd   | .gcode |
-| .gp  | .hnc | .knc   | .lib   | .m   | .min | .mpf   | .mpr   |
-| .msb | .nc  | .ncc   | .ncd   | .ncf | .ncg | .nci   | .ncp   |
-| .ngc | .out | .pim   | .pit   | .plt | .ply | .prg   | .pu1   |
-| .rol | .sbp | .spf   | .ssb   | .sub | .tap | .xpi   |        |
+| .001   | .apt | .aptcl | .cls   | .cnc | .din | .dnc | .ecs |
+| .eia   | .fan | .fgc   | .fnc   | .g   | .g00 | .gc  | .gcd |
+| .gcode | .gp  | .hnc   | .knc   | .lib | .m   | .min | .mpf |
+| .mpr   | .msb | .nc    | .ncc   | .ncd | .ncf | .ncg | .nci |
+| .ncp   | .ngc | .out   | .pim   | .pit | .plt | .ply | .prg |
+| .pu1   | .rol | .sbp   | .spf   | .ssb | .sub | .tap | .xpi | 
 ```
 
 If you would like another file extension supported by this extension, please [open an issue](https://github.com/appliedemgdesign/issues).
@@ -72,23 +105,16 @@ G-Code Syntax is customizable and provides many configuration settings to allow 
 | Name                                 | Description                                                                            |
 | ------------------------------------ | -------------------------------------------------------------------------------------- |
 | `gcode.general.hovers.enabled`       | Enable or Disable the hovers to show G-Code information                                |
-|                                      |                                                                                        |
 | `gcode.general.machineType`          | Choose the machine type for extension (Mill is default)                                |
-|                                      |                                                                                        |
 | `gcode.general.statusBars.enabled`   | Enable or Disable the G-Code status bars                                               |
-|                                      |                                                                                        |
 | `gcode.general.statusbars.alignment` | Choose the alignment of the status bars (Left is default)                              |
-|                                      |                                                                                        |
 | `gcode.general.units`                | Choose the units for the file. Options are Auto, Inch or Metric                        |
-|                                      |                                                                                        |
-| `gcode.navTree.autoRefresh`          | Tree auto-refreshes as changes are made to the g-code. ( Disabled by default )         |
-|                                      |                                                                                        |
-| `gcode.stats.enabled`                | Enable the statistics view. ( Disabled by default )                                    |
-|                                      |                                                                                        |
-| `gcode.stats.autoRefresh`            | Auto-refresh the stats view when changes are made to the g-code. (Disabled by default) |
-|                                      |                                                                                        |
+| `gcode.views.maxAutoRefresh`         | Value for limiting the autoRefresh maximum lines                                       |
+| `gcode.views.navTree.autoRefresh`    | Tree auto-refreshes as changes are made to the g-code. ( Disabled by default )         |
+| `gcode.views.stats.autoRefresh`      | Auto-refresh the stats view when changes are made to the g-code. (Disabled by default) |
+| `gcode.views.webviews.enabled`       | Enable or disable the webviews                                                         |
 
-![Settings Screenshot](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/images/settings-screenshot.png?raw=true)
+![Settings Screenshot](https://raw.githubusercontent.com/appliedengdesign/vscode-gcode-syntax/master/images/settings-screenshot.png)
 
 ## Known Issues
 
@@ -99,7 +125,7 @@ Please visit our [GitHub Issues](https://github.com/appliedengdesign/vscode-gcod
 - Add more snippets
 - Add additional tree items.
 - More Statistics
-- Additional status bar messages
+- Line Numbering
 - G-Code Debugging
 - Backplotter
 - Semantic Highlighting
@@ -109,7 +135,7 @@ Visit our [projects page](https://github.com/appliedengdesign/vscode-gcode-synta
 
 ## Changelog
 
-Latest Version: v0.5.1
+Latest Version: v0.6.0
 
 Please refer to our [CHANGELOG](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CHANGELOG.md) doc.
 
