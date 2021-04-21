@@ -3,7 +3,7 @@
     "displayName": "G-Code Syntax",
     "shortName": "G-Code",
     "description": "Turn VSCode into a fully capable G-Code editor, including language support & more.",
-    "version": "0.6.0",
+    "version": "0.6.1",
     "license": "MIT",
     "publisher": "appliedengdesign",
     "author": {
@@ -277,20 +277,13 @@
                 },
                 {
                     "command": "gcode.views.stats.refresh",
-                    "when": "view == gcode.views.stats && config.gcode.statsEnable",
+                    "when": "view == gcode.views.stats",
                     "group": "navigation"
                 },
                 {
                     "command": "gcode.supportGCode",
                     "when": "view == gcode.views.navTree",
                     "group": "navigation"
-                }
-            ],
-            "view/item/context": [
-                {
-                    "command": "gcode.views.stats.refresh",
-                    "when": "view == gcode.views.stats && config.gcode.statsEnable",
-                    "group": "inline"
                 }
             ],
             "commandPalette": [

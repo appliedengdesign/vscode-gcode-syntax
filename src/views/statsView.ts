@@ -4,7 +4,14 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import { commands, ConfigurationChangeEvent, TextDocumentChangeEvent, TreeItemCollapsibleState, window } from 'vscode';
+import {
+    commands,
+    ConfigurationChangeEvent,
+    TextDocumentChangeEvent,
+    ThemeIcon,
+    TreeItemCollapsibleState,
+    window,
+} from 'vscode';
 import { Control } from '../control';
 import { configuration } from '../util/config';
 import { constants, Contexts } from '../util/constants';
@@ -21,7 +28,6 @@ const StatsViewInfo = {
     ViewName: 'Stats',
     Config: {
         AutoRefresh: 'views.stats.autoRefresh',
-        Enabled: 'views.stats.enabled',
         MaxAutoRefresh: 'views.maxAutoRefresh',
     },
     Context: Contexts.ViewsStatsEnabled,
@@ -104,7 +110,7 @@ export class StatsView extends GView<StatsNode> {
         } else {
             void Control.setContext(Contexts.ViewsStatsEnabled, false);
 
-            this._children = [];
+            this._children = [this.placeholder()];
             this._onDidChangeTreeData.fire(undefined);
         }
     }
@@ -122,7 +128,7 @@ export class StatsView extends GView<StatsNode> {
         } else {
             void Control.setContext(Contexts.ViewsStatsEnabled, false);
 
-            this._children = [];
+            this._children = [this.placeholder()];
             this._onDidChangeTreeData.fire(undefined);
         }
     }
@@ -257,5 +263,19 @@ export class StatsView extends GView<StatsNode> {
         } else {
             return false;
         }
+    }
+
+    private placeholder(): StatsNode {
+        const ph = new StatsNode(
+            StatsType.Info,
+            'AutoRefresh is Disabled',
+            undefined,
+            ResourceType.Stats,
+            TreeItemCollapsibleState.None,
+        );
+
+        ph.iconPath = new ThemeIcon('extensions-info-message');
+
+        return ph;
     }
 }
