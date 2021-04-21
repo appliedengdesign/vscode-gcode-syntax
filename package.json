@@ -277,20 +277,13 @@
                 },
                 {
                     "command": "gcode.views.stats.refresh",
-                    "when": "view == gcode.views.stats && config.gcode.statsEnable",
+                    "when": "view == gcode.views.stats",
                     "group": "navigation"
                 },
                 {
                     "command": "gcode.supportGCode",
                     "when": "view == gcode.views.navTree",
                     "group": "navigation"
-                }
-            ],
-            "view/item/context": [
-                {
-                    "command": "gcode.views.stats.refresh",
-                    "when": "view == gcode.views.stats && config.gcode.statsEnable",
-                    "group": "inline"
                 }
             ],
             "commandPalette": [
