@@ -14,6 +14,7 @@ export const enum StatsType {
     ToolChanges,
     RunTime,
     Error,
+    Info,
 }
 
 export class StatsNode extends ViewNode {
@@ -28,6 +29,8 @@ export class StatsNode extends ViewNode {
         private tTip?: string,
     ) {
         super(name, desc, ResourceType.Stats);
+
+        this.setIcon();
     }
 
     setIcon(): void {
