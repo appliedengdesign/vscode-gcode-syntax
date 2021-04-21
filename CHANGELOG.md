@@ -2,6 +2,14 @@
 
 All changes to G-Code Language Extension will be documented here.
 
+## v0.6.1 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.6.1)
+
+### Fixes
+
+- Fixed missing icons in tree / stats views
+- Removed redundant refresh icons in stats view
+- Added placeholder for stats without auto refresh enabled
+
 ## v0.6.0 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.6.0)
 
 ### New Features
