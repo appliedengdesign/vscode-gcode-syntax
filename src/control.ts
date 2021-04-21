@@ -118,23 +118,10 @@ export class Control {
         );
 
         // Load Stats View
-        Logger.log(`Stats: ${configuration.getParam('views.stats.enabled') ? 'Enabled' : 'Disabled'}`);
-        Logger.log(`Stats AutoRefresh: ${configuration.getParam('views.stats.autoRefresh') ? 'Enabled' : 'Disabled'}`);
+        Logger.log('Loading Stats View...');
+        context.subscriptions.push((this._statsView = new StatsView()));
 
-        if (config.getParam('views.stats.enabled')) {
-            Logger.log('Loading Stats View...');
-            context.subscriptions.push((this._statsView = new StatsView()));
-        } else {
-            let disposable: Disposable;
-            // eslint-disable-next-line prefer-const
-            disposable = configuration.onDidChange(e => {
-                if (configuration.changed(e, 'views.stats.enabled')) {
-                    disposable.dispose();
-                    Logger.log('Loading Stats View...');
-                    context.subscriptions.push((this._statsView = new StatsView()));
-                }
-            });
-        }
+        Logger.log(`Stats AutoRefresh: ${configuration.getParam('views.stats.autoRefresh') ? 'Enabled' : 'Disabled'}`);
 
         // Load Support Heart to Statusbar
         this._statusBarControl.updateStatusBar(

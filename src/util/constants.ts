@@ -46,8 +46,8 @@ export const constants: IConstants = {
     },
     extensionOutputChannelName: gcode.packageJSON.shortName,
     extensionQualifiedId: extensionQualifiedId,
-    gcodeIcon: path.join(__dirname, '..', '..', 'resources', 'icons', 'gcode.svg'),
-    iconsPath: path.join(__dirname, '..', '..', 'resources', 'icons'),
+    gcodeIcon: path.join(__dirname, '..', 'resources', 'icons', 'gcode.svg'),
+    iconsPath: path.join(__dirname, '..', 'resources', 'icons'),
     iconExt: '.svg',
     langId: gcode.packageJSON.contributes.languages[0].id,
     urls: {
