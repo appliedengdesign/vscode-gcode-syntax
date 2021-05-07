@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* ---------------------------------------------------------------------------------------------
  *  Copyright (c) Applied Eng & Design All rights reserved.
  *  Licensed under the MIT License. See License.md in the project root for license information.
@@ -114,6 +116,50 @@ export abstract class GWebView implements Disposable {
     }
 
     protected abstract getHtml(webview: Webview): Promise<string>;
+
+    private _getHtmlForWebview(webview: Webview, ...opts: string[]) {
+        // CSS styles
+        const stylesReset = webview
+            .asWebviewUri(Uri.joinPath(Control.context.extensionUri, 'resources', 'webviews', 'css', 'reset.css'))
+            .with({ scheme: 'vscode-resource' });
+
+        const stylesMain = webview
+            .asWebviewUri(Uri.joinPath(Control.context.extensionUri, 'resources', 'webviews', 'css', 'vscode.css'))
+            .with({ scheme: 'vscode-resource' });
+
+        const nonce = this.getNonce();
+
+        const scriptUri = webview
+            .asWebviewUri(Uri.joinPath(Control.context.extensionUri, 'resources', 'webviews', 'js', `${opts[0]}.js`))
+            .with({ scheme: 'vscode-resource' });
+
+        return `<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                        <meta charset="utf-8">
+                        <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+                        <meta name="theme-color" content="#333333">
+
+                        <title>${this.title}</title>
+
+                        <link rel="stylesheet" type="text/css" href="${stylesReset}">
+                        <link rel="stylesheet" type="text/css" href="${stylesMain}">
+
+                        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';style-src vscode-resource: 'unsafe-inline' http: https: data:;">
+
+                </head>
+
+                <body>
+                        <noscript>You need to enable JavaScript to run this app.</noscript>
+
+                        <div id="app"></div>
+
+
+                        <script nonce="${nonce} src="${scriptUri}"></script>
+                </body>
+                </html>
+        `;
+    }
 
     protected getNonce(): string {
         let text = '';

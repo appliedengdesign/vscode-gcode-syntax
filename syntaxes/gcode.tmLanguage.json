@@ -137,19 +137,19 @@
         "coords": {
             "patterns": [
                 {
-                    "match": "([xX])\\s?(\\-?\\d?\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]))",
+                    "match": "([xX])\\s?(\\-?\\d*\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]))",
                     "name": "string.gcode"
                 },
                 {
-                    "match": "([yY])\\s?(\\-?\\d?\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]))",
+                    "match": "([yY])\\s?(\\-?\\d*\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]))",
                     "name": "string.gcode"
                 },
                 {
-                    "match": "([zZ])\\s?(\\-?\\d?\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]))",
+                    "match": "([zZ])\\s?(\\-?\\d*\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]))",
                     "name": "invalid.gcode"
                 },
                 {
-                    "match": "([aAbBcC])\\s?(\\-?\\d?\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]))",
+                    "match": "([aAbBcC])\\s?(\\-*\\d?\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]))",
                     "name": "constant.character.escape.gcode"
                 }
             ]
@@ -157,15 +157,15 @@
         "tools": {
             "patterns": [
                 {
-                    "match": "([dD])\\s?(\\d+\\.?\\d*|(?=[#\\[]))",
+                    "match": "([dD])\\s?(\\d*\\.?\\d*|(?=[#\\[]))",
                     "name": "constant.character.gcode"
                 },
                 {
-                    "match": "([hH])\\s?(\\d+\\.?\\d*|(?=[#\\[]))",
+                    "match": "([hH])\\s?(\\d*\\.?\\d*|(?=[#\\[]))",
                     "name": "constant.character.gcode"
                 },
                 {
-                    "match": "([tT])\\s?(\\d+\\.?\\d*|(?=[#\\[]))",
+                    "match": "([tT])\\s?(\\d*\\.?\\d*|(?=[#\\[]))",
                     "name": "constant.character.gcode"
                 }
             ]
@@ -173,15 +173,15 @@
         "modifiers": {
             "patterns": [
                 {
-                    "match": "([iIjJkK])(\\-?\\d?\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]))",
+                    "match": "([iIjJkK])(\\-?\\d*\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]))",
                     "name": "constant.character.escape.gcode"
                 },
                 {
-                    "match": "([qQrR])(\\-?\\d?\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]]))",
+                    "match": "([qQrR])(\\-?\\d*\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]]))",
                     "name": "support.constant.math.gcode"
                 },
                 {
-                    "match": "([uUwW])(\\-?\\d?\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]]))",
+                    "match": "([uUwW])(\\-?\\d*\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]]))",
                     "name": "support.constant.math.gcode"
                 }
             ]
