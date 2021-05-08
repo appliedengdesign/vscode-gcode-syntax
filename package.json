@@ -377,6 +377,16 @@
                 "command": "gcode.webviews.codes.show",
                 "title": "G-Code: Show Code Reference",
                 "category": "G-Code"
+            },
+            {
+                "command": "gcode.addLineNumbers",
+                "title": "G-Code: Add Line Numbers",
+                "category": "G-Code"
+            },
+            {
+                "command": "gcode.removeLineNumbers",
+                "title": "G-Code: Remove Line Numbers",
+                "category": "G-Code"
             }
         ]
     },
