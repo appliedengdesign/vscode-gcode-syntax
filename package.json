@@ -64,6 +64,9 @@
         "onCommand:gcode.views.stats.refresh",
         "onCommand:gcode.supportGCode"
     ],
+    "capabilities": {
+        "virtualWorkspaces": false
+    },
     "contributes": {
         "languages": [
             {
