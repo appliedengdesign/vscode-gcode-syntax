@@ -6,6 +6,7 @@
 'use strict';
 
 import { LineNumberer } from '../lineNumberer';
+import { LineNumbersInput } from '../quickpicks/lineNumbers';
 import { GCommand, UtilCommands } from './common';
 
 export class AddLineNumbers extends GCommand {
@@ -14,7 +15,10 @@ export class AddLineNumbers extends GCommand {
     }
 
     async execute() {
+        const lnInputs = new LineNumbersInput();
+        const state = await lnInputs.collect();
+
         const ln = new LineNumberer();
-        await ln.addNumbers(10, 10, true);
+        await ln.addNumbers(state.start, state.increment, true);
     }
 }
