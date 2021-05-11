@@ -5,6 +5,7 @@
 
 'use strict';
 
+import { StatusBarAlignment } from 'vscode';
 import { LineNumberFrequency } from '../lineNumberer';
 import { TraceLevel } from '../logger';
 
@@ -18,7 +19,7 @@ interface GCodeConfiguration {
 
         statusBars: {
             enabled: boolean;
-            alignment: 'left' | 'right';
+            alignment: StatusBarAlignment;
         };
 
         units: 'Auto' | 'Inch' | 'Metric';
@@ -58,7 +59,7 @@ export const defaults: GCodeConfiguration = {
         },
         statusBars: {
             enabled: true,
-            alignment: 'left',
+            alignment: StatusBarAlignment.Left,
         },
         units: 'Auto',
         outputLevel: TraceLevel.Verbose,
