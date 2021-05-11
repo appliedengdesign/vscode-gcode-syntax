@@ -210,6 +210,55 @@
                     ],
                     "markdownDescription": "Configure Units for G-Code Files. Choose Auto to have G-Code parse for ```G20/G21```"
                 },
+                "gcode.general.outputLevel": {
+                    "type": "string",
+                    "default": "verbose",
+                    "enum": [
+                        "silent",
+                        "errors",
+                        "verbose",
+                        "debug"
+                    ],
+                    "enumDescriptions": [
+                        "No Output",
+                        "Outputs only Errors",
+                        "Outputs all errors, warnings and messages",
+                        "Outputs Everything for Debugging Purposes"
+                    ],
+                    "markdownDescription": "Specifies how much output will be sent to the G-Code Output Channel.",
+                    "scope": "window"
+                },
+                "gcode.lineNumberer.addSpaceAfter": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Add Space After Line Number",
+                    "scope": "window"
+                },
+                "gcode.lineNumberer.frequency": {
+                    "type": "string",
+                    "default": "Every Line",
+                    "enum": [
+                        "Every Line",
+                        "At Tool Changes"
+                    ],
+                    "enumDescriptions": [
+                        "Line Number at Every Line",
+                        "Line Number only at Tool Changes"
+                    ],
+                    "markdownDescription": "Specify Frequency of Line Numbering"
+                },
+                "gcode.lineNumberer.ignoreBlank": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Ignore Blank Lines when Numbering",
+                    "scope": "window"
+                },
+                "gcode.lineNumberer.ignoreProgramNumbers": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Ignore program numbers, e.g. `O12345`",
+                    "scope": "window"
+                },
                 "gcode.views.maxAutoRefresh": {
                     "type": "integer",
                     "default": "10000",
