@@ -4,15 +4,7 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import {
-    ConfigurationChangeEvent,
-    Disposable,
-    ExtensionContext,
-    StatusBarAlignment,
-    StatusBarItem,
-    ThemeColor,
-    window,
-} from 'vscode';
+import { ConfigurationChangeEvent, Disposable, StatusBarAlignment, StatusBarItem, ThemeColor, window } from 'vscode';
 import { UtilCommands } from './commands/common';
 import { configuration } from './configuration/config';
 import { defaults } from './configuration/defaults';
@@ -40,7 +32,7 @@ export class StatusBarControl implements Disposable {
     // Status Bars
     private _statusBars: StatusBars;
 
-    constructor(private context: ExtensionContext) {
+    constructor() {
         this._disposable = Disposable.from(configuration.onDidChange(this.onConfigurationChanged, this));
 
         this._enabled = configuration.getParam(sb.enabled) ?? defaults.general.statusBars.enabled;
