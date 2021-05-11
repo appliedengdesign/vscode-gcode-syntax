@@ -13,7 +13,8 @@ import {
     window,
 } from 'vscode';
 import { Control } from '../control';
-import { configuration } from '../util/config';
+import { configuration } from '../util/configuration/config';
+import { defaults } from '../util/configuration/defaults';
 import { constants, Contexts } from '../util/constants';
 import { Logger } from '../util/logger';
 import { Messages } from '../util/messages';
@@ -50,7 +51,7 @@ export class StatsView extends GView<StatsNode> {
 
         this.registerCommands();
 
-        this._autoRefresh = <boolean>configuration.getParam(StatsViewInfo.Config.AutoRefresh);
+        this._autoRefresh = configuration.getParam(StatsViewInfo.Config.AutoRefresh);
 
         if (this._autoRefresh) {
             void this.refresh();
@@ -135,7 +136,7 @@ export class StatsView extends GView<StatsNode> {
 
     protected onConfigurationChanged(e: ConfigurationChangeEvent) {
         if (configuration.changed(e, StatsViewInfo.Config.AutoRefresh)) {
-            this._autoRefresh = <boolean>configuration.getParam(StatsViewInfo.Config.AutoRefresh);
+            this._autoRefresh = configuration.getParam(StatsViewInfo.Config.AutoRefresh);
             Logger.log(`Stats AutoRefresh: ${this._autoRefresh ? 'Enabled' : 'Disabled'}`);
         }
     }
@@ -157,7 +158,10 @@ export class StatsView extends GView<StatsNode> {
 
     protected async refresh(element?: StatsNode): Promise<void> {
         if (this._editor && this._editor.document) {
-            if (this._editor.document.lineCount > <number>configuration.getParam(StatsViewInfo.Config.MaxAutoRefresh)) {
+            if (
+                this._editor.document.lineCount >
+                (configuration.getParam<number>(StatsViewInfo.Config.MaxAutoRefresh) ?? defaults.views.maxAutoRefresh)
+            ) {
                 if (await Messages.showRefreshWarningMessage()) {
                     if (this.genStats()) {
                         if (element) {

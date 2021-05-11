@@ -14,7 +14,7 @@ import {
     window,
 } from 'vscode';
 import { UtilCommands } from './commands/common';
-import { configuration } from './config';
+import { configuration } from './configuration/config';
 import { Logger } from './logger';
 
 export interface StatusBars {

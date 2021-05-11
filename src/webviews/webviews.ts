@@ -18,7 +18,7 @@ import {
     WebviewPanelOnDidChangeViewStateEvent,
     window,
 } from 'vscode';
-import { configuration } from '../util/config';
+import { configuration } from '../util/configuration/config';
 import { WebViewCommands } from './webviewCommands';
 import { constants } from '../util/constants';
 import { Control } from '../control';

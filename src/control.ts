@@ -6,7 +6,7 @@
 'use strict';
 
 import { commands, Disposable, ExtensionContext } from 'vscode';
-import { Config, configuration } from './util/config';
+import { Config, configuration } from './util/configuration/config';
 import { Logger } from './util/logger';
 import { StatusBarControl } from './util/statusBar';
 import { NavTreeView } from './views/navTreeView';

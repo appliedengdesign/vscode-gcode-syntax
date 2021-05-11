@@ -5,7 +5,7 @@
 'use strict';
 
 import { ConfigurationChangeEvent, Disposable, languages, TextEditor, Uri, window } from 'vscode';
-import { configuration } from '../util/config';
+import { configuration } from '../util/configuration/config';
 import { constants } from '../util/constants';
 import { Logger } from '../util/logger';
 import { GCodeHoverProvider } from './gcodeHoverProvider';

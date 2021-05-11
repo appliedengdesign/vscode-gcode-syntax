@@ -7,8 +7,8 @@
 import { Progress, ProgressLocation, Range, TextEditor, window } from 'vscode';
 
 export enum LineNumberFrequency {
-    EveryLine,
-    AtToolChanges,
+    EveryLine = 'Every Line',
+    AtToolChanges = 'At Tool Changes',
 }
 
 type LineNumbererOptions = {

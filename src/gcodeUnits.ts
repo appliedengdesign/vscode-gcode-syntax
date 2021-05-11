@@ -7,7 +7,7 @@
 import { ConfigurationChangeEvent, Disposable, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
 import { Control } from './control';
 import { UtilCommands } from './util/commands/common';
-import { configuration } from './util/config';
+import { configuration } from './util/configuration/config';
 import { Logger } from './util/logger';
 import { StatusBar, StatusBarControl } from './util/statusBar';
 
