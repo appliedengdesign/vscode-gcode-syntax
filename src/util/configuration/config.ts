@@ -5,96 +5,10 @@
  *  Licensed under the MIT License. See License.md in the project root for license information.
  * -------------------------------------------------------------------------------------------- */
 'use strict';
-import {
-    ConfigurationChangeEvent,
-    ConfigurationScope,
-    Event,
-    EventEmitter,
-    ExtensionContext,
-    extensions,
-    StatusBarAlignment,
-    workspace,
-} from 'vscode';
+import { ConfigurationChangeEvent, ConfigurationScope, Event, EventEmitter, ExtensionContext, workspace } from 'vscode';
 import { constants } from '../constants';
-import { Logger, TraceLevel } from '../logger';
-import { LineNumberFrequency } from '../lineNumberer';
-
-import { GCodeUnits } from '../../gcodeUnits';
-
-export interface GCodeConfiguration {
-    general: {
-        machineType: 'Mill' | 'Lathe' | '3D Printer';
-
-        hovers: {
-            enabled: boolean;
-        };
-
-        statusBars: {
-            enabled: boolean;
-            alignment: StatusBarAlignment;
-        };
-
-        units: GCodeUnits;
-
-        outputLevel: TraceLevel;
-    };
-
-    lineNumberer: {
-        addSpaceAfter: boolean;
-        frequency: LineNumberFrequency;
-        ignoreBlank: boolean;
-        ignoreProgramNumbers: boolean;
-    };
-
-    views: {
-        maxAutoRefresh: number;
-
-        navTree: {
-            autoRefresh: boolean;
-        };
-
-        stats: {
-            autoRefresh: boolean;
-        };
-    };
-
-    webviews: {
-        enabled: boolean;
-    };
-}
-
-export const defaults: GCodeConfiguration = {
-    general: {
-        machineType: 'Mill',
-        hovers: {
-            enabled: true,
-        },
-        statusBars: {
-            enabled: true,
-            alignment: StatusBarAlignment.Left,
-        },
-        units: GCodeUnits.Auto,
-        outputLevel: TraceLevel.Verbose,
-    },
-    lineNumberer: {
-        addSpaceAfter: true,
-        frequency: LineNumberFrequency.EveryLine,
-        ignoreBlank: true,
-        ignoreProgramNumbers: true,
-    },
-    views: {
-        maxAutoRefresh: 10000,
-        navTree: {
-            autoRefresh: true,
-        },
-        stats: {
-            autoRefresh: false,
-        },
-    },
-    webviews: {
-        enabled: true,
-    },
-};
+import { Logger } from '../logger';
+import { GCodeConfiguration } from './defaults';
 
 export class Config {
     private static _defaults: GCodeConfiguration;
@@ -134,28 +48,6 @@ export class Config {
     changed(e: ConfigurationChangeEvent, section: string, scope?: ConfigurationScope): boolean {
         return e.affectsConfiguration(`${constants.configId}.${section}`, scope) ?? true;
     }
-
-    static get defaults() {
-        return this._defaults;
-    }
-
-    private buildDefaults() {
-        const gcode = extensions.getExtension(constants.extensionQualifiedId);
-
-        if (gcode) {
-            const pkgCfg = gcode.packageJSON.contrubutes.configuration;
-        }
-    }
 }
 
 export const configuration = new Config();
-
-export const cfg = new Proxy(defaults, {
-    get: function (name: GCodeConfiguration, prop: string): string | undefined {
-        if (!(prop in name)) {
-            return undefined;
-        }
-    },
-});
-
-cfg.general.machineType;

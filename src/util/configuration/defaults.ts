@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* ---------------------------------------------------------------------------------------------
  *  Copyright (c) Applied Eng & Design All rights reserved.
  *  Licensed under the MIT License. See License.md in the project root for license information.
@@ -7,11 +5,16 @@
 
 'use strict';
 
-import { extensions, StatusBarAlignment } from 'vscode';
+import { StatusBarAlignment } from 'vscode';
 import { GCodeUnits } from '../../gcodeUnits';
-import { constants } from '../constants';
 import { LineNumberFrequency } from '../lineNumberer';
-import { TraceLevel } from '../logger';
+
+export enum TraceLevel {
+    Silent = 'silent',
+    Errors = 'errors',
+    Verbose = 'verbose',
+    Debug = 'debug',
+}
 
 export interface GCodeConfiguration {
     general: {
@@ -54,8 +57,6 @@ export interface GCodeConfiguration {
         };
     };
 }
-
-const pkgCfg = extensions.getExtension(constants.extensionQualifiedId)!.packageJSON.contrubutes.configuration;
 
 export const defaults: GCodeConfiguration = {
     general: {
