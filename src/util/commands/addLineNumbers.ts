@@ -5,7 +5,8 @@
 
 'use strict';
 
-import { LineNumberer } from '../lineNumberer';
+import { configuration } from '../configuration/config';
+import { LineNumberer, LineNumbererOptions } from '../lineNumberer';
 import { LineNumbersInput } from '../quickpicks/lineNumbers';
 import { GCommand, UtilCommands } from './common';
 
@@ -18,7 +19,15 @@ export class AddLineNumbers extends GCommand {
         const lnInputs = new LineNumbersInput();
         const state = await lnInputs.collect();
 
+        const opts: LineNumbererOptions = {};
+
+        opts.addSpaceAfter = configuration.getParam('lineNumberer.addSpaceAfter');
+        opts.frequency = configuration.getParam('lineNumberer.frequency');
+        opts.ignoreBlank = configuration.getParam('lineNumberer.ignoreBlank');
+        opts.ignoreComments = configuration.getParam('lineNumberer.ignoreComments');
+        opts.ignoreProgramNumbers = configuration.getParam('lineNumberer.ignoreProgramNumbers');
+
         const ln = new LineNumberer();
-        await ln.addNumbers(state.start, state.increment, true);
+        await ln.addNumbers(state.start, state.increment, true, opts);
     }
 }

@@ -5,13 +5,14 @@
 'use strict';
 
 import { Progress, ProgressLocation, Range, TextEditor, window } from 'vscode';
+import { constants } from './constants';
 
 export enum LineNumberFrequency {
     EveryLine = 'Every Line',
     AtToolChanges = 'At Tool Changes',
 }
 
-type LineNumbererOptions = {
+export type LineNumbererOptions = {
     addSpaceAfter?: boolean;
     frequency?: LineNumberFrequency;
     ignoreComments?: boolean;
@@ -38,8 +39,18 @@ export class LineNumberer {
         showProgress: boolean,
         options?: LineNumbererOptions,
     ): Promise<boolean> {
-        if (this._editor && this._editor.document) {
-            this._beforeText = this._editor.document.getText();
+        if (
+            this._editor &&
+            this._editor.document &&
+            this._editor.document.uri.scheme === 'file' &&
+            this._editor.document.languageId === constants.langId
+        ) {
+            if (!this._editor.selection.isEmpty) {
+                const select = new Range(this._editor.selection.start, this._editor.selection.end);
+                this._beforeText = this._editor.document.getText(select);
+            } else {
+                this._beforeText = this._editor.document.getText();
+            }
         }
         // Remove any numbers first
         const newtext = this._removeNumbers(this._beforeText);
@@ -171,9 +182,20 @@ export class LineNumberer {
     }
 
     async removeNumbers(showProgress: boolean = false): Promise<boolean> {
-        if (this._editor && this._editor.document) {
-            this._beforeText = this._editor.document.getText();
+        if (
+            this._editor &&
+            this._editor.document &&
+            this._editor.document.uri.scheme === 'file' &&
+            this._editor.document.languageId === constants.langId
+        ) {
+            if (!this._editor.selection.isEmpty) {
+                const select = new Range(this._editor.selection.start, this._editor.selection.end);
+                this._beforeText = this._editor.document.getText(select);
+            } else {
+                this._beforeText = this._editor.document.getText();
+            }
         }
+
         if (showProgress) {
             await window.withProgress(
                 {
@@ -209,14 +231,19 @@ export class LineNumberer {
     private async _updateTextEditor(text: string): Promise<boolean> {
         const len = this._beforeText.length;
 
+        let rng: Range;
+
         if (this._editor && this._editor.document) {
+            if (!this._editor.selection.isEmpty) {
+                rng = new Range(this._editor.selection.start, this._editor.selection.end);
+            } else {
+                rng = new Range(this._editor.document.positionAt(0), this._editor.document.positionAt(len - 1));
+            }
+
             return Promise.resolve(
                 this._editor.edit(editBuilder => {
                     if (this._editor && this._editor.document) {
-                        editBuilder.replace(
-                            new Range(this._editor.document.positionAt(0), this._editor.document.positionAt(len - 1)),
-                            text,
-                        );
+                        editBuilder.replace(rng, text);
 
                         this._beforeText = '';
                     }

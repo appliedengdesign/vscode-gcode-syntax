@@ -253,6 +253,12 @@
                     "markdownDescription": "Ignore Blank Lines when Numbering",
                     "scope": "window"
                 },
+                "gcode.lineNumberer.ignoreComments": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Ignore Comments when Numbering",
+                    "scope": "window"
+                },
                 "gcode.lineNumberer.ignoreProgramNumbers": {
                     "type": "boolean",
                     "default": true,
