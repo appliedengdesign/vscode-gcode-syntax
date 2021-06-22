@@ -86,7 +86,7 @@ This extension adds language syntax for CNC G-Code, code snippets, and colorizat
 | .pu1   | .rol | .sbp   | .spf   | .ssb | .sub | .tap | .xpi | 
 ```
 
-If you would like another file extension supported by this extension, please [open an issue](https://github.com/appliedemgdesign/issues).
+If you would like another file extension supported by this extension, please [open an issue](https://github.com/appliedemgdesign/vscode-gcode-syntax/issues).
 
 ## Installation
 
