@@ -13,6 +13,15 @@
                     "include": "#comments"
                 },
                 {
+                    "include": "#bracket-expression"
+                },
+                {
+                    "include": "#keywords"
+                },
+                {
+                    "include": "#operators"
+                },
+                {
                     "include": "#speedsfeeds"
                 },
                 {
@@ -29,15 +38,6 @@
                 },
                 {
                     "include": "#macrovars"
-                },
-                {
-                    "include": "#keywords"
-                },
-                {
-                    "include": "#operators"
-                },
-                {
-                    "include": "#bracket-expression"
                 }
             ]
         },
