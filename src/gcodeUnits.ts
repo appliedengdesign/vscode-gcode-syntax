@@ -7,7 +7,8 @@
 import { ConfigurationChangeEvent, Disposable, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
 import { Control } from './control';
 import { UtilCommands } from './util/commands/common';
-import { configuration } from './util/config';
+import { configuration } from './util/configuration/config';
+import { defaults } from './util/configuration/defaults';
 import { Logger } from './util/logger';
 import { StatusBar, StatusBarControl } from './util/statusBar';
 
@@ -15,8 +16,10 @@ export const enum GCodeUnits {
     Inch = 'Inch',
     MM = 'Metric',
     Auto = 'Auto',
-    Default = 'Defautlt (Inch)',
+    Default = 'Default (Inch)',
 }
+
+const cfgUnits = 'general.units';
 
 export class GCodeUnitsController implements Disposable {
     private readonly _disposable: Disposable | undefined;
@@ -29,7 +32,7 @@ export class GCodeUnitsController implements Disposable {
     constructor() {
         this._statusbar = Control.statusBarController;
 
-        this._auto = (this._units = <GCodeUnits>configuration.getParam('general.units')) === GCodeUnits.Auto;
+        this._auto = (this._units = configuration.getParam(cfgUnits) ?? defaults.general.units) === GCodeUnits.Auto;
 
         this._statusbar.updateStatusBar(
             this._units,
@@ -49,8 +52,8 @@ export class GCodeUnitsController implements Disposable {
     }
 
     private onConfigurationChanged(e: ConfigurationChangeEvent) {
-        if (configuration.changed(e, 'general.units')) {
-            if ((this._units = <GCodeUnits>configuration.getParam('general.units')) !== 'Auto') {
+        if (configuration.changed(e, cfgUnits)) {
+            if ((this._units = configuration.getParam(cfgUnits) ?? defaults.general.units) !== GCodeUnits.Auto) {
                 Logger.log(`Units: ${this._units}`);
                 this._auto = false;
                 this._statusbar.updateStatusBar(

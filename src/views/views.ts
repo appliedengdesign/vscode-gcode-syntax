@@ -18,7 +18,7 @@ import {
     workspace,
 } from 'vscode';
 import { Control } from '../control';
-import { configuration } from '../util/config';
+import { configuration } from '../util/configuration/config';
 import { NodeTypes, ViewNode } from './nodes/nodes';
 
 export abstract class GView<TRoot extends ViewNode<NodeTypes>> implements TreeDataProvider<ViewNode>, Disposable {

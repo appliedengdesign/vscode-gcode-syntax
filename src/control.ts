@@ -6,7 +6,7 @@
 'use strict';
 
 import { commands, Disposable, ExtensionContext } from 'vscode';
-import { Config, configuration } from './util/config';
+import { Config, configuration } from './util/configuration/config';
 import { Logger } from './util/logger';
 import { StatusBarControl } from './util/statusBar';
 import { NavTreeView } from './views/navTreeView';
@@ -20,6 +20,13 @@ import { StateControl } from './util/stateControl';
 import { CodesWebview } from './webviews/codesWebview';
 import { MachineTypeControl } from './util/machineType';
 import { GCodeHoverControl } from './hovers/gcodeHoverControl';
+import { defaults } from './util/configuration/defaults';
+
+const cfgUnits = 'general.units';
+const cfgAutoRef = {
+    navTree: 'views.navTree.autoRefresh',
+    stats: 'views.stats.autoRefresh',
+};
 
 export class Control {
     private static _config: Config | undefined;
@@ -72,7 +79,7 @@ export class Control {
         this._config = config;
 
         // Load StatusBars
-        context.subscriptions.push((this._statusBarControl = new StatusBarControl(this._context)));
+        context.subscriptions.push((this._statusBarControl = new StatusBarControl()));
 
         // Load Machine Type
         context.subscriptions.push((this._machineTypeControl = new MachineTypeControl()));
@@ -84,7 +91,7 @@ export class Control {
         context.subscriptions.push((this._hoverController = new GCodeHoverControl()));
 
         // Units
-        this._units = <string>config.getParam('general.units');
+        this._units = config.getParam(cfgUnits) ?? defaults.general.units;
         Logger.log(`Units: ${this._units}`);
         if (this._units === 'Auto') {
             // Load Units Monitor
@@ -93,8 +100,8 @@ export class Control {
             let disposable: Disposable;
             // eslint-disable-next-line prefer-const
             disposable = configuration.onDidChange(e => {
-                if (configuration.changed(e, 'general.units')) {
-                    this._units = <string>configuration.getParam('general.units');
+                if (configuration.changed(e, cfgUnits)) {
+                    this._units = <string>configuration.getParam(cfgUnits);
                     if (this._units === 'Auto') {
                         disposable.dispose();
                         Logger.log(`Units: ${this._units}`);
@@ -114,14 +121,14 @@ export class Control {
         context.subscriptions.push((this._navTree = new NavTreeView()));
 
         Logger.log(
-            `Nav Tree AutoRefresh: ${configuration.getParam('views.navTree.autoRefresh') ? 'Enabled' : 'Disabled'}`,
+            `Nav Tree AutoRefresh: ${configuration.getParam<boolean>(cfgAutoRef.navTree) ? 'Enabled' : 'Disabled'}`,
         );
 
         // Load Stats View
         Logger.log('Loading Stats View...');
         context.subscriptions.push((this._statsView = new StatsView()));
 
-        Logger.log(`Stats AutoRefresh: ${configuration.getParam('views.stats.autoRefresh') ? 'Enabled' : 'Disabled'}`);
+        Logger.log(`Stats AutoRefresh: ${configuration.getParam<boolean>(cfgAutoRef.stats) ? 'Enabled' : 'Disabled'}`);
 
         // Load Support Heart to Statusbar
         this._statusBarControl.updateStatusBar(

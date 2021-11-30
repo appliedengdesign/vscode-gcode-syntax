@@ -3,7 +3,7 @@
     "displayName": "G-Code Syntax",
     "shortName": "G-Code",
     "description": "Turn VSCode into a fully capable G-Code editor, including language support & more.",
-    "version": "0.6.2",
+    "version": "0.7.0",
     "license": "MIT",
     "publisher": "appliedengdesign",
     "author": {
@@ -12,7 +12,7 @@
     },
     "copyright": "Copyright (c) 2021 Applied Eng. & Design / Mike Centola",
     "engines": {
-        "vscode": "^1.56.0"
+        "vscode": "^1.62.0"
     },
     "categories": [
         "Programming Languages",
@@ -64,6 +64,9 @@
         "onCommand:gcode.views.stats.refresh",
         "onCommand:gcode.supportGCode"
     ],
+    "capabilities": {
+        "virtualWorkspaces": false
+    },
     "contributes": {
         "languages": [
             {
@@ -206,6 +209,61 @@
                         "Metric"
                     ],
                     "markdownDescription": "Configure Units for G-Code Files. Choose Auto to have G-Code parse for ```G20/G21```"
+                },
+                "gcode.general.outputLevel": {
+                    "type": "string",
+                    "default": "verbose",
+                    "enum": [
+                        "silent",
+                        "errors",
+                        "verbose",
+                        "debug"
+                    ],
+                    "enumDescriptions": [
+                        "No Output",
+                        "Outputs only Errors",
+                        "Outputs all errors, warnings and messages",
+                        "Outputs Everything for Debugging Purposes"
+                    ],
+                    "markdownDescription": "Specifies how much output will be sent to the G-Code Output Channel.",
+                    "scope": "window"
+                },
+                "gcode.lineNumberer.addSpaceAfter": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Add Space After Line Number",
+                    "scope": "window"
+                },
+                "gcode.lineNumberer.frequency": {
+                    "type": "string",
+                    "default": "Every Line",
+                    "enum": [
+                        "Every Line",
+                        "At Tool Changes"
+                    ],
+                    "enumDescriptions": [
+                        "Line Number at Every Line",
+                        "Line Number only at Tool Changes"
+                    ],
+                    "markdownDescription": "Specify Frequency of Line Numbering"
+                },
+                "gcode.lineNumberer.ignoreBlank": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Ignore Blank Lines when Numbering",
+                    "scope": "window"
+                },
+                "gcode.lineNumberer.ignoreComments": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Ignore Comments when Numbering",
+                    "scope": "window"
+                },
+                "gcode.lineNumberer.ignoreProgramNumbers": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Ignore program numbers, e.g. `O12345`",
+                    "scope": "window"
                 },
                 "gcode.views.maxAutoRefresh": {
                     "type": "integer",
@@ -374,6 +432,16 @@
                 "command": "gcode.webviews.codes.show",
                 "title": "G-Code: Show Code Reference",
                 "category": "G-Code"
+            },
+            {
+                "command": "gcode.addLineNumbers",
+                "title": "G-Code: Add Line Numbers",
+                "category": "G-Code"
+            },
+            {
+                "command": "gcode.removeLineNumbers",
+                "title": "G-Code: Remove Line Numbers",
+                "category": "G-Code"
             }
         ]
     },
@@ -395,30 +463,30 @@
         "webpack-dev": "webpack --mode development --watch"
     },
     "devDependencies": {
-        "@types/chai": "^4.2.17",
-        "@types/glob": "^7.1.3",
-        "@types/mocha": "^8.2.2",
-        "@types/node": "^15.0.2",
-        "@types/vscode": "^1.56.0",
-        "@typescript-eslint/eslint-plugin": "^4.22.1",
-        "@typescript-eslint/parser": "^4.22.1",
+        "@types/chai": "^4.2.22",
+        "@types/glob": "^7.2.0",
+        "@types/mocha": "^9.0.0",
+        "@types/node": "^16.11.11",
+        "@types/vscode": "^1.62.0",
+        "@typescript-eslint/eslint-plugin": "^5.5.0",
+        "@typescript-eslint/parser": "^5.5.0",
         "chai": "^4.3.4",
-        "eslint": "^7.25.0",
+        "eslint": "^8.3.0",
         "eslint-config-prettier": "^8.3.0",
-        "eslint-plugin-import": "^2.22.1",
-        "eslint-plugin-prettier": "^3.4.0",
-        "fork-ts-checker-webpack-plugin": "^6.2.6",
-        "glob": "^7.1.7",
-        "mocha": "^8.4.0",
-        "prettier": "^2.2.1",
+        "eslint-plugin-import": "^2.25.3",
+        "eslint-plugin-prettier": "^4.0.0",
+        "fork-ts-checker-webpack-plugin": "^6.5.0",
+        "glob": "^7.2.0",
+        "mocha": "^9.1.3",
+        "prettier": "^2.5.0",
         "shx": "^0.3.3",
-        "ts-loader": "^9.1.2",
-        "ts-node": "^9.1.1",
-        "typescript": "^4.2.4",
-        "vscode-test": "^1.5.2",
-        "webpack": "^5.36.2",
-        "webpack-bundle-analyzer": "^4.4.1",
-        "webpack-cli": "^4.7.0"
+        "ts-loader": "^9.2.6",
+        "ts-node": "^10.4.0",
+        "typescript": "^4.5.2",
+        "vscode-test": "^1.6.1",
+        "webpack": "^5.64.4",
+        "webpack-bundle-analyzer": "^4.5.0",
+        "webpack-cli": "^4.9.1"
     },
     "dependencies": {
         "@appliedengdesign/gcode-reference": "^0.0.3"

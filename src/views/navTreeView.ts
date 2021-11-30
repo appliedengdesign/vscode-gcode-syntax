@@ -12,7 +12,7 @@ import {
     TextEditorRevealType,
     window,
 } from 'vscode';
-import { configuration } from '../util/config';
+import { configuration } from '../util/configuration/config';
 import { StatusBar, StatusBarControl } from '../util/statusBar';
 import { NavTreeNode } from './nodes/navTreeNode';
 import { GView } from './views';
@@ -22,6 +22,7 @@ import { Control } from '../control';
 import { Logger } from '../util/logger';
 import { ViewCommands } from './viewCommands';
 import { Messages } from '../util/messages';
+import { defaults } from '../util/configuration/defaults';
 
 const NavTreeViewInfo = {
     ViewId: 'gcode.views.navTree',
@@ -55,7 +56,7 @@ export class NavTreeView extends GView<NavTreeNode> {
         // Initialize StatusBar
         this._statusbar = Control.statusBarController;
 
-        this._autoRefresh = <boolean>configuration.getParam(NavTreeViewInfo.Config.AutoRefresh);
+        this._autoRefresh = configuration.getParam(NavTreeViewInfo.Config.AutoRefresh);
 
         if (this._autoRefresh) {
             void this.refresh();
@@ -136,7 +137,7 @@ export class NavTreeView extends GView<NavTreeNode> {
 
     protected onConfigurationChanged(e: ConfigurationChangeEvent) {
         if (configuration.changed(e, NavTreeViewInfo.Config.AutoRefresh)) {
-            this._autoRefresh = <boolean>configuration.getParam(NavTreeViewInfo.Config.AutoRefresh);
+            this._autoRefresh = configuration.getParam(NavTreeViewInfo.Config.AutoRefresh);
             Logger.log(`Nav Tree AutoRefresh: ${this._autoRefresh ? 'Enabled' : 'Disabled'}`);
         }
     }
@@ -170,7 +171,8 @@ export class NavTreeView extends GView<NavTreeNode> {
     protected async refresh(element?: NavTreeNode): Promise<void> {
         if (this._editor && this._editor.document) {
             if (
-                this._editor.document.lineCount > <number>configuration.getParam(NavTreeViewInfo.Config.MaxAutoRefresh)
+                this._editor.document.lineCount >
+                (configuration.getParam<number>(NavTreeViewInfo.Config.MaxAutoRefresh) ?? defaults.views.maxAutoRefresh)
             ) {
                 if (await Messages.showRefreshWarningMessage()) {
                     if (this.parseTree()) {

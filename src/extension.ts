@@ -4,7 +4,7 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 import { ExtensionContext } from 'vscode';
-import { Config, configuration } from './util/config';
+import { Config, configuration } from './util/configuration/config';
 import { constants } from './util/constants';
 import { Logger } from './util/logger';
 import { registerCommands } from './util/commands';

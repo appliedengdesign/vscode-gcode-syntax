@@ -9,6 +9,7 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--disable-extensions",
+                "--trace-depreciation",
                 "--extensionDevelopmentPath=${workspaceFolder}",
                 "${workspaceFolder}/samplenc/sample-colors.nc",
                 "${workspaceFolder}/samplenc/sample-profile.nc"
@@ -37,9 +38,8 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--disable-extensions",
-                "--extensionDevelopmentPath=${workspaceFolder}",
-                "${workspaceFolder}/samplenc/sample-colors.nc",
-                "${workspaceFolder}/samplenc/sample-profile.nc"
+                "--trace-depreciation",
+                "--extensionDevelopmentPath=${workspaceFolder}"
             ],
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"

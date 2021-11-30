@@ -15,5 +15,7 @@ export function registerCommands(context: ExtensionContext): void {
         new Commands.ShowSupportGCode(),
         new Commands.AddComment(),
         new Commands.RemoveComment(),
+        new Commands.AddLineNumbers(),
+        new Commands.RemoveLineNumbers(),
     );
 }

@@ -4,17 +4,10 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import {
-    ConfigurationChangeEvent,
-    Disposable,
-    ExtensionContext,
-    StatusBarAlignment,
-    StatusBarItem,
-    ThemeColor,
-    window,
-} from 'vscode';
+import { ConfigurationChangeEvent, Disposable, StatusBarAlignment, StatusBarItem, ThemeColor, window } from 'vscode';
 import { UtilCommands } from './commands/common';
-import { configuration } from './config';
+import { configuration } from './configuration/config';
+import { defaults } from './configuration/defaults';
 import { Logger } from './logger';
 
 export interface StatusBars {
@@ -26,6 +19,11 @@ export interface StatusBars {
 
 export type StatusBar = keyof StatusBars;
 
+const sb = {
+    enabled: 'general.statusBars.enabled',
+    aligh: 'general.statusBars.alignment',
+};
+
 export class StatusBarControl implements Disposable {
     private _enabled: boolean;
     private _align: StatusBarAlignment;
@@ -34,10 +32,10 @@ export class StatusBarControl implements Disposable {
     // Status Bars
     private _statusBars: StatusBars;
 
-    constructor(private context: ExtensionContext) {
+    constructor() {
         this._disposable = Disposable.from(configuration.onDidChange(this.onConfigurationChanged, this));
 
-        this._enabled = <boolean>configuration.getParam('general.statusBars.enabled');
+        this._enabled = configuration.getParam(sb.enabled) ?? defaults.general.statusBars.enabled;
 
         this._statusBars = {
             treeStatusBar: undefined,
@@ -46,10 +44,7 @@ export class StatusBarControl implements Disposable {
             support: undefined,
         };
 
-        this._align =
-            configuration.getParam('general.statusBars.alignment') === 'Left'
-                ? StatusBarAlignment.Left
-                : StatusBarAlignment.Right;
+        this._align = configuration.getParam(sb.aligh) ?? defaults.general.statusBars.alignment;
 
         if (this._enabled) {
             Logger.log('Loading Status Bars...');
@@ -74,7 +69,7 @@ export class StatusBarControl implements Disposable {
     }
 
     private onConfigurationChanged(e: ConfigurationChangeEvent) {
-        if (configuration.changed(e, 'general.statusBars.enabled')) {
+        if (configuration.changed(e, sb.enabled)) {
             if (this._enabled) {
                 // Disable & Dispose
                 Object.keys(this._statusBars).forEach(key => {
@@ -92,12 +87,9 @@ export class StatusBarControl implements Disposable {
                 this.showStatusBars();
             }
 
-            this._enabled = <boolean>configuration.getParam('general.statusBars.enabled');
+            this._enabled = configuration.getParam(sb.enabled) ?? defaults.general.statusBars.enabled;
 
-            this._align =
-                configuration.getParam('general.statusBars.alignment') === 'Left'
-                    ? StatusBarAlignment.Left
-                    : StatusBarAlignment.Right;
+            this._align = configuration.getParam(sb.aligh) ?? defaults.general.statusBars.alignment;
         } else {
             return;
         }

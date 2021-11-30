@@ -12,6 +12,8 @@ export const enum UtilCommands {
     ShowSupportGCode = 'gcode.supportGCode',
     AddComment = 'gcode.addComment',
     RemoveComment = 'gcode.removeComment',
+    AddLineNumbers = 'gcode.addLineNumbers',
+    RemoveLineNumbers = 'gcode.removeLineNumbers',
 }
 
 export abstract class GCommand implements Disposable {

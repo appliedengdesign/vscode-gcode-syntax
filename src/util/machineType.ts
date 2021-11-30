@@ -6,7 +6,7 @@
 
 import { ConfigurationChangeEvent, Disposable, Event, EventEmitter, workspace } from 'vscode';
 import { GReference, MachineTypes } from '@appliedengdesign/gcode-reference';
-import { configuration } from './config';
+import { configuration } from './configuration/config';
 import { Logger } from './logger';
 import { StatusBar, StatusBarControl } from './statusBar';
 import { Control } from '../control';
