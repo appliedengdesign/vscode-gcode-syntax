@@ -102,17 +102,23 @@ Tree view is enabled by default and can be access from the G icon on the activit
 
 G-Code Syntax is customizable and provides many configuration settings to allow the personalization of almost all features.
 
-| Name                                 | Description                                                                            |
-| ------------------------------------ | -------------------------------------------------------------------------------------- |
-| `gcode.general.hovers.enabled`       | Enable or Disable the hovers to show G-Code information                                |
-| `gcode.general.machineType`          | Choose the machine type for extension (Mill is default)                                |
-| `gcode.general.statusBars.enabled`   | Enable or Disable the G-Code status bars                                               |
-| `gcode.general.statusbars.alignment` | Choose the alignment of the status bars (Left is default)                              |
-| `gcode.general.units`                | Choose the units for the file. Options are Auto, Inch or Metric                        |
-| `gcode.views.maxAutoRefresh`         | Value for limiting the autoRefresh maximum lines                                       |
-| `gcode.views.navTree.autoRefresh`    | Tree auto-refreshes as changes are made to the g-code. ( Disabled by default )         |
-| `gcode.views.stats.autoRefresh`      | Auto-refresh the stats view when changes are made to the g-code. (Disabled by default) |
-| `gcode.views.webviews.enabled`       | Enable or disable the webviews                                                         |
+| Name                                 | Description                                                                                 |
+| ------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `gcode.general.hovers.enabled`            | Enable or Disable the hovers to show G-Code information                                |
+| `gcode.general.machineType`               | Choose the machine type for extension (Mill is default)                                |
+| `gcode.general.statusBars.enabled`        | Enable or Disable the G-Code status bars                                               |
+| `gcode.general.statusbars.alignment`      | Choose the alignment of the status bars (Left is default)                              |
+| `gcode.general.units`                     | Choose the units for the file. Options are Auto, Inch or Metric                        |
+| `gcode.general.outputLevel`               | Configure Output level for debugging purposes                                          |
+| `gcode.lineNumberer.addSpaceAfter`        | Add space after line number                                                            |
+| `gcode.lineNumberer.frequency`            | Frequency of line number additions (Every Line or at Tool Changes)                     |
+| `gcode.lineNumberer.ignoreBlank`          | Ignore Blank lines when numbering                                                      |
+| `gcode.lineNumberer.ignoreComments`       | Ignore Comments when numbering                                                         |
+| `gcode.lineNumberer.ignoreProgramNumbers` | Ignore Program numbers, e.g. `O12345`                                                  |
+| `gcode.views.maxAutoRefresh`              | Value for limiting the autoRefresh maximum lines                                       |
+| `gcode.views.navTree.autoRefresh`         | Tree auto-refreshes as changes are made to the g-code. ( Disabled by default )         |
+| `gcode.views.stats.autoRefresh`           | Auto-refresh the stats view when changes are made to the g-code. (Disabled by default) |
+| `gcode.views.webviews.enabled`            | Enable or disable the webviews                                                         |
 
 ![Settings Screenshot](https://raw.githubusercontent.com/appliedengdesign/vscode-gcode-syntax/master/images/settings-screenshot.png)
 
@@ -125,7 +131,6 @@ Please visit our [GitHub Issues](https://github.com/appliedengdesign/vscode-gcod
 - Add more snippets
 - Add additional tree items.
 - More Statistics
-- Line Numbering
 - G-Code Debugging
 - Backplotter
 - Semantic Highlighting
@@ -135,7 +140,7 @@ Visit our [projects page](https://github.com/appliedengdesign/vscode-gcode-synta
 
 ## Changelog
 
-Latest Version: v0.6.2
+Latest Version: v0.7.0
 
 Please refer to our [CHANGELOG](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CHANGELOG.md) doc.
 
