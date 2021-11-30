@@ -2,6 +2,27 @@
 
 All changes to G-Code Language Extension will be documented here.
 
+## v0.7.0 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.6.2)
+
+### New Features
+
+- Added line numbering command with settings in configuration
+- Line numberer Quickpick options
+
+### Fixes
+
+- Configuration files moved
+- Added default configurations
+- Updated dependencies
+- Fixed link to issue queue [#30](https://github.com/appliedengdesign/vscode-gcode-syntax/pull/30)
+- Imporoved highlighting for keywords and macro syntax [#33](https://github.com/appliedengdesign/vscode-gcode-syntax/pull/33)
+- Fixed tool change to ignore comments [#31](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/31)
+
+### Other
+
+- Added trace-depreciation to launch.json file
+- Updated README
+
 ## v0.6.2 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.6.2)
 
 ### Fixes
