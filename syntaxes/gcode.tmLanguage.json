@@ -13,6 +13,15 @@
                     "include": "#comments"
                 },
                 {
+                    "include": "#bracket-expression"
+                },
+                {
+                    "include": "#keywords"
+                },
+                {
+                    "include": "#operators"
+                },
+                {
                     "include": "#speedsfeeds"
                 },
                 {
@@ -29,15 +38,6 @@
                 },
                 {
                     "include": "#macrovars"
-                },
-                {
-                    "include": "#keywords"
-                },
-                {
-                    "include": "#operators"
-                },
-                {
-                    "include": "#bracket-expression"
                 }
             ]
         },
@@ -57,7 +57,7 @@
         "keywords": {
             "patterns": [
                 {
-                    "match": "(GOTO(?>\\d+))|(IF)|(EQ)|(NE)|(LT)|(GT)|(LE)|(GE)|(DO(?>\\d+))|(WHILE)|(WH)|(END(?>\\d+))|(AND)|(OR)|(XOR)",
+                    "match": "(GOTO(?>\\d+))|(IF)|(EQ)|(NE)|(LT)|(GT)|(LE)|(GE)|(DO ?(?>\\d+))|(WHILE)|(WH)|(END ?(?>\\d+))|(AND)|(OR)|(XOR)|(THEN)|(ELSE)|(ENDIF)",
                     "name": "keyword.control.gcode"
                 },
                 {
