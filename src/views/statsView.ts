@@ -249,7 +249,7 @@ export class StatsView extends GView<StatsNode> {
     }
 
     private updateToolChanges(text: string): boolean {
-        const re = /(M0?6)/gim;
+        const re = /^[^;(]*(M0?6)/gim;
         const num = text.match(re)?.length || 0;
 
         this._stats.toolchanges = num;
