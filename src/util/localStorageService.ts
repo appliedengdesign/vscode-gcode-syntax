@@ -31,13 +31,13 @@ export class LocalStorageService {
             try {
                 await this._wsState.update(key, value);
             } catch (reason) {
-                Logger.error(reason);
+                Logger.error(<Error>reason);
             }
         } else {
             try {
                 await this._globalState.update(key, value);
             } catch (reason) {
-                Logger.error(reason);
+                Logger.error(<Error>reason);
             }
         }
     }
@@ -47,13 +47,13 @@ export class LocalStorageService {
             try {
                 await this._wsState.update(key, undefined);
             } catch (reason) {
-                Logger.error(reason);
+                Logger.error(<Error>reason);
             }
         } else {
             try {
                 await this._globalState.update(key, undefined);
             } catch (reason) {
-                Logger.error(reason);
+                Logger.error(<Error>reason);
             }
         }
     }
