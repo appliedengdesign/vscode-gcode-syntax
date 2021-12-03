@@ -65,7 +65,7 @@
         "onCommand:gcode.supportGCode"
     ],
     "capabilities": {
-        "virtualWorkspaces": false
+        "virtualWorkspaces": true
     },
     "contributes": {
         "languages": [
