@@ -1,0 +1,29 @@
+
+body {
+  background-color: #ffffe0;
+}
+
+svg {
+  background-color: aquamarine;
+}
+
+path {
+  fill: none;
+  stroke: #fe4038;
+}
+
+line {
+  stroke: #fe4038;
+}
+
+text {
+  font-size: 0.4em;
+}
+
+ellipse {
+  stroke: #000;
+}
+
+#box {
+  border: 1px solid #000
+}
