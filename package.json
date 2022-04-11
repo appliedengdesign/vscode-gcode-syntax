@@ -482,7 +482,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "fork-ts-checker-webpack-plugin": "^7.2.3",
+    "fork-ts-checker-webpack-plugin": "^7.2.4",
     "gcode-interpreter": "^2.1.0",
     "glob": "^7.2.0",
     "mocha": "^9.2.2",
