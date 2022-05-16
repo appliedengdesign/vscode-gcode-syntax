@@ -3,14 +3,15 @@
  *  Licensed under the MIT License. See License.md in the project root for license information.
  * -------------------------------------------------------------------------------------------- */
 'use strict';
-import { ExtensionContext } from 'vscode';
+import * as vscode from 'vscode';
 import { Config, configuration } from './util/configuration/config';
 import { constants } from './util/constants';
 import { Logger } from './util/logger';
 import { registerCommands } from './util/commands';
 import { Control } from './control';
+import { GCodeViewer } from './commands/gcodeViewer';
 
-export function activate(context: ExtensionContext) {
+export function activate(context: vscode.ExtensionContext) {
     const start = process.hrtime();
 
     // Initialize Logger
@@ -26,6 +27,20 @@ export function activate(context: ExtensionContext) {
 
     // Initialize Controller
     Control.initialize(context, configuration);
+
+    const gcodeViewerDisposable = vscode.commands.registerCommand(`gcode.${GCodeViewer.commandName}`, () => {
+        const gcodeViewerPanel = vscode.window.createWebviewPanel(
+            'gcode_GCodeViewer',
+            'G-Code Preview',
+            vscode.ViewColumn.One,
+            {
+                enableScripts: true,
+            },
+        );
+        const command = new GCodeViewer(context);
+        command.execute(gcodeViewerPanel.webview);
+    });
+    context.subscriptions.push(gcodeViewerDisposable);
 
     Logger.log(
         `${constants.extension.shortname} v${constants.extension.version} activated in ${Control.getLoadTime(
