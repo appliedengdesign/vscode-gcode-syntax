@@ -59,6 +59,51 @@
             "trace": true
         },
         {
+            "name": "Run G-Code (Full)",
+            "type": "pwa-extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--trace-depreciation",
+                "--extensionDevelopmentPath=${workspaceFolder}"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "presentation": {
+                "hidden": false,
+                "group": "Launch Extension",
+                "order": 3
+            },
+            "preLaunchTask": "npm: webpack",
+            "skipFiles": [
+                "<node_internals>/**",
+                "**/node_modules/**"
+            ],
+            "smartStep": true,
+            "sourceMaps": true,
+            "trace": true
+        },
+        {
+            "name": "Run G-Code As Web Extension",
+            "type": "pwa-extensionHost",
+            "debugWebWorkerHost": true,
+            "request": "launch",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "--extensionDevelopmentKind=web"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "preLaunchTask": "npm: webpack",
+            "presentation": {
+                "hidden": false,
+                "group": "Web Extension",
+                "order": 1
+            }
+        },
+        {
             "name": "G-Code Mocha Unit Tests",
             "type": "pwa-node",
             "request": "launch",

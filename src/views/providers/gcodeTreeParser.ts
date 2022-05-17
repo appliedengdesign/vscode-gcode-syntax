@@ -391,11 +391,15 @@ export class GCodeTreeParser {
                         } else {
                             x = -1;
                         }
+
                         node = new NavTreeNode(
-                            `Spindle On ${words[i + x].substr(1)}RPM` + ' CW',
+                            `Spindle On ${words[i + x].substr(1) === undefined ? '' : words[i + x].substr(1)}RPM` +
+                                ' CW',
                             TreeItemCollapsibleState.None,
                         );
-                        node.tooltip = `Spindle On Clockwise (${words[i + x].substr(1)}RPM)`;
+                        node.tooltip = `Spindle On Clockwise (${
+                            words[i + x].substr(1) === undefined ? '' : words[i + x].substr(1)
+                        }RPM)`;
                         node.setIcon(IconType.SpindleCW);
                         node.command = {
                             command: 'gcode.views.navTree.select',
@@ -415,10 +419,13 @@ export class GCodeTreeParser {
                             x = -1;
                         }
                         node = new NavTreeNode(
-                            `Spindle On ${words[i + x].substr(1)}RPM` + ' CCW',
+                            `Spindle On ${words[i + x].substr(1) === undefined ? '' : words[i + x].substr(1)}RPM` +
+                                ' CCW',
                             TreeItemCollapsibleState.None,
                         );
-                        node.tooltip = `Spindle On Counter Clockwise (${words[i + x].substr(1)}RPM)`;
+                        node.tooltip = `Spindle On Counter Clockwise (${
+                            words[i + x].substr(1) === undefined ? '' : words[i + x].substr(1)
+                        }RPM)`;
                         node.setIcon(IconType.SpindleCCW);
                         node.command = {
                             command: 'gcode.views.navTree.select',
