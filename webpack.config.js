@@ -17,7 +17,7 @@ function getExtensionConfig(mode, env) {
     plugins.push(
         new ForkTsCheckerWebpackPlugin({
             async: false,
-            eslint: { enabled: true, files: 'src/**/*.ts', options: { cache: true } },
+            // eslint: { enabled: true, files: 'src/**/*.ts', options: { cache: true } },
             formatter: 'basic',
         }),
     );
@@ -54,7 +54,7 @@ function getExtensionConfig(mode, env) {
         module: {
             rules: [
                 {
-                    test: /\.ts$/,
+                    test: /\.tsx?$/,
                     exclude: /node_modules/,
                     include: path.join(__dirname, 'src'),
                     use: [
