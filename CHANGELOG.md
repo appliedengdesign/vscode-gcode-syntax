@@ -4,6 +4,14 @@ All changes to G-Code Language Extension will be documented here.
 
 ## v0.7.1 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.1)
 
+### New Features
+
+- Added `.S` extension ( [#36](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/36) )
+
+### Fixes
+
+- Fixed debug console exception w/ M03 w/o spindle speed. [#34](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/34)
+
 ### Other
 
 - Updated dependencies
@@ -15,6 +23,7 @@ All changes to G-Code Language Extension will be documented here.
 
 - Added line numbering command with settings in configuration
 - Line numberer Quickpick options
+- Added max filesize option to configuration [#32](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/32)
 
 ### Fixes
 
