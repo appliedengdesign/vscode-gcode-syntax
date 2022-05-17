@@ -2,7 +2,14 @@
 
 All changes to G-Code Language Extension will be documented here.
 
-## v0.7.0 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.6.2)
+## v0.7.1 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.1)
+
+### Other
+
+- Updated dependencies
+- Updated copyright to 2022
+  
+## v0.7.0 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.7.0)
 
 ### New Features
 
