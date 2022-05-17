@@ -16,6 +16,7 @@ All changes to G-Code Language Extension will be documented here.
 
 - Updated dependencies
 - Updated copyright to 2022
+- Removed eslint from `ForkTsCheckerWebpackPlugin` in `webpack.config.js` ( [Remove ESLint Support](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin/issues/601) )
   
 ## v0.7.0 [#](https://github.com/appliedengesign/vscode-gcode-syntax/releases/tag/v0.7.0)
 
