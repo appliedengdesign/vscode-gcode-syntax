@@ -3,14 +3,14 @@
     "displayName": "G-Code Syntax",
     "shortName": "G-Code",
     "description": "Turn VSCode into a fully capable G-Code editor, including language support & more.",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "license": "MIT",
     "publisher": "appliedengdesign",
     "author": {
         "name": "Mike Centola",
         "url": "https://mikecentola.com"
     },
-    "copyright": "Copyright (c) 2021 Applied Eng. & Design / Mike Centola",
+    "copyright": "Copyright (c) 2022 Applied Eng. & Design / Mike Centola",
     "engines": {
         "vscode": "^1.67.0"
     },
