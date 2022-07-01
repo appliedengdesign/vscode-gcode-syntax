@@ -83,7 +83,8 @@ This extension adds language syntax for CNC G-Code, code snippets, and colorizat
 | .gcode | .gp  | .hnc   | .knc   | .lib | .m   | .min | .mpf |
 | .mpr   | .msb | .nc    | .ncc   | .ncd | .ncf | .ncg | .nci |
 | .ncp   | .ngc | .out   | .pim   | .pit | .plt | .ply | .prg |
-| .pu1   | .rol | .sbp   | .spf   | .ssb | .sub | .tap | .xpi | 
+| .pu1   | .rol | .S     | .sbp   | .spf | .ssb | .sub | .tap |
+| .xpi   |      |        |        |      |      |      |      |
 ```
 
 If you would like another file extension supported by this extension, please [open an issue](https://github.com/appliedemgdesign/vscode-gcode-syntax/issues).
@@ -140,7 +141,7 @@ Visit our [projects page](https://github.com/appliedengdesign/vscode-gcode-synta
 
 ## Changelog
 
-Latest Version: v0.7.1
+Latest Version: v0.7.2
 
 Please refer to our [CHANGELOG](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CHANGELOG.md) doc.
 
