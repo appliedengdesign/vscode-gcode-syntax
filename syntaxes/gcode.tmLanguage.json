@@ -16,7 +16,13 @@
                     "include": "#bracket-expression"
                 },
                 {
-                    "include": "#keywords"
+                    "include": "#control"
+                },
+                {
+                    "include": "#gcodes"
+                },
+                {
+                    "include": "#mcodes"
                 },
                 {
                     "include": "#operators"
@@ -54,12 +60,28 @@
                 }
             ]
         },
-        "keywords": {
+        "control": {
             "patterns": [
                 {
-                    "match": "(GOTO(?>\\d+))|(IF)|(EQ)|(NE)|(LT)|(GT)|(LE)|(GE)|(DO ?(?>\\d+))|(WHILE)|(WH)|(END ?(?>\\d+))|(AND)|(OR)|(XOR)|(THEN)|(ELSE)|(ENDIF)",
+                    "match": "(GOTO\\s?\\d*)",
                     "name": "keyword.control.gcode"
                 },
+                {
+                    "match": "(EQ|NE|LT|GT|LE|GE|AND|OR|XOR)",
+                    "name": "keyword.control.gcode"
+                },
+                {
+                    "match": "(DO\\s?\\d*|WHILE|WH|END|IF|THEN|ELSE|ENDIF)",
+                    "name": "keyword.control.gcode"
+                },
+                {
+                    "match": "([\\%])",
+                    "name": "string.gcode"
+                }
+            ]
+        },
+        "gcodes": {
+            "patterns": [
                 {
                     "match": "[gG](1)?5[4-9](.1)?\\s?(P[0-9]{1,3})?",
                     "name": "constant.numeric.gcode"
@@ -75,29 +97,29 @@
                 {
                     "match": "[gG][0-9]{1,3}(\\.[0-9])?",
                     "name": "markup.bold.gcode"
-                },
+                }
+            ]
+        },
+        "mcodes": {
+            "patterns": [
                 {
                     "match": "[mM][0-9]{1,3}",
                     "name": "keyword.operator.quantifier.regexp.gcode"
-                },
-                {
-                    "match": "([\\%])",
-                    "name": "string.gcode"
                 }
             ]
         },
         "operators": {
             "patterns": [
                 {
-                    "match": "(SIN)|(COS)|(TAN)|(ASIN)|(ACOS)|(ATAN)|(FIX)|(FUP)|(LN)|(ROUND)|(SQRT)",
+                    "match": "(SIN|COS|TAN|ASIN|ACOS|ATAN|FIX|FUP|LN|ROUND|SQRT)",
                     "name": "support.constant.math.gcode"
                 },
                 {
-                    "match": "(FIX)|(FUP)|(ROUND)|(ABS)|(MOD)",
+                    "match": "(FIX|FUP|ROUND|ABS|MOD)",
                     "name": "support.constant.math.gcode"
                 },
                 {
-                    "match": "(\\+)|(\\*)|(\\/)|(\\*\\*)",
+                    "match": "(\\+|\\*|\\/|\\*\\*)",
                     "name": "support.constant.math.gcode"
                 },
                 {
@@ -157,15 +179,15 @@
         "tools": {
             "patterns": [
                 {
-                    "match": "([dD])\\s?(\\d*\\.?\\d*|(?=[#\\[]))",
+                    "match": "([dD])\\s?(\\d+(\\.\\d*)?|(?=[#\\[]))",
                     "name": "constant.character.gcode"
                 },
                 {
-                    "match": "([hH])\\s?(\\d*\\.?\\d*|(?=[#\\[]))",
+                    "match": "([hH])\\s?(\\d+(\\.\\d*)?|(?=[#\\[]))",
                     "name": "constant.character.gcode"
                 },
                 {
-                    "match": "([tT])\\s?(\\d*\\.?\\d*|(?=[#\\[]))",
+                    "match": "([tT])\\s?(\\d+(\\.\\d*)?|(?=[#\\[]))",
                     "name": "constant.character.gcode"
                 }
             ]
