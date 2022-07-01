@@ -1,13 +1,14 @@
 {
+	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"incremental": true,
 		"isolatedModules": true,
 		"lib": [
-			"es2020"
+			"ES2021"
 		],
-		"module": "esnext",
+		"module": "CommonJS",
 		"moduleResolution": "node",
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitReturns": true,
@@ -19,7 +20,7 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		"target": "es2019",
+		"target": "ES2021",
 		"useDefineForClassFields": true
 	},
 	"include": [
@@ -28,6 +29,6 @@
 	],
 	"exclude": [
 		"node_modules",
-		"samplenc",
+		"samplenc"
 	]
 }

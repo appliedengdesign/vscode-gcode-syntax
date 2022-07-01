@@ -2,6 +2,20 @@
 
 All changes to G-Code Language Extension will be documented here.
 
+## v0.7.2 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.2)
+
+### Fixes
+
+- Fixed highlighting syntax for `T` inside of other words [#40](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/40)
+
+### Other
+
+- Updated dependencies [#38](https://github.com/appliedengdesign/vscode-gcode-syntax/pull/38)
+- Refactored some Regex to be more concise
+- Updated VSCode engine to `^1.68.0`
+- Update Typescript build to ES2021
+- Updated README
+
 ## v0.7.1 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.1)
 
 ### New Features
