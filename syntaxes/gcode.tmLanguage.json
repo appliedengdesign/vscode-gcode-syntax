@@ -13,9 +13,6 @@
                     "include": "#comments"
                 },
                 {
-                    "include": "#bracket-expression"
-                },
-                {
                     "include": "#control"
                 },
                 {
@@ -44,6 +41,9 @@
                 },
                 {
                     "include": "#macrovars"
+                },
+                {
+                    "include": "#rs274ngc"
                 }
             ]
         },
@@ -63,15 +63,15 @@
         "control": {
             "patterns": [
                 {
-                    "match": "(GOTO\\s?\\d*)",
+                    "match": "(?i)(GOTO\\s?\\d+)",
                     "name": "keyword.control.gcode"
                 },
                 {
-                    "match": "(EQ|NE|LT|GT|LE|GE|AND|OR|XOR)",
+                    "match": "(?i)(EQ|NE|LT|GT|LE|GE|AND|OR|XOR)",
                     "name": "keyword.control.gcode"
                 },
                 {
-                    "match": "(DO\\s?\\d*|WHILE|WH|END|IF|THEN|ELSE|ENDIF)",
+                    "match": "(?i)(DO\\s?\\d*|WHILE|WH|END|IF|THEN|ELSE|ENDIF)",
                     "name": "keyword.control.gcode"
                 },
                 {
@@ -111,11 +111,11 @@
         "operators": {
             "patterns": [
                 {
-                    "match": "(SIN|COS|TAN|ASIN|ACOS|ATAN|FIX|FUP|LN|ROUND|SQRT)",
+                    "match": "(?i)(SIN|COS|TAN|ASIN|ACOS|ATAN|FIX|FUP|LN|ROUND|SQRT)",
                     "name": "support.constant.math.gcode"
                 },
                 {
-                    "match": "(FIX|FUP|ROUND|ABS|MOD)",
+                    "match": "(?i)(FIX|FUP|ROUND|ABS|MOD)",
                     "name": "support.constant.math.gcode"
                 },
                 {
@@ -135,7 +135,7 @@
                     "name": "constant.language.gcode"
                 },
                 {
-                    "match": "([eEfF])\\s?(\\d*\\.?\\d+\\.?|\\.?(?=[#\\[]))",
+                    "match": "([eEfF])\\s?\\.?(\\d+(\\.\\d*)?|(?=[#\\[]))",
                     "name": "constant.language.gcode"
                 }
             ]
@@ -147,7 +147,7 @@
                     "name": "constant.numeric.gcode"
                 },
                 {
-                    "match": "(^[oO])(\\d+)",
+                    "match": "(^[oO])(\\d+)?",
                     "name": "string.regexp.gcode"
                 },
                 {
@@ -211,32 +211,31 @@
         "macrovars": {
             "patterns": [
                 {
-                    "match": "[#][0-9]+",
-                    "name": "variable.other.gcode"
-                },
-                {
-                    "match": "[#][\\[].+[\\]]",
+                    "match": "[#][0-9]*",
                     "name": "variable.other.gcode"
                 }
             ]
         },
-        "bracket-expression": {
-            "begin": "\\[",
-            "end": "\\]",
-            "beginCaptures": {
-                "0": {
-                    "name": "punctuation.paren.open"
-                }
-            },
-            "endCaptures": {
-                "0": {
-                    "name": "punctuation.paren.close"
-                }
-            },
-            "name": "expression.group",
+        "rs274ngc": {
             "patterns": [
                 {
-                    "include": "#all"
+                    "match": "(?i)(ENDSUB|SUB)",
+                    "name": "keyword.control.gcode"
+                },
+                {
+                    "begin": "<",
+                    "end": ">",
+                    "beginCaptures": {
+                        "0": {
+                            "name": "markup.bold.gcode"
+                        }
+                    },
+                    "endCaptures": {
+                        "0": {
+                            "name": "markup.bold.gcode"
+                        }
+                    },
+                    "name": "support.type.gcode"
                 }
             ]
         }
