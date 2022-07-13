@@ -2,6 +2,19 @@
 
 All changes to G-Code Language Extension will be documented here.
 
+## v0.7.3 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.3)
+
+### Fixes
+
+- Added regexes for `rs274ngc` in `.ngc` files and refactored for better colorization [#40](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/40)
+- Added `<` and `>` to bracket defintions
+
+### Other
+
+- Updated dependencies
+- Updated VSCode engine to `^1.69.0`
+- Updated README
+
 ## v0.7.2 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.2)
 
 ### Fixes
