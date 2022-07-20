@@ -12,7 +12,8 @@
                 "--trace-depreciation",
                 "--extensionDevelopmentPath=${workspaceFolder}",
                 "${workspaceFolder}/samplenc/sample-colors.nc",
-                "${workspaceFolder}/samplenc/sample-profile.nc"
+                "${workspaceFolder}/samplenc/sample-profile.nc",
+                "${workspaceFolder}/samplenc/sample-circular-pocket.nc"
             ],
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
