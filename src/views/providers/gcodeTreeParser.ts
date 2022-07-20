@@ -85,7 +85,7 @@ export class GCodeTreeParser {
                     case '01':
                     case '1':
                         node = new NavTreeNode('Cutting', TreeItemCollapsibleState.None);
-                        node.tooltip = '[G01] Linear]';
+                        node.tooltip = '[G01] Linear Motion';
                         node.setIcon(IconType.Cutting);
                         node.command = {
                             command: 'gcode.views.navTree.select',
