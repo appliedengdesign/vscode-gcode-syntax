@@ -4,7 +4,7 @@
     "configurations": [
         {
             "name": "Run G-Code (Sandbox) - Samples",
-            "type": "pwa-extensionHost",
+            "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
@@ -33,7 +33,7 @@
         },
         {
             "name": "Run G-Code (Sandbox)",
-            "type": "pwa-extensionHost",
+            "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
@@ -60,7 +60,7 @@
         },
         {
             "name": "Run G-Code (Full)",
-            "type": "pwa-extensionHost",
+            "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
@@ -86,7 +86,7 @@
         },
         {
             "name": "Run G-Code As Web Extension",
-            "type": "pwa-extensionHost",
+            "type": "extensionHost",
             "debugWebWorkerHost": true,
             "request": "launch",
             "args": [
@@ -105,15 +105,17 @@
         },
         {
             "name": "G-Code Mocha Unit Tests",
-            "type": "pwa-node",
+            "type": "node",
             "request": "launch",
             "internalConsoleOptions": "openOnSessionStart",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
-                "--no-timeouts",
-                "--colors",
                 "--require",
                 "ts-node/register",
+                "--timeout",
+                "0",
+                "--colors",
+                "--recursive",
                 "${workspaceFolder}/test/unit/*.test.ts"
             ],
             "skipFiles": [
