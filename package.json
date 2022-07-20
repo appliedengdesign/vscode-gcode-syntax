@@ -165,12 +165,18 @@
                     "enum": [
                         "Mill",
                         "Lathe",
-                        "3D Printer"
+                        "3D Printer",
+                        "Swiss",
+                        "Laser",
+                        "EDM"
                     ],
                     "enumDescriptions": [
                         "Configure G-Code Extension for CNC Mill",
                         "Configure G-Code Extension for CNC Lathe",
-                        "Configure G-Code Extension for 3D Printers"
+                        "Configure G-Code Extension for 3D Printers",
+                        "Configure G-Code Extension for Swiss-style Lathes",
+                        "Configure G-Code Extension for Laser Machine Tools",
+                        "Configure G-Code Extension for EDM"
                     ],
                     "markdownDescription": "Configure G-Code Extension for a Specific Machine Type",
                     "scope": "window"
@@ -448,6 +454,7 @@
     },
     "scripts": {
         "analyze:bundle": "webpack --env analyzeBundle",
+        "build": "webpack -mode development",
         "bundle": "webpack --mode production",
         "clean": "shx rm -rf out/* && rm -rf dist/*",
         "compile": "tsc -p ./",
@@ -458,7 +465,7 @@
         "pretty": "prettier --config .prettierrc --loglevel warn .",
         "pub": "vsce publish",
         "test": "node ./out/test/runTests.js",
-        "test:unit": "SET TS_NODE_PROJECT=./tsconfig.tests.json&& mocha -r ts-node/register test/unit/*.test.ts",
+        "test:unit": "SET TS_NODE_PROJECT=./tsconfig.tests.json && mocha -r ts-node/register test/unit/*.test.ts",
         "vscode:prepublish": "npm run bundle",
         "webpack": "webpack --mode development",
         "webpack-dev": "webpack --mode development --watch"
