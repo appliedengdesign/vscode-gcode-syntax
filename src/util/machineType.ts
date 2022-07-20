@@ -60,6 +60,18 @@ export class MachineTypeControl implements Disposable {
                 this._machineType = MachineTypes.Printer;
                 break;
 
+            case 'Swiss':
+                this._machineType = MachineTypes.Swiss;
+                break;
+
+            case 'Laser':
+                this._machineType = MachineTypes.Laser;
+                break;
+
+            case 'EDM':
+                this._machineType = MachineTypes.EDM;
+                break;
+
             default:
                 return;
         }
