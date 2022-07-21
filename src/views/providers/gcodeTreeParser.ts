@@ -135,7 +135,7 @@ export class GCodeTreeParser {
                             x = -1;
                         }
 
-                        if (!(tmp = words[i + x].substr(1)).match(/\./g)) {
+                        if (!(tmp = words[i + x].slice(1)).match(/\./g)) {
                             // Milliseconds
                             tmp = Number(tmp) / 1000;
                         }
@@ -393,12 +393,11 @@ export class GCodeTreeParser {
                         }
 
                         node = new NavTreeNode(
-                            `Spindle On ${words[i + x].substr(1) === undefined ? '' : words[i + x].substr(1)}RPM` +
-                                ' CW',
+                            `Spindle On ${words[i + x].slice(1) === undefined ? '' : words[i + x].slice(1)}RPM` + ' CW',
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = `Spindle On Clockwise (${
-                            words[i + x].substr(1) === undefined ? '' : words[i + x].substr(1)
+                            words[i + x].slice(1) === undefined ? '' : words[i + x].slice(1)
                         }RPM)`;
                         node.setIcon(IconType.SpindleCW);
                         node.command = {
@@ -419,12 +418,12 @@ export class GCodeTreeParser {
                             x = -1;
                         }
                         node = new NavTreeNode(
-                            `Spindle On ${words[i + x].substr(1) === undefined ? '' : words[i + x].substr(1)}RPM` +
+                            `Spindle On ${words[i + x].slice(1) === undefined ? '' : words[i + x].slice(1)}RPM` +
                                 ' CCW',
                             TreeItemCollapsibleState.None,
                         );
                         node.tooltip = `Spindle On Counter Clockwise (${
-                            words[i + x].substr(1) === undefined ? '' : words[i + x].substr(1)
+                            words[i + x].slice(1) === undefined ? '' : words[i + x].slice(1)
                         }RPM)`;
                         node.setIcon(IconType.SpindleCCW);
                         node.command = {
