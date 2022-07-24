@@ -464,6 +464,7 @@
         "pretest": "npm run compile",
         "pretty": "prettier --config .prettierrc --loglevel warn .",
         "pub": "vsce publish",
+        "refresh": "npm run clean && shx rm -rf ./node_modules && npm install",
         "test": "node ./out/test/runTests.js",
         "test:unit": "SET TS_NODE_PROJECT=./tsconfig.tests.json && mocha -r ts-node/register test/unit/*.test.ts",
         "vscode:prepublish": "npm run bundle",
