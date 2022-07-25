@@ -16,7 +16,7 @@ import {
 import { configuration } from '../util/configuration/config';
 import { StatusBar, StatusBarControl } from '../util/statusBar';
 import { NavTreeNode } from './nodes/navTreeNode';
-import { GView } from './views';
+import { GView } from './gView';
 import { constants, Contexts, PIcon, ViewCommands } from '../util/constants';
 import { GCodeTreeParser } from './providers/gcodeTreeParser';
 import { Control } from '../control';

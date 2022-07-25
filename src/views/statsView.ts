@@ -22,7 +22,7 @@ import { Messages } from '../util/messages';
 import { ResourceType } from './nodes/nodes';
 import { StatsNode, StatsType } from './nodes/statsNode';
 import { GCodeRuntimeParser } from './providers/gcodeRuntimeParser';
-import { GView } from './views';
+import { GView } from './gView';
 
 const StatsViewInfo = {
     ViewId: 'gcode.views.stats',
