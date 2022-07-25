@@ -10,14 +10,14 @@
 import { Uri, Webview } from 'vscode';
 import { Control } from '../control';
 import { WebViewCommands } from '../util/constants';
-import { GWebView } from './webviews';
+import { GWebview } from './gWebview';
 
 const GCodesWebviewInfo = {
     ViewId: 'gcode.webviews.codes',
     Title: 'G/M Code Reference',
 };
 
-export class CodesWebview extends GWebView {
+export class CodesWebview extends GWebview {
     constructor() {
         super(GCodesWebviewInfo.ViewId, GCodesWebviewInfo.Title, WebViewCommands.ShowCodesWebview);
     }
