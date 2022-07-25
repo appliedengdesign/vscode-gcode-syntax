@@ -15,13 +15,12 @@ import {
 import { Control } from '../control';
 import { configuration } from '../util/configuration/config';
 import { defaults } from '../util/configuration/defaults';
-import { constants, Contexts } from '../util/constants';
+import { constants, Contexts, ViewCommands } from '../util/constants';
 import { Logger } from '../util/logger';
 import { Messages } from '../util/messages';
 import { ResourceType } from './nodes/nodes';
 import { StatsNode, StatsType } from './nodes/statsNode';
 import { GCodeRuntimeParser } from './providers/gcodeRuntimeParser';
-import { ViewCommands } from './viewCommands';
 import { GView } from './views';
 
 const StatsViewInfo = {

@@ -6,9 +6,9 @@
 
 import { ConfigurationChangeEvent, Disposable, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
 import { Control } from './control';
-import { UtilCommands } from './util/commands/common';
 import { configuration } from './util/configuration/config';
 import { defaults } from './util/configuration/defaults';
+import { GCommands } from './util/constants';
 import { Logger } from './util/logger';
 import { StatusBar, StatusBarControl } from './util/statusBar';
 
@@ -39,7 +39,7 @@ export class GCodeUnitsController implements Disposable {
             this.unitsStatusBar,
             undefined,
             undefined,
-            UtilCommands.ShowGCodeSettings,
+            GCommands.ShowGCodeSettings,
         );
 
         Control.context.subscriptions.push(configuration.onDidChange(this.onConfigurationChanged, this));
@@ -61,7 +61,7 @@ export class GCodeUnitsController implements Disposable {
                     this.unitsStatusBar,
                     undefined,
                     undefined,
-                    UtilCommands.ShowGCodeSettings,
+                    GCommands.ShowGCodeSettings,
                 );
             } else {
                 Logger.log(`Units: ${this._units}`);
@@ -71,7 +71,7 @@ export class GCodeUnitsController implements Disposable {
                     this.unitsStatusBar,
                     undefined,
                     undefined,
-                    UtilCommands.ShowGCodeSettings,
+                    GCommands.ShowGCodeSettings,
                 );
             }
         }
@@ -91,7 +91,7 @@ export class GCodeUnitsController implements Disposable {
                     this.unitsStatusBar,
                     undefined,
                     undefined,
-                    UtilCommands.ShowGCodeSettings,
+                    GCommands.ShowGCodeSettings,
                 );
             } else {
                 return;
@@ -112,7 +112,7 @@ export class GCodeUnitsController implements Disposable {
                     this.unitsStatusBar,
                     undefined,
                     undefined,
-                    UtilCommands.ShowGCodeSettings,
+                    GCommands.ShowGCodeSettings,
                 );
             } else {
                 return;

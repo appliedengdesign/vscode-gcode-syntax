@@ -5,12 +5,13 @@
 
 'use strict';
 
+import { GCommands } from '../constants';
 import { LineNumberer } from '../lineNumberer';
-import { GCommand, UtilCommands } from './common';
+import { GCommand } from './base';
 
 export class RemoveLineNumbers extends GCommand {
     constructor() {
-        super(UtilCommands.RemoveLineNumbers);
+        super(GCommands.RemoveLineNumbers);
     }
 
     async execute() {

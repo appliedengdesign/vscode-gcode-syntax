@@ -16,11 +16,10 @@ import { configuration } from '../util/configuration/config';
 import { StatusBar, StatusBarControl } from '../util/statusBar';
 import { NavTreeNode } from './nodes/navTreeNode';
 import { GView } from './views';
-import { constants, Contexts, PIcon } from '../util/constants';
+import { constants, Contexts, PIcon, ViewCommands } from '../util/constants';
 import { GCodeTreeParser } from './providers/gcodeTreeParser';
 import { Control } from '../control';
 import { Logger } from '../util/logger';
-import { ViewCommands } from './viewCommands';
 import { Messages } from '../util/messages';
 import { defaults } from '../util/configuration/defaults';
 

@@ -5,9 +5,9 @@
 'use strict';
 
 import { ConfigurationChangeEvent, Disposable, StatusBarAlignment, StatusBarItem, ThemeColor, window } from 'vscode';
-import { UtilCommands } from './commands/common';
 import { configuration } from './configuration/config';
 import { defaults } from './configuration/defaults';
+import { GCommands } from './constants';
 import { Logger } from './logger';
 
 export interface StatusBars {
@@ -100,7 +100,7 @@ export class StatusBarControl implements Disposable {
         bar: StatusBar,
         tooltip?: string,
         color?: string | ThemeColor,
-        cmd?: UtilCommands | string,
+        cmd?: GCommands | string,
     ): boolean {
         if (!this._enabled) {
             return false;
