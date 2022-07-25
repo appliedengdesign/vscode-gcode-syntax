@@ -6,12 +6,12 @@
 'use strict';
 
 import { Range, window } from 'vscode';
-import { constants } from '../constants';
-import { GCommand, UtilCommands } from './common';
+import { constants, GCommands } from '../constants';
+import { GCommand } from './base';
 
 export class AddComment extends GCommand {
     constructor() {
-        super(UtilCommands.AddComment);
+        super(GCommands.AddComment);
     }
 
     execute() {

@@ -6,23 +6,22 @@
 'use strict';
 
 import { commands, Disposable } from 'vscode';
-
-export const enum UtilCommands {
-    ShowGCodeSettings = 'gcode.showSettings',
-    ShowSupportGCode = 'gcode.supportGCode',
-    AddComment = 'gcode.addComment',
-    RemoveComment = 'gcode.removeComment',
-    AddLineNumbers = 'gcode.addLineNumbers',
-    RemoveLineNumbers = 'gcode.removeLineNumbers',
-}
+import { GCommands } from '../constants';
 
 export abstract class GCommand implements Disposable {
-    private _disposable: Disposable;
+    private readonly _disposable: Disposable;
 
-    constructor(cmd: UtilCommands) {
-        this._disposable = commands.registerCommand(cmd, (...args: any[]) => this._execute(cmd, ...args), this);
+    constructor(cmd: GCommands | GCommands[]) {
+        if (typeof cmd === 'string') {
+            this._disposable = commands.registerCommand(cmd, (...args: any[]) => this._execute(cmd, ...args), this);
 
-        return;
+            return;
+        }
+
+        const subscriptions = cmd.map(cmd =>
+            commands.registerCommand(cmd, (...args: any[]) => this._execute(cmd, ...args), this),
+        );
+        this._disposable = Disposable.from(...subscriptions);
     }
 
     dispose() {

@@ -6,17 +6,12 @@
 
 import { ExtensionContext } from 'vscode';
 import { constants } from './constants';
-import { LocalStorageService } from './localStorageService';
+import { LocalStorageService, StorageLocations } from './localStorageService';
 import { Version } from './version';
 
 export interface IState extends Record<string, unknown> {
     previousVersion: string;
     version: string;
-}
-
-const enum Loc {
-    Global = 'global',
-    WS = 'workspace',
 }
 
 export class StateControl {
@@ -34,15 +29,15 @@ export class StateControl {
     }
 
     private getState(): IState {
-        return this._storageManager.getValue<IState>(constants.configId, Loc.Global) ?? this.defaults;
+        return this._storageManager.getValue<IState>(constants.configId, StorageLocations.Global) ?? this.defaults;
     }
 
     async deleteState(): Promise<void> {
-        await this._storageManager.deleteValue(constants.configId, Loc.Global);
+        await this._storageManager.deleteValue(constants.configId, StorageLocations.Global);
     }
 
     private async writeState(): Promise<void> {
-        await this._storageManager.setValue<IState>(constants.configId, this._state, Loc.Global);
+        await this._storageManager.setValue<IState>(constants.configId, this._state, StorageLocations.Global);
     }
 
     getVersion(): Version {

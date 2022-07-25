@@ -4,10 +4,9 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 import { ExtensionContext } from 'vscode';
-import { Config, configuration } from './util/configuration/config';
+import { configuration } from './util/configuration/config';
 import { constants } from './util/constants';
 import { Logger } from './util/logger';
-import { registerCommands } from './util/commands';
 import { Control } from './control';
 
 export function activate(context: ExtensionContext) {
@@ -16,13 +15,6 @@ export function activate(context: ExtensionContext) {
     // Initialize Logger
     Logger.initialize(context);
     Logger.enable();
-
-    // Initialize Config
-    const cfg = configuration;
-    Config.initialize(context, cfg);
-
-    // Register Commands
-    void registerCommands(context);
 
     // Initialize Controller
     Control.initialize(context, configuration);

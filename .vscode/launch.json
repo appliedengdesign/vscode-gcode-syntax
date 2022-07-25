@@ -9,12 +9,14 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--disable-extensions",
+                "--trace-warnings",
                 "--trace-depreciation",
                 "--extensionDevelopmentPath=${workspaceFolder}",
                 "${workspaceFolder}/samplenc/sample-colors.nc",
                 "${workspaceFolder}/samplenc/sample-profile.nc",
                 "${workspaceFolder}/samplenc/sample-circular-pocket.nc"
             ],
+            "cwd": "${workspaceFolder}",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -26,11 +28,12 @@
             "preLaunchTask": "npm: webpack",
             "skipFiles": [
                 "<node_internals>/**",
-                "**/node_modules/**"
+                "**/node_modules/**",
+                "**/resources/app/out/vs/**"
             ],
             "smartStep": true,
             "sourceMaps": true,
-            "trace": true
+            "trace": true,
         },
         {
             "name": "Run G-Code (Sandbox)",
@@ -42,6 +45,7 @@
                 "--trace-depreciation",
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ],
+            "cwd": "${workspaceFolder}",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
@@ -53,7 +57,8 @@
             "preLaunchTask": "npm: webpack",
             "skipFiles": [
                 "<node_internals>/**",
-                "**/node_modules/**"
+                "**/node_modules/**",
+                "**/resources/app/out/vs/**"
             ],
             "smartStep": true,
             "sourceMaps": true,
@@ -123,11 +128,18 @@
                 "<node_internals>/**",
                 "**/node_modules/**"
             ],
+            "presentation": {
+                "hidden": false,
+                "group": "Testing",
+                "order": 1
+            },
             "env": {
                 "NODE_ENV": "testing",
                 "TS_NODE_PROJECT": "./tsconfig.tests.json"
             },
-            "sourceMaps": true
+            "sourceMaps": true,
+            "smartStep": true,
+            "trace": true
         }
     ]
 }

@@ -6,13 +6,14 @@
 'use strict';
 
 import { configuration } from '../configuration/config';
+import { GCommands } from '../constants';
 import { LineNumberer, LineNumbererOptions } from '../lineNumberer';
 import { LineNumbersInput } from '../quickpicks/lineNumbers';
-import { GCommand, UtilCommands } from './common';
+import { GCommand } from './base';
 
 export class AddLineNumbers extends GCommand {
     constructor() {
-        super(UtilCommands.AddLineNumbers);
+        super(GCommands.AddLineNumbers);
     }
 
     async execute() {

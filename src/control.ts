@@ -12,8 +12,7 @@ import { StatusBarControl } from './util/statusBar';
 import { NavTreeView } from './views/navTreeView';
 import { GCodeUnitsController } from './gcodeUnits';
 import { StatsView } from './views/statsView';
-import { constants, Contexts, PIcon, VSBuiltInCommands } from './util/constants';
-import { UtilCommands } from './util/commands/common';
+import { constants, Contexts, GCommands, PIcon, VSBuiltInCommands } from './util/constants';
 import { Version } from './util/version';
 import { Messages } from './util/messages';
 import { StateControl } from './util/stateControl';
@@ -21,6 +20,7 @@ import { CodesWebview } from './webviews/codesWebview';
 import { MachineTypeControl } from './util/machineType';
 import { GCodeHoverControl } from './hovers/gcodeHoverControl';
 import { defaults } from './util/configuration/defaults';
+import { registerCommands } from './util/commands/functions';
 
 const cfgUnits = 'general.units';
 const cfgAutoRef = {
@@ -32,6 +32,7 @@ export class Control {
     private static _config: Config | undefined;
     private static _context: ExtensionContext;
     private static _units: string | undefined;
+    private static _version: Version;
 
     // Controllers
     private static _machineTypeControl: MachineTypeControl | undefined;
@@ -75,8 +76,15 @@ export class Control {
 
     // Static Methods
     static initialize(context: ExtensionContext, config: Config) {
+        // Initialize G-Code Extension
         this._context = context;
         this._config = config;
+
+        // Initialze Configuration
+        Config.initialize(this._context, this._config);
+
+        // Register Commands
+        context.subscriptions.push(...registerCommands());
 
         // Load StatusBars
         context.subscriptions.push((this._statusBarControl = new StatusBarControl()));
@@ -136,7 +144,7 @@ export class Control {
             'support',
             'Support G-Code Syntax ❤',
             undefined,
-            UtilCommands.ShowSupportGCode,
+            GCommands.ShowSupportGCode,
         );
 
         // Check Version

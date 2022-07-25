@@ -10,7 +10,7 @@ import { configuration } from './configuration/config';
 import { Logger } from './logger';
 import { StatusBar, StatusBarControl } from './statusBar';
 import { Control } from '../control';
-import { UtilCommands } from './commands/common';
+import { GCommands } from './constants';
 
 export class MachineTypeControl implements Disposable {
     private readonly _dispoable: Disposable | undefined;
@@ -81,7 +81,7 @@ export class MachineTypeControl implements Disposable {
             this.mtypeStatusBar,
             undefined,
             undefined,
-            UtilCommands.ShowGCodeSettings,
+            GCommands.ShowGCodeSettings,
         );
 
         this._gReference.setType(this._machineType);

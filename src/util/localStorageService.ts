@@ -4,7 +4,12 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-export type LSSLoc = 'global' | 'workspace';
+export const enum StorageLocations {
+    Global = 'global',
+    WorkSpace = 'workspace',
+}
+
+export type StorageLocation = StorageLocations;
 
 import { ExtensionContext, Memento } from 'vscode';
 import { Logger } from './logger';
@@ -13,21 +18,21 @@ export class LocalStorageService {
     private _wsState: Memento;
     private _globalState: Memento;
 
-    constructor(context: ExtensionContext) {
+    constructor(private readonly context: ExtensionContext) {
         this._wsState = context.workspaceState;
         this._globalState = context.globalState;
     }
 
-    public getValue<T>(key: string, loc: LSSLoc): T | undefined {
-        if (loc === 'workspace') {
+    public getValue<T>(key: string, loc: StorageLocation): T | undefined {
+        if (loc === StorageLocations.WorkSpace) {
             return this._wsState.get<T>(key);
         } else {
             return this._globalState.get<T>(key);
         }
     }
 
-    public async setValue<T>(key: string, value: T, loc: LSSLoc): Promise<void> {
-        if (loc === 'workspace') {
+    public async setValue<T>(key: string, value: T, loc: StorageLocation): Promise<void> {
+        if (loc === StorageLocations.WorkSpace) {
             try {
                 await this._wsState.update(key, value);
             } catch (reason) {
@@ -42,8 +47,8 @@ export class LocalStorageService {
         }
     }
 
-    public async deleteValue(key: string, loc: LSSLoc): Promise<void> {
-        if (loc === 'workspace') {
+    public async deleteValue(key: string, loc: StorageLocation): Promise<void> {
+        if (loc === StorageLocations.WorkSpace) {
             try {
                 await this._wsState.update(key, undefined);
             } catch (reason) {

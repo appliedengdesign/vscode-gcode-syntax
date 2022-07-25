@@ -60,9 +60,14 @@
         "onLanguage:gcode",
         "onView:gcode.gcodeTree",
         "onView:gcode.gcodeStats",
+        "onCommand:gcode.addComment",
+        "onCommand:gcode.addLineNumbers",
+        "onCommand:gcode.removeComment",
+        "onCommand:gcode.removeLineNumbers",
+        "onCommand:gcode.showSettings",
+        "onCommand:gcode.supportGCode",
         "onCommand:gcode.views.navTree.refresh",
-        "onCommand:gcode.views.stats.refresh",
-        "onCommand:gcode.supportGCode"
+        "onCommand:gcode.views.stats.refresh"
     ],
     "capabilities": {
         "virtualWorkspaces": true
@@ -353,37 +358,62 @@
             ],
             "commandPalette": [
                 {
-                    "command": "gcode.views.navTree.refresh",
-                    "when": "true"
+                    "command": "gcode.addComment",
+                    "when": "editorLangId == gcode"
                 },
                 {
-                    "command": "gcode.views.stats.refresh",
+                    "command": "gcode.addLineNumbers",
+                    "when": "editorLangId == gcode"
+                },
+                {
+                    "command": "gcode.removeComment",
+                    "when": "editorLangId == gcode"
+                },
+                {
+                    "command": "gcode.removeLineNumbers",
+                    "when": "editorLangId == gcode"
+                },
+                {
+                    "command": "gcode.showSettings",
                     "when": "true"
                 },
                 {
                     "command": "gcode.supportGCode",
                     "when": "false"
+                },
+                {
+                    "command": "gcode.views.navTree.refresh",
+                    "when": "editorLangId == gcode"
+                },
+                {
+                    "command": "gcode.views.stats.refresh",
+                    "when": "editorLangId == gcode"
                 }
             ],
             "editor/context": [
                 {
-                    "when": "resourceLangId == gcode",
+                    "when": "editorLangId == gcode",
                     "command": "gcode.views.navTree.refresh",
                     "group": "gcode"
                 },
                 {
-                    "when": "resourceLangId == gcode",
+                    "when": "editorLangId == gcode",
                     "command": "gcode.views.stats.refresh",
                     "group": "gcode"
                 },
                 {
-                    "when": "resourceLangId == gcode",
+                    "when": "editorLangId == gcode",
                     "command": "gcode.addComment",
                     "group": "gcode"
                 },
                 {
-                    "when": "resourceLangId == gcode",
+                    "when": "editorLangId == gcode",
                     "command": "gcode.removeComment",
+                    "group": "gcode"
+                },
+                {
+                    "when": "editorLangId == gcode",
+                    "command": "gcode.showSettings",
                     "group": "gcode"
                 }
             ]
@@ -464,6 +494,7 @@
         "pretest": "npm run compile",
         "pretty": "prettier --config .prettierrc --loglevel warn .",
         "pub": "vsce publish",
+        "refresh": "npm run clean && shx rm -rf ./node_modules && npm install",
         "test": "node ./out/test/runTests.js",
         "test:unit": "SET TS_NODE_PROJECT=./tsconfig.tests.json && mocha -r ts-node/register test/unit/*.test.ts",
         "vscode:prepublish": "npm run bundle",
