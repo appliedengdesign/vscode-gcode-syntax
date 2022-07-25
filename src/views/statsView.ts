@@ -7,6 +7,7 @@
 import {
     commands,
     ConfigurationChangeEvent,
+    Disposable,
     TextDocumentChangeEvent,
     ThemeIcon,
     TreeItemCollapsibleState,
@@ -44,11 +45,7 @@ export class StatsView extends GView<StatsNode> {
     constructor() {
         super(StatsViewInfo.ViewId, StatsViewInfo.ViewName);
 
-        this._editor = window.activeTextEditor;
-
         this.initialize();
-
-        this.registerCommands();
 
         this._autoRefresh = configuration.getParam(StatsViewInfo.Config.AutoRefresh);
 
@@ -140,19 +137,25 @@ export class StatsView extends GView<StatsNode> {
         }
     }
 
-    protected registerCommands() {
-        // Refresh Command
-        commands.registerCommand(
-            ViewCommands.RefreshStats,
-            () => {
-                if (window.activeTextEditor?.document.languageId === constants.langId) {
-                    void Control.setContext(Contexts.ViewsStatsEnabled, true);
-                }
+    protected registerCommands(): Disposable[] {
+        return [
+            // Refresh Command
+            commands.registerCommand(
+                ViewCommands.RefreshStats,
+                () => {
+                    if (window.activeTextEditor?.document.languageId === constants.langId) {
+                        void Control.setContext(Contexts.ViewsStatsEnabled, true);
+                    }
 
-                void this.refresh();
-            },
-            this,
-        );
+                    // Refresh View
+                    void this.refresh();
+
+                    // Show Stats View
+                    void this.show();
+                },
+                this,
+            ),
+        ];
     }
 
     protected async refresh(element?: StatsNode): Promise<void> {

@@ -5,6 +5,7 @@
 'use strict';
 
 import {
+    commands,
     ConfigurationChangeEvent,
     Disposable,
     Event,
@@ -14,15 +15,16 @@ import {
     TreeDataProvider,
     TreeItem,
     TreeView,
+    TreeViewVisibilityChangeEvent,
     window,
     workspace,
 } from 'vscode';
-import { Control } from '../control';
 import { configuration } from '../util/configuration/config';
+import { Logger } from '../util/logger';
 import { NodeTypes, ViewNode } from './nodes/nodes';
 
 export abstract class GView<TRoot extends ViewNode<NodeTypes>> implements TreeDataProvider<ViewNode>, Disposable {
-    protected _disposable: Disposable | undefined;
+    protected _disposables: Disposable[] = [];
     protected _root: TRoot | undefined;
     protected _tree: TreeView<ViewNode> | undefined;
     protected _editor: TextEditor | undefined;
@@ -33,9 +35,17 @@ export abstract class GView<TRoot extends ViewNode<NodeTypes>> implements TreeDa
         return this._onDidChangeTreeData.event;
     }
 
+    private _onDidChangeVisibility: EventEmitter<TreeViewVisibilityChangeEvent> =
+        new EventEmitter<TreeViewVisibilityChangeEvent>();
+    get onDidChangeVisibility(): Event<TreeViewVisibilityChangeEvent> {
+        return this._onDidChangeVisibility.event;
+    }
+
     protected abstract getRoot(): ViewNode | undefined;
 
-    constructor(public readonly id: string, public readonly name: string) {}
+    constructor(public readonly id: string, public readonly name: string) {
+        this._disposables.push(...this.registerCommands());
+    }
 
     protected ensureRoot() {
         if (this._root === undefined) {
@@ -46,26 +56,40 @@ export abstract class GView<TRoot extends ViewNode<NodeTypes>> implements TreeDa
     }
 
     protected initialize(options: { showCollapseAll?: boolean } = {}) {
-        if (this._disposable) {
-            this._disposable.dispose();
-            this._onDidChangeTreeData = new EventEmitter<ViewNode>();
-        }
-
         this._tree = window.createTreeView(this.id, {
             ...options,
             treeDataProvider: this,
         });
 
-        Control.context.subscriptions.push(configuration.onDidChange(this.onConfigurationChanged, this));
+        this._disposables.push(
+            configuration.onDidChange(this.onConfigurationChanged, this),
+            window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged()),
+            workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e)),
+            this._tree,
+            this._tree.onDidChangeVisibility(this.onVisibilityChanged, this),
+        );
+    }
 
-        window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
-        workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
+    protected onVisibilityChanged(e: TreeViewVisibilityChangeEvent) {
+        this._onDidChangeVisibility.fire(e);
+    }
 
-        this._disposable = Disposable.from(this._tree);
+    get visible(): boolean {
+        return this._tree?.visible ?? false;
+    }
+
+    protected async show() {
+        if (!this.visible) {
+            try {
+                void (await commands.executeCommand(`${this.id}.focus`));
+            } catch (err) {
+                Logger.error(err, 'Error focusing view');
+            }
+        }
     }
 
     dispose() {
-        this._disposable && this._disposable.dispose();
+        Disposable.from(...this._disposables).dispose();
     }
 
     getTreeItem(element: ViewNode): TreeItem | Promise<TreeItem> {
@@ -84,6 +108,8 @@ export abstract class GView<TRoot extends ViewNode<NodeTypes>> implements TreeDa
     getParent(element: ViewNode): ViewNode | undefined {
         return element.getParent();
     }
+
+    protected abstract registerCommands(): Disposable[];
 
     protected abstract refresh(element?: ViewNode): void;
 
