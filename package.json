@@ -59,15 +59,7 @@
     "activationEvents": [
         "onLanguage:gcode",
         "onView:gcode.gcodeTree",
-        "onView:gcode.gcodeStats",
-        "onCommand:gcode.addComment",
-        "onCommand:gcode.addLineNumbers",
-        "onCommand:gcode.removeComment",
-        "onCommand:gcode.removeLineNumbers",
-        "onCommand:gcode.showSettings",
-        "onCommand:gcode.supportGCode",
-        "onCommand:gcode.views.navTree.refresh",
-        "onCommand:gcode.views.stats.refresh"
+        "onView:gcode.gcodeStats"
     ],
     "capabilities": {
         "virtualWorkspaces": true
@@ -228,6 +220,7 @@
                     "enum": [
                         "silent",
                         "errors",
+                        "warnings",
                         "verbose",
                         "debug"
                     ],
