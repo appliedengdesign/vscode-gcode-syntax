@@ -9,7 +9,7 @@
 
 import { Uri, Webview } from 'vscode';
 import { Control } from '../control';
-import { WebViewCommands } from './webviewCommands';
+import { WebViewCommands } from '../util/constants';
 import { GWebView } from './webviews';
 
 const GCodesWebviewInfo = {

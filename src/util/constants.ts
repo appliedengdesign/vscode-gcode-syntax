@@ -90,3 +90,7 @@ export const enum ViewCommands {
     RefreshTree = 'gcode.views.navTree.refresh',
     TreeSelect = 'gcode.views.navTree.select',
 }
+
+export const enum WebViewCommands {
+    ShowCodesWebview = 'gcode.webviews.codes.show',
+}
