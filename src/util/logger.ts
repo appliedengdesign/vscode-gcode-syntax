@@ -9,6 +9,14 @@ import { configuration } from './configuration/config';
 import { defaults, TraceLevel } from './configuration/defaults';
 import { constants } from './constants';
 
+/* Log Levels
+    Silent - No Output
+    Errors - Errors only
+    Warnings - Warnings + Errors
+    Verbose - Standard Outputs + Warnings + Errors
+    Debug - Everything
+*/
+
 const configTraceLevel = 'general.outputLevel';
 
 export class Logger {
@@ -53,48 +61,64 @@ export class Logger {
     }
 
     static debug(message: string): void {
-        if (this.level !== TraceLevel.Debug) {
+        if (
+            this.level === TraceLevel.Silent ||
+            this.level === TraceLevel.Errors ||
+            this.level === TraceLevel.Warnings ||
+            this.level === TraceLevel.Verbose
+        ) {
             return;
         }
 
         if (this.output !== undefined) {
             this.output.appendLine(message);
-        }
-    }
-
-    static error(err: Error, message?: string, handled = false): void {
-        console.error(`${handled ? 'H' : 'Unh'}andled Error: ${err.stack || err.message || err.toString()}`);
-
-        if (this.level === TraceLevel.Silent) {
-            return;
-        }
-
-        if (!err) {
-            return;
-        }
-
-        if (this.output !== undefined) {
-            this.output.appendLine(
-                `${handled ? 'H' : 'Unh'}andled Error: ${err.stack || err.message || err.toString()}`,
-            );
         }
     }
 
     static log(message: string): void {
-        if (this.level === TraceLevel.Verbose || this.level === TraceLevel.Debug) {
-            if (this.output !== undefined) {
-                this.output.appendLine(`${this.level === TraceLevel.Debug ? this.timestamp : ''} ${message}`);
-            }
+        if (
+            this.level === TraceLevel.Silent ||
+            this.level === TraceLevel.Errors ||
+            this.level === TraceLevel.Warnings
+        ) {
+            return;
+        }
+
+        if (this.output !== undefined) {
+            this.output.appendLine(`${this.level === TraceLevel.Debug ? this.timestamp : ''} ${message}`);
         }
     }
 
     static warn(message: string): void {
-        if (this.level === TraceLevel.Silent) {
+        if (this.level === TraceLevel.Silent || this.level === TraceLevel.Errors) {
             return;
         }
 
         if (this.output !== undefined) {
             this.output.appendLine(message);
+        }
+    }
+
+    static error(err: Error | unknown, message?: string): void {
+        if (this.level === TraceLevel.Silent) {
+            return;
+        }
+
+        if (message == null) {
+            const stack = err instanceof Error ? err.stack : undefined;
+
+            if (stack) {
+                const match = /.*\s*?at\s(.+?)\s/.exec(stack);
+                if (match != null) {
+                    message = match[1];
+                }
+            }
+        }
+
+        if (this.output !== undefined) {
+            this.output.appendLine(
+                `${this.level === TraceLevel.Debug ? this.timestamp : ''} ${message ?? ''}\n${String(err)}`,
+            );
         }
     }
 
