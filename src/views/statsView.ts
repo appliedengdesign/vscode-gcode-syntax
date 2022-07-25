@@ -224,7 +224,7 @@ export class StatsView extends GView<StatsNode> {
                 this._children.push(
                     new StatsNode(
                         StatsType.RunTime,
-                        `Est Runtime: ${new Date(this._stats.runtime * 1000).toISOString().substr(11, 8)}`,
+                        `Est Runtime: ${new Date(this._stats.runtime * 1000).toISOString().slice(11, 19)}`,
                         undefined,
                         ResourceType.Stats,
                         TreeItemCollapsibleState.None,
