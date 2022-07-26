@@ -20,7 +20,7 @@ import { MachineTypeControl } from './util/machineType';
 import { GCodeHoverControl } from './hovers/gcodeHoverControl';
 import { defaults } from './util/configuration/defaults';
 import { registerCommands } from './util/commands';
-import { WebviewController } from './webviews/webviewController';
+import { CalcWebviewView } from './webviews/calc/calcWebviewView';
 
 const cfgUnits = 'general.units';
 const cfgAutoRef = {
@@ -40,14 +40,12 @@ export class Control {
     private static _unitsController: GCodeUnitsController | undefined;
     private static _stateController: StateControl;
     private static _hoverController: GCodeHoverControl;
-    private static _webviewController: WebviewController | undefined;
 
     // Views
     private static _statsView: StatsView | undefined;
     private static _navTree: NavTreeView | undefined;
 
     // Webviews
-    private static _codesWebview: CodesWebview | undefined;
     private static _calcWebviewView: CalcWebviewView | undefined;
 
     private static async _checkVersion() {
@@ -156,8 +154,9 @@ export class Control {
             GCommands.ShowSupportGCode,
         );
 
-        // Set Up Webviews
-        context.subscriptions.push((this._webviewController = new WebviewController()));
+        // Webviews
+        context.subscriptions.push((this._calcWebviewView = new CalcWebviewView()));
+
         Logger.log('Done Initializing.');
     }
 

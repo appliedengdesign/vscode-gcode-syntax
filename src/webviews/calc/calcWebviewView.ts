@@ -4,25 +4,48 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import { commands, Disposable, Uri, Webview } from 'vscode';
+import { commands, ConfigurationChangeEvent, Disposable, Uri, Webview } from 'vscode';
 import { Control } from '../../control';
-import { WebViewCommands } from '../../util/constants';
+import { configuration } from '../../util/configuration/config';
+import { defaults } from '../../util/configuration/defaults';
+import { Contexts, WebviewCommands, Webviews, WebviewTitles } from '../../util/constants';
 import { GWebviewView } from '../gWebviewView';
-
-const CalcWebviewInfo = {
-    ViewId: 'gcode.webviews.calc',
-    Title: 'Milling / Turning Calculators',
-};
 
 export class CalcWebviewView extends GWebviewView {
     constructor() {
-        super(CalcWebviewInfo.ViewId, CalcWebviewInfo.Title);
+        super(Webviews.CalcWebviewView, WebviewTitles.CalcWebviewView);
+
+        if ((this._enabled = configuration.getParam(`${this.id.slice(6)}.enabled`) ?? defaults.webviews.calc.enabled)) {
+            void Control.setContext(Contexts.CalcWebviewViewEnabled, true);
+        }
+
+        this._disposables.push(configuration.onDidChange(this.onConfigurationChanged, this));
     }
 
-    registerCommands(): Disposable[] {
+    dispose() {
+        super.dispose();
+    }
+
+    private onConfigurationChanged(e: ConfigurationChangeEvent) {
+        if (configuration.changed(e, `${this.id.slice(6)}.enabled`)) {
+            if (this._enabled) {
+                // Disable
+                void Control.setContext(Contexts.CalcWebviewViewEnabled, false);
+            } else {
+                // Enable
+                void Control.setContext(Contexts.CalcWebviewViewEnabled, true);
+            }
+
+            // void this.refresh();
+
+            this._enabled = configuration.getParam(`${this.id.slice(6)}.enabled`) ?? defaults.webviews.calc.enabled;
+        }
+    }
+
+    protected registerCommands(): Disposable[] {
         return [
             commands.registerCommand(
-                WebViewCommands.ShowCalcWebview,
+                WebviewCommands.ShowCalcWebview,
                 () => {
                     void this.show();
                 },

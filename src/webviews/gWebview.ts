@@ -19,7 +19,7 @@ import {
     window,
 } from 'vscode';
 import { configuration } from '../util/configuration/config';
-import { constants, WebViewCommands } from '../util/constants';
+import { constants, WebviewCommands } from '../util/constants';
 import { Control } from '../control';
 
 export abstract class GWebview implements Disposable {
@@ -31,7 +31,7 @@ export abstract class GWebview implements Disposable {
     constructor(
         public readonly id: string,
         public readonly title: string,
-        showCommand: WebViewCommands,
+        showCommand: WebviewCommands,
         private readonly _column?: ViewColumn,
     ) {
         this._disposable = Disposable.from(

@@ -21,10 +21,11 @@ import { Logger } from '../util/logger';
 
 export abstract class GWebviewView implements WebviewViewProvider, Disposable {
     protected readonly _disposables: Disposable[] = [];
+    protected _enabled: boolean | undefined;
     private _view: WebviewView | undefined;
     private _title: string;
 
-    constructor(public readonly id: string, public readonly title: string) {
+    constructor(public readonly id: string, title: string) {
         this._title = title;
 
         this._disposables.push(window.registerWebviewViewProvider(id, this));
@@ -35,8 +36,37 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
         Disposable.from(...this._disposables).dispose();
     }
 
+    isEnabled(): boolean {
+        return this._enabled ?? false;
+    }
+
+    disable() {
+        this._enabled = false;
+    }
+
     get visible() {
         return this._view?.visible ?? false;
+    }
+
+    get title(): string {
+        return this._view?.title ?? this._title;
+    }
+
+    set title(title: string) {
+        this._title = title;
+        if (this._view) {
+            this._view.title = title;
+        }
+    }
+
+    get description(): string | undefined {
+        return this._view?.description;
+    }
+
+    set description(desc: string | undefined) {
+        if (this._view) {
+            this._view.description = desc;
+        }
     }
 
     async show(options?: { preserveFocus?: boolean }) {
@@ -57,7 +87,7 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
         webviewView.webview.options = this.getWebviewOptions();
         webviewView.title = this.title;
 
-        webviewView.webview.html = await this.getHtml(this._view.webview);
+        await this.refresh();
     }
 
     protected async refresh(): Promise<void> {

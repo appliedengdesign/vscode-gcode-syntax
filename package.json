@@ -342,10 +342,10 @@
                 "title": "Webviews",
                 "order": 30,
                 "properties": {
-                    "gcode.webviews.enabled": {
+                    "gcode.webviews.calc.enabled": {
                         "type": "boolean",
                         "default": true,
-                        "markdownDescription": "Enable or Disable Webviews",
+                        "markdownDescription": "Enable Milling / Turning Calculator",
                         "scope": "window"
                     }
                 }
@@ -380,7 +380,7 @@
                     "name": "Milling / Turning Calculator",
                     "contextualTitle": "G-Code",
                     "visibility": "collapsed",
-                    "when": "gcode:webviews:enabled"
+                    "when": "gcode:webviews:calc:enabled"
                 }
             ]
         },
@@ -474,7 +474,7 @@
                     "group": "gcode"
                 },
                 {
-                    "when": "editorLangId == gcode && gcode:webviews:enabled",
+                    "when": "editorLangId == gcode && gcode:webviews:calc:enabled",
                     "command": "gcode.webviews.calc.show",
                     "group": "gcode"
                 },
