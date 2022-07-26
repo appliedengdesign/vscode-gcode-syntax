@@ -164,6 +164,8 @@ export class Control {
         Logger.log('Terminating Extension...');
 
         // Dispose Views
+        this._calcWebviewView?.dispose();
+        this._statsView?.dispose();
         this._statsView?.dispose();
         this._navTree?.dispose();
 

@@ -377,10 +377,7 @@
                 {
                     "type": "webview",
                     "id": "gcode.webviews.calc",
-                    "name": "Machining Calculator",
-                    "contextualTitle": "G-Code",
-                    "visibility": "collapsed",
-                    "when": "gcode:webviews:calc:enabled"
+                    "name": "Milling / Turning Calculator"
                 }
             ]
         },

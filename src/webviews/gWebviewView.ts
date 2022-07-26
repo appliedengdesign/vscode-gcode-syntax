@@ -21,52 +21,21 @@ import { Logger } from '../util/logger';
 
 export abstract class GWebviewView implements WebviewViewProvider, Disposable {
     protected readonly _disposables: Disposable[] = [];
-    protected _enabled: boolean | undefined;
     private _view: WebviewView | undefined;
     private _title: string;
 
-    constructor(public readonly id: string, title: string) {
+    constructor(public readonly id: string, public readonly title: string) {
         this._title = title;
 
         this._disposables.push(window.registerWebviewViewProvider(id, this));
-        this._disposables.push(...this.registerCommands());
     }
 
     dispose() {
         Disposable.from(...this._disposables).dispose();
     }
 
-    isEnabled(): boolean {
-        return this._enabled ?? false;
-    }
-
-    disable() {
-        this._enabled = false;
-    }
-
     get visible() {
         return this._view?.visible ?? false;
-    }
-
-    get title(): string {
-        return this._view?.title ?? this._title;
-    }
-
-    set title(title: string) {
-        this._title = title;
-        if (this._view) {
-            this._view.title = title;
-        }
-    }
-
-    get description(): string | undefined {
-        return this._view?.description;
-    }
-
-    set description(desc: string | undefined) {
-        if (this._view) {
-            this._view.description = desc;
-        }
     }
 
     async show(options?: { preserveFocus?: boolean }) {
@@ -87,7 +56,7 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
         webviewView.webview.options = this.getWebviewOptions();
         webviewView.title = this.title;
 
-        await this.refresh();
+        webviewView.webview.html = await this.getHtml(this._view.webview);
     }
 
     protected async refresh(): Promise<void> {
@@ -97,8 +66,6 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
     }
 
     protected abstract getHtml(webview: Webview): Promise<string>;
-
-    protected abstract registerCommands(): Disposable[];
 
     protected getNonce(): string {
         let text = '';
@@ -114,7 +81,8 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
     protected getWebviewOptions(): WebviewOptions {
         return {
             enableScripts: true,
-            localResourceRoots: [Uri.joinPath(Control.context.extensionUri)],
+            // enableCommandUris: true,
+            localResourceRoots: [Uri.joinPath(Control.context.extensionUri, 'resources', 'webviews')],
         };
     }
 }
