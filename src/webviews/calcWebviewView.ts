@@ -4,7 +4,8 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import { Uri, Webview } from 'vscode';
+import { TextDecoder } from 'util';
+import { Uri, Webview, workspace } from 'vscode';
 import { Control } from '../control';
 import { GWebviewView } from './gWebviewView';
 
@@ -28,7 +29,21 @@ export class CalcWebviewView extends GWebviewView {
             Uri.joinPath(Control.context.extensionUri, 'resources', 'webviews', 'css', 'vscode.css'),
         );
 
+        // vscode-webview-ui-toolkit
+        const toolkitUri = webview.asWebviewUri(
+            Uri.joinPath(
+                Control.context.extensionUri,
+                'node_modules',
+                '@vscode',
+                'webview-ui-toolkit',
+                'dist',
+                'toolkit.js',
+            ),
+        );
+
         const nonce = this.getNonce();
+
+        // const body = new TextDecoder('utf8').decode(await workspace.fs.readFile())
 
         return Promise.resolve(`<!DOCTYPE html>
                 <html lang="en">
@@ -36,17 +51,32 @@ export class CalcWebviewView extends GWebviewView {
                         <meta charset="UTF-8">
                         
                         <meta http-equiv="Content-Security-Policy" content="default-src 'none'; 
-                        style-src ${webview.cspSource}; img-src ${webview.cspSource} https:; 
+                        style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} https:; 
                         script-src 'nonce-${nonce}';">
                         
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+                        <script nonce="${nonce}" type="module" src="${String(toolkitUri)}"></script>
                         
                         <link href="${String(stylesReset)}" rel="stylesheet">
                         <link href="${String(stylesMain)}" rel="stylesheet">
                         
                         <title>Calc</title>
                 </head>
-                <body>Calculators</body>
+                <body>
+                    <vscode-panels>
+                        <vscode-panel-tab id="tab-1">MILLING</vscode-panel-tab>
+                        <vscode-panel-tab id="tab-2">TURNING</vscode-panel-tab>
+
+                        <vscode-panel-view id="view-1">
+                            <vscode-text-field id="SFM" placeholder="SFM"</vscode-text-field>
+                            <vscode-button id="rpm-calc">Calculate></vscode-button>
+
+                            <section id="rpm-results"></section>
+                        </vscode-panel-view>
+                        <vscode-panel-view id="view-2"></vscode-panel-view>
+                    </vscode-panels>
+                </body>
                 </html>`);
     }
 }
