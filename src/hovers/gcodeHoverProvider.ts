@@ -29,7 +29,7 @@ export class GCodeHoverProvider implements HoverProvider {
     }
 
     private lookup(text: string): MarkdownString | undefined {
-        const ref = Control.machineType?.gReference;
+        const ref = Control.machineTypeController?.gReference;
 
         const code = ref?.get(text);
 
