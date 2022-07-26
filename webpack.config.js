@@ -5,7 +5,7 @@
 
 'use strict';
 
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const path = require('path');
 
@@ -14,12 +14,11 @@ const path = require('path');
 
 function getExtensionConfig(mode, env) {
     const plugins = [];
+
     plugins.push(
-        new ForkTsCheckerWebpackPlugin({
-            async: false,
-            // eslint: { enabled: true, files: 'src/**/*.ts', options: { cache: true } },
-            formatter: 'basic',
-        }),
+        new ESLintPlugin({
+            extensions: ['ts']
+        })
     );
 
     if (env.analyzeBundle) {
