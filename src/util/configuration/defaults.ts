@@ -47,10 +47,10 @@ export interface GCodeConfiguration {
         stats: {
             autoRefresh: boolean;
         };
+    };
 
-        webviews: {
-            enabled: boolean;
-        };
+    webviews: {
+        enabled: boolean;
     };
 }
 
@@ -88,8 +88,8 @@ export const defaults: GCodeConfiguration = {
         stats: {
             autoRefresh: false,
         },
-        webviews: {
-            enabled: true,
-        },
+    },
+    webviews: {
+        enabled: true,
     },
 };

@@ -74,6 +74,7 @@ export enum Contexts {
     MachineType = 'gcode:general:machineType',
     ViewsNavTreeEnabled = 'gcode:views:navTree:enabled',
     ViewsStatsEnabled = 'gcode:views:stats:enabled',
+    WebviewsEnabled = 'gcode:webviews:enabled',
 }
 
 export enum GCommands {
@@ -93,4 +94,5 @@ export const enum ViewCommands {
 
 export const enum WebViewCommands {
     ShowCodesWebview = 'gcode.webviews.codes.show',
+    ShowCalcWebview = 'gcode.webviews.calc.show',
 }

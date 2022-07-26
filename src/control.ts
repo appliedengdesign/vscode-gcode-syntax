@@ -16,12 +16,11 @@ import { constants, Contexts, GCommands, PIcon, VSBuiltInCommands } from './util
 import { Version } from './util/version';
 import { Messages } from './util/messages';
 import { StateControl } from './util/stateControl';
-import { CodesWebview } from './webviews/codesWebview';
 import { MachineTypeControl } from './util/machineType';
 import { GCodeHoverControl } from './hovers/gcodeHoverControl';
 import { defaults } from './util/configuration/defaults';
 import { registerCommands } from './util/commands';
-import { CalcWebviewView } from './webviews/calcWebviewView';
+import { WebviewController } from './webviews/webviewController';
 
 const cfgUnits = 'general.units';
 const cfgAutoRef = {
@@ -41,6 +40,7 @@ export class Control {
     private static _unitsController: GCodeUnitsController | undefined;
     private static _stateController: StateControl;
     private static _hoverController: GCodeHoverControl;
+    private static _webviewController: WebviewController | undefined;
 
     // Views
     private static _statsView: StatsView | undefined;
@@ -157,8 +157,7 @@ export class Control {
         );
 
         // Set Up Webviews
-        context.subscriptions.push((this._codesWebview = new CodesWebview()));
-        context.subscriptions.push((this._calcWebviewView = new CalcWebviewView()));
+        context.subscriptions.push((this._webviewController = new WebviewController()));
         Logger.log('Done Initializing.');
     }
 
@@ -166,10 +165,8 @@ export class Control {
         Logger.log('Terminating Extension...');
 
         // Dispose Views
-        this._codesWebview?.dispose();
-        this._calcWebviewView?.dispose();
         this._statsView?.dispose();
-        this._statsView?.dispose();
+        this._navTree?.dispose();
 
         // Dispose Controllers
         this._hoverController.dispose();

@@ -28,6 +28,7 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
         this._title = title;
 
         this._disposables.push(window.registerWebviewViewProvider(id, this));
+        this._disposables.push(...this.registerCommands());
     }
 
     dispose() {
@@ -66,6 +67,8 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
     }
 
     protected abstract getHtml(webview: Webview): Promise<string>;
+
+    protected abstract registerCommands(): Disposable[];
 
     protected getNonce(): string {
         let text = '';

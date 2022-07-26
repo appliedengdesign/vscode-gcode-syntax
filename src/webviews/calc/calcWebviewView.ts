@@ -4,10 +4,10 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import { TextDecoder } from 'util';
-import { Uri, Webview, workspace } from 'vscode';
-import { Control } from '../control';
-import { GWebviewView } from './gWebviewView';
+import { commands, Disposable, Uri, Webview } from 'vscode';
+import { Control } from '../../control';
+import { WebViewCommands } from '../../util/constants';
+import { GWebviewView } from '../gWebviewView';
 
 const CalcWebviewInfo = {
     ViewId: 'gcode.webviews.calc',
@@ -17,6 +17,18 @@ const CalcWebviewInfo = {
 export class CalcWebviewView extends GWebviewView {
     constructor() {
         super(CalcWebviewInfo.ViewId, CalcWebviewInfo.Title);
+    }
+
+    registerCommands(): Disposable[] {
+        return [
+            commands.registerCommand(
+                WebViewCommands.ShowCalcWebview,
+                () => {
+                    void this.show();
+                },
+                this,
+            ),
+        ];
     }
 
     async getHtml(webview: Webview): Promise<string> {
@@ -42,8 +54,6 @@ export class CalcWebviewView extends GWebviewView {
         );
 
         const nonce = this.getNonce();
-
-        // const body = new TextDecoder('utf8').decode(await workspace.fs.readFile())
 
         return Promise.resolve(`<!DOCTYPE html>
                 <html lang="en">
