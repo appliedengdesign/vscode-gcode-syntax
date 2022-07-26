@@ -81,8 +81,7 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
     protected getWebviewOptions(): WebviewOptions {
         return {
             enableScripts: true,
-            // enableCommandUris: true,
-            localResourceRoots: [Uri.joinPath(Control.context.extensionUri, 'resources', 'webviews')],
+            localResourceRoots: [Uri.joinPath(Control.context.extensionUri)],
         };
     }
 }
