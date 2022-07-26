@@ -345,7 +345,7 @@
                     "gcode.webviews.calc.enabled": {
                         "type": "boolean",
                         "default": true,
-                        "markdownDescription": "Enable Machining Calculator",
+                        "markdownDescription": "Enable Milling / Turning Calculator",
                         "scope": "window"
                     }
                 }
@@ -377,7 +377,10 @@
                 {
                     "type": "webview",
                     "id": "gcode.webviews.calc",
-                    "name": "Milling / Turning Calculator"
+                    "name": "Milling / Turning Calculator",
+                    "contextualTitle": "G-Code",
+                    "visibility": "collapsed",
+                    "when": "gcode:webviews:calc:enabled"
                 }
             ]
         },
