@@ -563,6 +563,7 @@
         "webpack-cli": "^4.10.0"
     },
     "dependencies": {
-        "@appliedengdesign/gcode-reference": "^0.0.7"
+        "@appliedengdesign/gcode-reference": "^0.0.7",
+        "@vscode/webview-ui-toolkit": "^1.0.0"
     }
 }
