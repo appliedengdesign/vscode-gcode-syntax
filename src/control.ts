@@ -21,6 +21,7 @@ import { MachineTypeControl } from './util/machineType';
 import { GCodeHoverControl } from './hovers/gcodeHoverControl';
 import { defaults } from './util/configuration/defaults';
 import { registerCommands } from './util/commands';
+import { CalcWebviewView } from './webviews/calcWebviewView';
 
 const cfgUnits = 'general.units';
 const cfgAutoRef = {
@@ -47,6 +48,7 @@ export class Control {
 
     // Webviews
     private static _codesWebview: CodesWebview | undefined;
+    private static _calcWebviewView: CalcWebviewView | undefined;
 
     private static async _checkVersion() {
         const prevVer = this._stateController.getVersion();
@@ -156,7 +158,7 @@ export class Control {
 
         // Set Up Webviews
         context.subscriptions.push((this._codesWebview = new CodesWebview()));
-
+        context.subscriptions.push((this._calcWebviewView = new CalcWebviewView()));
         Logger.log('Done Initializing.');
     }
 
@@ -165,6 +167,7 @@ export class Control {
 
         // Dispose Views
         this._codesWebview?.dispose();
+        this._calcWebviewView?.dispose();
         this._statsView?.dispose();
         this._statsView?.dispose();
 
@@ -196,10 +199,6 @@ export class Control {
         return this._version;
     }
 
-    static get machineType() {
-        return this._machineTypeControl;
-    }
-
     static get navTree() {
         if (this._navTree === undefined) {
             this._context.subscriptions.push((this._navTree = new NavTreeView()));
@@ -226,5 +225,13 @@ export class Control {
 
     static get stateController() {
         return this._stateController;
+    }
+
+    static get machineTypeController() {
+        return this._machineTypeControl;
+    }
+
+    static get hoverController() {
+        return this._hoverController;
     }
 }

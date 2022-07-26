@@ -343,14 +343,21 @@
         "views": {
             "gcode": [
                 {
+                    "type": "tree",
                     "id": "gcode.views.navTree",
                     "name": "Tree",
                     "contextualTitle": "G-Code"
                 },
                 {
+                    "type": "tree",
                     "id": "gcode.views.stats",
                     "name": "Stats",
                     "contextualTitle": "G-Code"
+                },
+                {
+                    "type": "webview",
+                    "id": "gcode.webviews.calc",
+                    "name": "Milling / Turning Calculator"
                 }
             ]
         },
