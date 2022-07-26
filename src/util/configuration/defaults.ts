@@ -50,7 +50,9 @@ export interface GCodeConfiguration {
     };
 
     webviews: {
-        enabled: boolean;
+        calc: {
+            enabled: boolean;
+        };
     };
 }
 
@@ -90,6 +92,8 @@ export const defaults: GCodeConfiguration = {
         },
     },
     webviews: {
-        enabled: true,
+        calc: {
+            enabled: true,
+        },
     },
 };
