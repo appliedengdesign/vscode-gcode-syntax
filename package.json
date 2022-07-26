@@ -326,7 +326,7 @@
                 "gcode.webviews.enabled": {
                     "type": "boolean",
                     "default": true,
-                    "markdownDescription": "Enable or Disable WebViews",
+                    "markdownDescription": "Enable or Disable Webviews",
                     "scope": "window"
                 }
             }
@@ -357,7 +357,10 @@
                 {
                     "type": "webview",
                     "id": "gcode.webviews.calc",
-                    "name": "Milling / Turning Calculator"
+                    "name": "Milling / Turning Calculator",
+                    "contextualTitle": "G-Code",
+                    "visibility": "collapsed",
+                    "when": "gcode:webviews:enabled"
                 }
             ]
         },
@@ -423,6 +426,10 @@
                 {
                     "command": "gcode.views.stats.refresh",
                     "when": "editorLangId == gcode"
+                },
+                {
+                    "command": "gcode.webviews.calc.show",
+                    "when": "editorLangId == gcode"
                 }
             ],
             "editor/context": [
@@ -444,6 +451,38 @@
                 {
                     "when": "editorLangId == gcode",
                     "command": "gcode.removeComment",
+                    "group": "gcode"
+                },
+                {
+                    "when": "editorLangId == gcode && gcode:webviews:enabled",
+                    "command": "gcode.webviews.calc.show",
+                    "group": "gcode"
+                },
+                {
+                    "when": "editorLangId == gcode",
+                    "command": "gcode.showSettings",
+                    "group": "gcode"
+                }
+            ],
+            "editor/title/context": [
+                {
+                    "when": "editorLangId == gcode",
+                    "command": "gcode.views.navTree.refresh",
+                    "group": "gcode"
+                },
+                {
+                    "when": "editorLangId == gcode",
+                    "command": "gcode.views.stats.refresh",
+                    "group": "gcode"
+                },
+                {
+                    "when": "editorLangId == gcode",
+                    "command": "gcode.addLineNumbers",
+                    "group": "gcode"
+                },
+                {
+                    "when": "editorLangId == gcode",
+                    "command": "gcode.removeLineNumbers",
                     "group": "gcode"
                 },
                 {
@@ -501,11 +540,6 @@
                 "category": "G-Code"
             },
             {
-                "command": "gcode.webviews.codes.show",
-                "title": "G-Code: Show Code Reference",
-                "category": "G-Code"
-            },
-            {
                 "command": "gcode.addLineNumbers",
                 "title": "G-Code: Add Line Numbers",
                 "category": "G-Code"
@@ -513,6 +547,16 @@
             {
                 "command": "gcode.removeLineNumbers",
                 "title": "G-Code: Remove Line Numbers",
+                "category": "G-Code"
+            },
+            {
+                "command": "gcode.webviews.codes.show",
+                "title": "G-Code: Show Code Reference",
+                "category": "G-Code"
+            },
+            {
+                "command": "gcode.webviews.calc.show",
+                "title": "G-Code: Show Calculator",
                 "category": "G-Code"
             }
         ]
@@ -545,11 +589,12 @@
         "@typescript-eslint/eslint-plugin": "^5.38.0",
         "@typescript-eslint/parser": "^5.38.0",
         "chai": "^4.3.6",
+        "copy-webpack-plugin": "^11.0.0",
         "eslint": "^8.23.1",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-import": "^2.26.0",
         "eslint-plugin-prettier": "^4.2.1",
-        "fork-ts-checker-webpack-plugin": "^7.2.13",
+        "eslint-webpack-plugin": "^3.2.0",
         "glob": "^8.0.3",
         "mocha": "^10.0.0",
         "prettier": "^2.7.1",
