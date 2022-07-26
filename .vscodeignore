@@ -8,6 +8,7 @@
 .prettierignore
 .prettierrc
 .vscode-test/**
+.vscode-test-web/**
 .vscode/**
 **/*.map
 CODE_OF_CONDUCT.md
@@ -18,9 +19,12 @@ images/**/[^logo]*
 out/test/**
 package-lock.json
 samplenc/**
+scripts/**
 src/**
 test/**
 out/**
+node_modules/**
 tsconfig**
 tsconfig.tsbuildinfo
-webpack.config.js
+webpack.config*.js
+.DS_Store
