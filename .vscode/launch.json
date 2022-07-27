@@ -26,7 +26,7 @@
                 "group": "Launch Extension",
                 "order": 1
             },
-            "preLaunchTask": "npm: webpack",
+            "preLaunchTask": "npm: build",
             "skipFiles": [
                 "<node_internals>/**",
                 "**/node_modules/**",
@@ -55,7 +55,7 @@
                 "group": "Launch Extension",
                 "order": 2
             },
-            "preLaunchTask": "npm: webpack",
+            "preLaunchTask": "npm: build",
             "skipFiles": [
                 "<node_internals>/**",
                 "**/node_modules/**",
@@ -82,10 +82,11 @@
                 "group": "Launch Extension",
                 "order": 3
             },
-            "preLaunchTask": "npm: webpack",
+            "preLaunchTask": "npm: build",
             "skipFiles": [
                 "<node_internals>/**",
-                "**/node_modules/**"
+                "**/node_modules/**",
+                "**/resources/app/out/vs/**"
             ],
             "smartStep": true,
             "sourceMaps": true,
@@ -127,7 +128,8 @@
             ],
             "skipFiles": [
                 "<node_internals>/**",
-                "**/node_modules/**"
+                "**/node_modules/**",
+                "**/resources/app/out/vs/**"
             ],
             "presentation": {
                 "hidden": false,

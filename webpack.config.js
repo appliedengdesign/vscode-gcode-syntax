@@ -7,10 +7,26 @@
 
 const ESLintPlugin = require('eslint-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 
 // @ts-check
 /** @typedef {import('webpack').Configuration} */
+
+module.exports = function (env, argv) {
+    const mode = argv.mode || 'none';
+
+    env = {
+        analyzeBundle: false,
+        analyzeDeps: false,
+        ...env,
+    };
+
+    return [
+        getExtensionConfig(mode, env),
+        getWebviewsConfig(mode, env),
+    ];
+};
 
 function getExtensionConfig(mode, env) {
     const plugins = [];
@@ -36,7 +52,6 @@ function getExtensionConfig(mode, env) {
             filename: 'extension.js',
             libraryTarget: 'commonjs2',
             devtoolFallbackModuleFilenameTemplate: '../[resource-path]',
-            clean: true,
         },
 
         devtool: 'source-map',
@@ -48,6 +63,7 @@ function getExtensionConfig(mode, env) {
 
         resolve: {
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+            mainFields: ['browser', 'module', 'main'],
         },
 
         module: {
@@ -67,6 +83,10 @@ function getExtensionConfig(mode, env) {
 
         plugins: plugins,
 
+        infrastructureLogging: {
+            level: 'log',
+        },
+
         stats: {
             preset: 'error-warnings',
             assets: true,
@@ -81,14 +101,86 @@ function getExtensionConfig(mode, env) {
     return config;
 }
 
-module.exports = function (env, argv) {
-    const mode = argv.mode || 'none';
+function getWebviewsConfig(mode, env) {
+    const basePath = path.join(__dirname, 'src', 'webviews', 'apps');
+    const plugins = [];
 
-    env = {
-        analyzeBundle: false,
-        analyzeDeps: false,
-        ...env,
+    plugins.push(
+        new ESLintPlugin({
+            extensions: ['ts']
+        })
+    );
+
+    plugins.push(
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+        })
+    );
+
+    const config = {
+        name: 'webviews',
+        mode: mode,
+        target: 'web',
+        devtool: 'source-map',
+        context: basePath,
+        
+        entry: {
+            'calc/calc': './calc/calc.ts'
+        },
+
+        output: {
+            filename: '[name].js',
+            path: path.join(__dirname, 'dist', 'webviews'),
+            publicPath: '#{root}/dist/webviews/[name]',
+        },
+
+        module: {
+            rules: [
+                {
+                    test: /\.scss$/,
+                    use: [
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                        },
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                sourceMap: true,
+                                url: false,
+                            },
+                        },
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                sourceMap: true,
+                            }
+                        }
+                    ],
+                    exclude: /node_modules/,
+                },
+            ],
+        },
+
+        resolve: {
+            extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+        },
+
+        plugins: plugins,
+
+        infrastructureLogging: {
+            level: 'log',
+        },
+
+        stats: {
+            preset: 'error-warnings',
+            assets: true,
+            colors: true,
+            env: true,
+            errorsCount: true,
+            warningsCount: true,
+            timings: true,
+        },
     };
 
-    return getExtensionConfig(mode, env);
-};
+    return config;
+}
