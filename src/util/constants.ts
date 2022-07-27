@@ -91,7 +91,7 @@ export enum Webviews {
 }
 
 export enum WebviewTitles {
-    CalcWebviewView = 'Milling / Turning Calculators',
+    CalcWebviewView = 'Machining Calculators',
 }
 
 export enum ViewCommands {
