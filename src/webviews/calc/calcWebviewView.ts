@@ -56,12 +56,8 @@ export class CalcWebviewView extends GWebviewView {
 
     async getHtml(webview: Webview): Promise<string> {
         // CSS styles
-        const stylesReset = webview.asWebviewUri(
-            Uri.joinPath(Control.context.extensionUri, 'resources', 'webviews', 'css', 'reset.css'),
-        );
-
         const stylesMain = webview.asWebviewUri(
-            Uri.joinPath(Control.context.extensionUri, 'resources', 'webviews', 'css', 'vscode.css'),
+            Uri.joinPath(Control.context.extensionUri, 'dist', 'webviews', 'calc', 'calc.css'),
         );
 
         // vscode-webview-ui-toolkit
@@ -74,6 +70,10 @@ export class CalcWebviewView extends GWebviewView {
                 'dist',
                 'toolkit.js',
             ),
+        );
+
+        const calcJsUri = webview.asWebviewUri(
+            Uri.joinPath(Control.context.extensionUri, 'dist', 'webviews', 'calc', 'calc.js'),
         );
 
         const nonce = this.getNonce();
@@ -90,20 +90,21 @@ export class CalcWebviewView extends GWebviewView {
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
                         <script nonce="${nonce}" type="module" src="${String(toolkitUri)}"></script>
+                        <script nonce="${nonce}" type="module" src="${String(calcJsUri)}"></script>
                         
-                        <link href="${String(stylesReset)}" rel="stylesheet">
                         <link href="${String(stylesMain)}" rel="stylesheet">
                         
-                        <title>Calc</title>
+                        <title>${this.title}</title>
                 </head>
                 <body>
                     <vscode-panels>
-                        <vscode-panel-tab id="tab-1">MILLING</vscode-panel-tab>
-                        <vscode-panel-tab id="tab-2">TURNING</vscode-panel-tab>
+                        <vscode-panel-tab id="tab-1">Cutting Speed</vscode-panel-tab>
+                        <vscode-panel-tab id="tab-2">Feed Rate</vscode-panel-tab>
 
                         <vscode-panel-view id="view-1">
-                            <vscode-text-field id="SFM" placeholder="SFM"</vscode-text-field>
-                            <vscode-button id="rpm-calc">Calculate></vscode-button>
+                            <vscode-text-field id="sfm" placeholder="SFM" size="6"></vscode-text-field>
+                            <vscode-text-field id="tool-dia" placeholder="Tool Dia" size="6"></vscode-text-field>
+                            <vscode-button id="rpm-calc">Calculate RPM</vscode-button>
 
                             <section id="rpm-results"></section>
                         </vscode-panel-view>
