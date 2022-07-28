@@ -1,4 +1,3 @@
-// A launch configuration that launches the extension inside a new window
 {
     "version": "0.2.0",
     "configurations": [
@@ -34,7 +33,7 @@
             ],
             "smartStep": true,
             "sourceMaps": true,
-            "trace": true,
+            "trace": true
         },
         {
             "name": "Run G-Code (Sandbox)",
@@ -104,9 +103,9 @@
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
-            "preLaunchTask": "npm: webpack",
+            "preLaunchTask": "npm: build",
             "presentation": {
-                "hidden": false,
+                "hidden": true,
                 "group": "Web Extension",
                 "order": 1
             }

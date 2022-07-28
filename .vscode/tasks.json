@@ -1,38 +1,23 @@
 {
 	"version": "2.0.0",
+	"presentation": {
+		"echo": false,
+		"reveal": "always",
+		"focus": false,
+		"panel": "dedicated",
+		"showReuseMessage": false,
+		"clear": false
+	},
 	"tasks": [
 		{
 			"type": "npm",
-			"script": "watch",
-			"problemMatcher": "$tsc-watch",
-			"isBackground": true,
-			"presentation": {
-				"echo": true,
-				"reveal": "never",
-				"focus": false,
-				"panel": "shared",
-				"showReuseMessage": true,
-				"clear": false
-			},
+			"script": "build",
+			"problemMatcher": [
+				"$ts-webpack",
+			],
 			"group": {
 				"kind": "build",
 				"isDefault": true
-			}
-		},
-		{
-			"type": "npm",
-			"script": "webpack",
-			"problemMatcher": "$tsc-watch",
-			"label": "npm: webpack",
-			"detail": "webpack --mode development",
-			"isBackground": true,
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared",
-				"showReuseMessage": true,
-				"clear": false
 			}
 		}
 	]
