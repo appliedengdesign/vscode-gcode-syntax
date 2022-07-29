@@ -10,6 +10,7 @@ import { configuration } from '../../util/configuration/config';
 import { defaults } from '../../util/configuration/defaults';
 import { Contexts, WebviewCommands, Webviews, WebviewTitles } from '../../util/constants';
 import { GWebviewView } from '../gWebviewView';
+import { getNonce } from '../helpers';
 
 export class CalcWebviewView extends GWebviewView {
     constructor() {
@@ -76,7 +77,7 @@ export class CalcWebviewView extends GWebviewView {
             Uri.joinPath(Control.context.extensionUri, 'dist', 'webviews', 'calc', 'calc.js'),
         );
 
-        const nonce = this.getNonce();
+        const nonce = getNonce();
 
         return Promise.resolve(`<!DOCTYPE html>
                 <html lang="en">
