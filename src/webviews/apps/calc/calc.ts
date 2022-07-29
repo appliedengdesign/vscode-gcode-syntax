@@ -1,5 +1,9 @@
-import './calc.scss';
+export class CalcApp {
+    private btn: string;
 
-export class CalcApp {}
+    constructor() {
+        this.btn = 'test';
+    }
+}
 
 new CalcApp();
