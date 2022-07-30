@@ -12,6 +12,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CspHtmlPlugin = require('csp-html-webpack-plugin');
 const path = require('path');
 const fs = require('fs');
 
@@ -50,6 +51,8 @@ function getExtensionConfig(mode, env) {
         name: 'extension',
         mode: mode,
         target: 'node',
+        devtool: 'source-map',
+
         entry: './src/extension.ts',
 
         output: {
@@ -58,8 +61,6 @@ function getExtensionConfig(mode, env) {
             libraryTarget: 'commonjs2',
             devtoolFallbackModuleFilenameTemplate: '../[resource-path]',
         },
-
-        devtool: 'source-map',
 
         externals: {
             vscode: 'commonjs vscode',
@@ -122,6 +123,8 @@ function getWebviewsConfig(mode, env) {
 
     plugins.push(...getWebviewPlugins(outPath, basePath, entries));
 
+    plugins.push(getCspHtml(mode, env));
+
     const config = {
         name: 'webviews',
         mode: mode,
@@ -135,7 +138,6 @@ function getWebviewsConfig(mode, env) {
             path: path.resolve(__dirname, 'dist', 'webviews'),
             filename: `[name]/[name][ext]`,
             publicPath: '{root}/dist/webviews/',
-            clean: true,
         },
 
         plugins: plugins,
@@ -148,6 +150,10 @@ function getWebviewsConfig(mode, env) {
                     use: [
                         {
                             loader: 'ts-loader',
+                            options: {
+                                configFile: path.resolve(basePath, 'tsconfig.json'),
+                                transpileOnly: true,
+                            }
                         },
                     ],
                     exclude: /node_modules/,
@@ -217,9 +223,6 @@ function getWebviewEntries(_path) {
         // App TS File
         result[item] = { import: [`./${item}/${item}.ts`, `./${item}/${item}.scss` ], filename: `${item}/${item}.js` };
 
-        // App SCSS File
-        //result[`${item}.scss`] = { import: `./${item}/${item}.scss`, filename: `${item}/${item}.css` };
-
         return result;
     }, {});
     
@@ -248,6 +251,7 @@ function getWebviewPlugins(_outPath, _basePath, entries) {
                 template: path.resolve(_basePath, entry, `${entry}.html`),
                 inject: 'head',
                 filename: path.resolve(_outPath, `${entry}`, `${entry}.html`),
+                scriptLoading: 'module',
             }),
         );
 
@@ -264,4 +268,33 @@ function getWebviewPlugins(_outPath, _basePath, entries) {
     //console.log(webviewPlugins);
     //process.exit(1);
     return webviewPlugins;
+}
+
+function getCspHtml(mode, env) {
+    const cspPlugin = new CspHtmlPlugin(
+        {
+            'default-src': "'none'",
+            'img-src': [ '{cspSource}', 'https:', 'data:' ],
+            'script-src': [ '{cspSource}', "'nonce-{cspNonce}'" ],
+            'style-src': [ '{cspSource}', "'nonce-{cspNonce}'", "'unsafe-inline'" ],
+            'font-src': [ '{cspSource}' ],
+        },
+        {
+            enabled: true,
+            hashingMethod: 'sha256',
+            hashEnabled: {
+                'script-src': true,
+                'style-src:': true,
+            },
+            nonceEnabled: {
+                'script-src': true,
+                'style-src': true,
+            },
+        },
+    );
+
+    // Override nonce creation
+    cspPlugin.createNonce = () => '{cspNonce}';
+
+    return cspPlugin;
 }
