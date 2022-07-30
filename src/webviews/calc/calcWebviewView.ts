@@ -4,7 +4,8 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import { commands, ConfigurationChangeEvent, Disposable, Uri, Webview } from 'vscode';
+import { TextDecoder } from 'util';
+import { commands, ConfigurationChangeEvent, Disposable, Uri, Webview, workspace } from 'vscode';
 import { Control } from '../../control';
 import { configuration } from '../../util/configuration/config';
 import { defaults } from '../../util/configuration/defaults';
@@ -13,8 +14,12 @@ import { GWebviewView } from '../gWebviewView';
 import { getNonce } from '../helpers';
 
 export class CalcWebviewView extends GWebviewView {
+    private _shortId: string;
+
     constructor() {
         super(Webviews.CalcWebviewView, WebviewTitles.CalcWebviewView);
+
+        this._shortId = this.id.split('.').pop() ?? '';
 
         if ((this._enabled = configuration.getParam(`${this.id.slice(6)}.enabled`) ?? defaults.webviews.calc.enabled)) {
             void Control.setContext(Contexts.CalcWebviewViewEnabled, true);
@@ -56,10 +61,14 @@ export class CalcWebviewView extends GWebviewView {
     }
 
     async getHtml(webview: Webview): Promise<string> {
-        // CSS styles
-        const stylesMain = webview.asWebviewUri(
-            Uri.joinPath(Control.context.extensionUri, 'dist', 'webviews', 'calc', 'calc.css'),
-        );
+        const webRootUri = Uri.joinPath(Control.context.extensionUri, 'dist', 'webviews');
+        const uri = Uri.joinPath(webRootUri, this._shortId, `${this._shortId}.html`);
+        const content = new TextDecoder('utf8').decode(await workspace.fs.readFile(uri));
+
+        const cspSource = webview.cspSource;
+        const cspNonce = getNonce();
+
+        const root = webview.asWebviewUri(Control.context.extensionUri).toString();
 
         // vscode-webview-ui-toolkit
         const toolkitUri = webview.asWebviewUri(
@@ -73,45 +82,28 @@ export class CalcWebviewView extends GWebviewView {
             ),
         );
 
-        const calcJsUri = webview.asWebviewUri(
-            Uri.joinPath(Control.context.extensionUri, 'dist', 'webviews', 'calc', 'calc.js'),
-        );
+        const html = content.replace(/{(cspNonce|cspSource|root|title|toolkit)}/g, (_substring, token) => {
+            switch (token) {
+                case 'cspNonce':
+                    return cspNonce.toString();
 
-        const nonce = getNonce();
+                case 'cspSource':
+                    return cspSource.toString();
 
-        return Promise.resolve(`<!DOCTYPE html>
-                <html lang="en">
-                <head>
-                        <meta charset="UTF-8">
-                        
-                        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; 
-                        style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} https:; 
-                        script-src 'nonce-${nonce}';">
-                        
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                case 'root':
+                    return root;
 
-                        <script nonce="${nonce}" type="module" src="${String(toolkitUri)}"></script>
-                        <script nonce="${nonce}" type="module" src="${String(calcJsUri)}"></script>
-                        
-                        <link href="${String(stylesMain)}" rel="stylesheet">
-                        
-                        <title>${this.title}</title>
-                </head>
-                <body>
-                    <vscode-panels>
-                        <vscode-panel-tab id="tab-1">Cutting Speed</vscode-panel-tab>
-                        <vscode-panel-tab id="tab-2">Feed Rate</vscode-panel-tab>
+                case 'title':
+                    return `<title>${this.title}</title>`;
 
-                        <vscode-panel-view id="view-1">
-                            <vscode-text-field id="sfm" placeholder="SFM" size="6"></vscode-text-field>
-                            <vscode-text-field id="tool-dia" placeholder="Tool Dia" size="6"></vscode-text-field>
-                            <vscode-button id="rpm-calc">Calculate RPM</vscode-button>
+                case 'toolkit':
+                    return `<script nonce="${cspNonce}" type="module" src="${toolkitUri.toString()}"></script>`;
 
-                            <section id="rpm-results"></section>
-                        </vscode-panel-view>
-                        <vscode-panel-view id="view-2"></vscode-panel-view>
-                    </vscode-panels>
-                </body>
-                </html>`);
+                default:
+                    return '';
+            }
+        });
+
+        return Promise.resolve(html);
     }
 }

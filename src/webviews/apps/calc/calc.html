@@ -1,17 +1,17 @@
 <%= require('html-loader?{"esModule":false}!../shared/partials/head.html') %>
 
-<vscode-panels>
-    <vscode-panel-tab id="tab-1">Cutting Speed</vscode-panel-tab>
-    <vscode-panel-tab id="tab-2">Feed Rate</vscode-panel-tab>
+    <vscode-panels>
+        <vscode-panel-tab id="tab-1">Cutting Speed</vscode-panel-tab>
+        <vscode-panel-tab id="tab-2">Feed Rate</vscode-panel-tab>
 
-    <vscode-panel-view id="view-1">
-        <vscode-text-field id="sfm" placeholder="SFM" size="6"></vscode-text-field>
-        <vscode-text-field id="tool-dia" placeholder="Tool Dia" size="6"></vscode-text-field>
-        <vscode-button id="rpm-calc">Calculate RPM</vscode-button>
-
-        <section id="rpm-results"></section>
-    </vscode-panel-view>
-    <vscode-panel-view id="view-2"></vscode-panel-view>
-</vscode-panels>
+        <vscode-panel-view id="view-1">
+            <vscode-text-field id="sfm" placeholder="SFM" size="6"></vscode-text-field><br />
+            <vscode-text-field id="tool-dia" placeholder="Tool Dia" size="6"></vscode-text-field><br />
+            <br />
+            <vscode-button id="rpm-calc">Calculate RPM</vscode-button>
+            <vscode-text-field id="rpm-results" size="6"></vscode-text-field>
+        </vscode-panel-view>
+        <vscode-panel-view id="view-2"></vscode-panel-view>
+    </vscode-panels>
 
 <%= require('html-loader?{"esModule":false}!../shared/partials/tail.html') %>
