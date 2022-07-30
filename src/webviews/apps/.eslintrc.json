@@ -1,0 +1,11 @@
+{
+    "extends": [
+        "../../../.eslintrc.json"
+    ],
+    "env": {
+        "browser": true
+    },
+    "parserOptions": {
+        "project": "src/webviews/apps/tsconfig.json"
+    }
+}
