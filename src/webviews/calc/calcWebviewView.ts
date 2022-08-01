@@ -10,6 +10,7 @@ import { Control } from '../../control';
 import { configuration } from '../../util/configuration/config';
 import { defaults } from '../../util/configuration/defaults';
 import { Contexts, WebviewCommands, Webviews, WebviewTitles } from '../../util/constants';
+import { Logger } from '../../util/logger';
 import { GWebviewView } from '../gWebviewView';
 import { getNonce } from '../helpers';
 
@@ -22,6 +23,7 @@ export class CalcWebviewView extends GWebviewView {
         this._shortId = this.id.split('.').pop() ?? '';
 
         if ((this._enabled = configuration.getParam(`${this.id.slice(6)}.enabled`) ?? defaults.webviews.calc.enabled)) {
+            Logger.log('Loading Calculator...');
             void Control.setContext(Contexts.CalcWebviewViewEnabled, true);
         }
 
@@ -37,8 +39,10 @@ export class CalcWebviewView extends GWebviewView {
             if (this._enabled) {
                 // Disable
                 void Control.setContext(Contexts.CalcWebviewViewEnabled, false);
+                Logger.log('Disabling Calculator...');
             } else {
                 // Enable
+                Logger.log('Loading Calculator...');
                 void Control.setContext(Contexts.CalcWebviewViewEnabled, true);
             }
 
