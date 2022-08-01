@@ -152,7 +152,7 @@ function getWebviewsConfig(mode, env) {
                             loader: 'ts-loader',
                             options: {
                                 configFile: path.resolve(basePath, 'tsconfig.json'),
-                                transpileOnly: true,
+                                //transpileOnly: true,
                             }
                         },
                     ],
@@ -276,7 +276,7 @@ function getCspHtml(mode, env) {
             'default-src': "'none'",
             'img-src': [ '{cspSource}', 'https:', 'data:' ],
             'script-src': [ '{cspSource}', "'nonce-{cspNonce}'" ],
-            'style-src': [ '{cspSource}', "'nonce-{cspNonce}'", "'unsafe-inline'" ],
+            'style-src': [ '{cspSource}', "'nonce-{cspNonce}'" ],
             'font-src': [ '{cspSource}' ],
         },
         {
