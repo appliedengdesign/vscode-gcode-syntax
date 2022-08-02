@@ -2,6 +2,15 @@
 
 All changes to G-Code Language Extension will be documented here.
 
+## v0.7.4 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.4)
+
+### Other
+
+- Updated dependencies
+- Updated README
+- Removed ProBot Stale and Added GitHub Actions Stale
+- Updated CodeQL to v2
+
 ## v0.7.3 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.3)
 
 ### Fixes

@@ -3,7 +3,7 @@
     "displayName": "G-Code Syntax",
     "shortName": "G-Code",
     "description": "Turn VSCode into a fully capable G-Code editor, including language support & more.",
-    "version": "0.7.3",
+    "version": "0.7.4",
     "license": "MIT",
     "publisher": "appliedengdesign",
     "author": {
@@ -498,12 +498,12 @@
         "@types/chai": "^4.3.1",
         "@types/glob": "^7.2.0",
         "@types/mocha": "^9.1.1",
-        "@types/node": "^18.6.1",
+        "@types/node": "^18.6.3",
         "@types/vscode": "^1.69.0",
-        "@typescript-eslint/eslint-plugin": "^5.30.7",
-        "@typescript-eslint/parser": "^5.30.7",
+        "@typescript-eslint/eslint-plugin": "^5.32.0",
+        "@typescript-eslint/parser": "^5.32.0",
         "chai": "^4.3.6",
-        "eslint": "^8.20.0",
+        "eslint": "^8.21.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-import": "^2.26.0",
         "eslint-plugin-prettier": "^4.2.1",
@@ -521,6 +521,6 @@
         "webpack-cli": "^4.10.0"
     },
     "dependencies": {
-        "@appliedengdesign/gcode-reference": "^0.0.4"
+        "@appliedengdesign/gcode-reference": "^0.0.5"
     }
 }
