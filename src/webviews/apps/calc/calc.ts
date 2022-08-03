@@ -95,6 +95,27 @@ export class CalcApp {
         Object.keys(this._calcDom).forEach(key => {
             this._calcDom[key as keyof ICalcDom]?.btn.addEventListener('click', this.processEvent.bind(this), false);
         });
+
+        const clearBtns = document.querySelectorAll<HTMLElement>('span.clear-btn > vscode-button');
+
+        if (clearBtns) {
+            clearBtns.forEach(btn => {
+                btn.addEventListener('click', this.clearFields.bind(this), false);
+            });
+        }
+    }
+
+    private clearFields(e: MouseEvent): void {
+        const target = e.target as HTMLButtonElement;
+
+        if (target) {
+            const targetView = target.id.split('-')[1];
+
+            document.querySelectorAll<HTMLElement>(`#view-${targetView} vscode-text-field`).forEach(input => {
+                const element = input.shadowRoot?.getElementById('control') as HTMLInputElement;
+                element.value = '';
+            });
+        }
     }
 
     private processEvent(e: MouseEvent): void {
