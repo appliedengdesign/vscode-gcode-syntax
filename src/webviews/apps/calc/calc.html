@@ -1,17 +1,55 @@
 <%= require('html-loader?{"esModule":false}!../shared/partials/head.html') %>
 
-    <vscode-panels>
-        <vscode-panel-tab id="tab-1">Cutting Speed</vscode-panel-tab>
-        <vscode-panel-tab id="tab-2">Feed Rate</vscode-panel-tab>
+<body class="preload">
 
-        <vscode-panel-view id="view-1">
-            <vscode-text-field id="sfm" placeholder="SFM" size="6"></vscode-text-field><br />
-            <vscode-text-field id="tool-dia" placeholder="Tool Dia" size="6"></vscode-text-field><br />
-            <br />
-            <vscode-button id="rpm-calc">Calculate RPM</vscode-button>
-            <vscode-text-field id="rpm-results" size="6"></vscode-text-field>
-        </vscode-panel-view>
-        <vscode-panel-view id="view-2"></vscode-panel-view>
-    </vscode-panels>
+    <div class="container">
+
+        <vscode-panels aria-label="with Complex Content">
+            <vscode-panel-tab id="tab-1">SPEEDS</vscode-panel-tab>
+            <vscode-panel-tab id="tab-2">FEEDS</vscode-panel-tab>
+
+            <vscode-panel-view id="view-1">
+                <section id="rpm" class="calculator">
+                    <h3>RPM</h3>
+                    <vscode-divider role="separator"></vscode-divider>
+                    <vscode-text-field id="rpm-sfm" placeholder="Enter SFM" size="6">SFM</vscode-text-field>
+                    <vscode-text-field id="rpm-tool-dia" placeholder="Enter Tool Dia" size="6">Tool Diameter</vscode-text-field>
+                    <label class="results">RPM</label><span id="rpm-results" class="results"></span>
+                    <vscode-button id="rpm-calc-btn">Calculate</vscode-button>
+                </section>
+                <section id="sfm" class="calculator">
+                    <h3>SFM</h3>
+                    <vscode-divider role="separator"></vscode-divider>
+                    <vscode-text-field id="sfm-rpm" placeholder="Enter SFM" size="6">RPM</vscode-text-field>
+                    <vscode-text-field id="sfm-tool-dia" placeholder="Enter Tool Dia" size="6">Tool Diameter</vscode-text-field>
+                    <label class="results">SFM</label><span id="sfm-results" class="results"></span>
+                    <vscode-button id="sfm-calc-btn">Calculate</vscode-button>
+                </section>
+            </vscode-panel-view>
+            <vscode-panel-view id="view-2">
+                <section id="feedrate" class="calculator">
+                    <h3>Feedrate</h3>
+                    <vscode-divider role="separator"></vscode-divider>
+                    <vscode-text-field id="fr-rpm" placeholder="Enter RPM" size="6">RPM</vscode-text-field>
+                    <vscode-text-field id="fr-num-flutes" placeholder="Enter # Flutes" size="6"># of Flutes</vscode-text-field>
+                    <vscode-text-field id="fr-chip-load" placeholder="Enter IPT" size="6">Load / Tooth</vscode-text-field>
+                    <label class="results">Feedrate</label><span id="fr-results" class="results"></span>
+                    <vscode-button id="fr-calc-btn">Calculate</vscode-button>
+                </section>
+                <section id="chip-load" class="calculator">
+                    <h3>Chip Load</h3>
+                    <vscode-divider role="separator"></vscode-divider>
+                    <vscode-text-field id="cl-ipm" placeholder="Enter IPM" size="6">IPM</vscode-text-field>
+                    <vscode-text-field id="cl-rpm" placeholder="Enter RPM" size="6">RPM</vscode-text-field>
+                    <vscode-text-field id="cl-num-flutes" placeholder="Enter # Flutes" size="6"># of Flutes</vscode-text-field>
+                    <label class="results">Chip Load</label><span id="cl-results" class="results"></span>
+                    <vscode-button id="cl-calc-btn">Calculate</vscode-button>
+                </section>
+            </vscode-panel-view>
+        </vscode-panels>
+
+    </div>
+
+</body>
 
 <%= require('html-loader?{"esModule":false}!../shared/partials/tail.html') %>

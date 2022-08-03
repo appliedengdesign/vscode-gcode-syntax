@@ -1,2 +1,57 @@
-@import '../shared/reset';
-@import '../shared/vscode';
+@import '../shared/scss/reset';
+@import '../shared/scss/vscode';
+@import '../shared/scss/base';
+
+.container {
+    display: flex;
+    font-size: 1.1em;
+    grid-template-rows: auto min-content;
+    min-height: 100%;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    padding: 1em;
+}
+
+h3 {
+    border: none;
+    font-weight: 600;
+    margin-top: 0;
+    white-space: nowrap;
+}
+
+vscode-text-field,
+vscode-button {
+    margin: 0.5rem 0;
+}
+
+vscode-text-field.results {
+    font-style: italic;
+}
+
+label.results {
+    font-style: italic;
+    margin-top: 1rem;
+    margin-bottom: 2px;
+}
+
+span.results {
+    border: 1px solid var(--vscode-inputValidation-infoBorder);
+    background: transparent;
+    width: 90px;
+    height: 20px;
+    padding: 5px;
+}
+
+section.calculator > vscode-button {
+    margin-top: 1rem;
+}
+
+.error {
+    color: var(--vscode-errorForeground);
+}
