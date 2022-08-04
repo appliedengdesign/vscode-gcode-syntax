@@ -4,49 +4,21 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-interface ICalcDom {
-    rpm?: {
-        btn: HTMLElement;
-        sfm: HTMLInputElement;
-        toolDia: HTMLInputElement;
-        results: HTMLSpanElement;
-    };
+import { GWebviewApp } from '../shared/gWebviewApp';
+import { WebviewMsg } from '../shared/webviewMsg.types';
+import { ICalcDom, TCalcDom, Units } from './calc.types';
 
-    sfm?: {
-        btn: HTMLElement;
-        rpm: HTMLInputElement;
-        toolDia: HTMLInputElement;
-        results: HTMLSpanElement;
-    };
-
-    feedrate?: {
-        btn: HTMLElement;
-        rpm: HTMLInputElement;
-        numFlutes: HTMLInputElement;
-        chipLoad: HTMLInputElement;
-        results: HTMLSpanElement;
-    };
-
-    chipLoad?: {
-        btn: HTMLElement;
-        ipm: HTMLInputElement;
-        rpm: HTMLInputElement;
-        numFlutes: HTMLInputElement;
-        results: HTMLSpanElement;
-    };
-}
-
-type TCalcDom = ICalcDom[keyof ICalcDom];
-
-type Units = 'imperial' | 'metric';
-
-export class CalcApp {
+export class CalcApp extends GWebviewApp {
     private _calcDom: ICalcDom = {};
-    private _units: Units = 'imperial';
+    private _units: Units = 'Inch';
 
     constructor() {
+        super('CalcApp');
+
+        // Populate DOM
         this.populateDOM();
 
+        // Register Button Events
         this.registerBtns();
     }
 
@@ -91,6 +63,14 @@ export class CalcApp {
         };
     }
 
+    protected onMsgReceived(e: MessageEvent<WebviewMsg>): void {
+        const message = e.data;
+
+        if (message.type === 'changeUnits') {
+            this._units = message.payload as Units;
+        }
+    }
+
     private registerBtns(): void {
         Object.keys(this._calcDom).forEach(key => {
             this._calcDom[key as keyof ICalcDom]?.btn.addEventListener('click', this.processEvent.bind(this), false);
@@ -101,19 +81,6 @@ export class CalcApp {
         if (clearBtns) {
             clearBtns.forEach(btn => {
                 btn.addEventListener('click', this.clearFields.bind(this), false);
-            });
-        }
-    }
-
-    private clearFields(e: MouseEvent): void {
-        const target = e.target as HTMLButtonElement;
-
-        if (target) {
-            const targetView = target.id.split('-')[1];
-
-            document.querySelectorAll<HTMLElement>(`#view-${targetView} vscode-text-field`).forEach(input => {
-                const element = input.shadowRoot?.getElementById('control') as HTMLInputElement;
-                element.value = '';
             });
         }
     }
@@ -191,6 +158,19 @@ export class CalcApp {
         }
     }
 
+    private clearFields(e: MouseEvent): void {
+        const target = e.target as HTMLButtonElement;
+
+        if (target) {
+            const targetView = target.id.split('-')[1];
+
+            document.querySelectorAll<HTMLElement>(`#view-${targetView} vscode-text-field`).forEach(input => {
+                const element = input.shadowRoot?.getElementById('control') as HTMLInputElement;
+                element.value = '';
+            });
+        }
+    }
+
     private displayResults(result: number | undefined, target: TCalcDom): void {
         if (result && result !== Number.POSITIVE_INFINITY) {
             // Precision is 2 decimals or 5 for Chip Load
@@ -210,7 +190,7 @@ export class CalcApp {
     }
 
     private calcRPM(sfm: number, toolDia: number, units: Units): number | undefined {
-        if (units === 'imperial') {
+        if (units === 'Inch') {
             return (sfm * 12) / (Math.PI * toolDia);
         } else {
             return (sfm * 1000) / (Math.PI * toolDia);
@@ -218,7 +198,7 @@ export class CalcApp {
     }
 
     private calcSFM(rpm: number, toolDia: number, units: Units): number | undefined {
-        if (units === 'imperial') {
+        if (units === 'Inch') {
             // Calculate SFM for Imperial
             return (Math.PI * toolDia * rpm) / 12;
         } else {
