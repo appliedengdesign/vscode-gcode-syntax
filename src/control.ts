@@ -5,7 +5,7 @@
 
 'use strict';
 
-import { commands, Disposable, ExtensionContext } from 'vscode';
+import { commands, ExtensionContext } from 'vscode';
 import { Config, configuration } from './util/configuration/config';
 import { Logger } from './util/logger';
 import { StatusBarControl } from './util/statusBar';
@@ -18,11 +18,9 @@ import { Messages } from './util/messages';
 import { StateControl } from './util/stateControl';
 import { MachineTypeControl } from './util/machineType';
 import { GCodeHoverControl } from './hovers/gcodeHoverControl';
-import { defaults } from './util/configuration/defaults';
 import { registerCommands } from './util/commands';
 import { CalcWebviewView } from './webviews/calc/calcWebviewView';
 
-const cfgUnits = 'general.units';
 const cfgAutoRef = {
     navTree: 'views.navTree.autoRefresh',
     stats: 'views.stats.autoRefresh',
@@ -31,7 +29,6 @@ const cfgAutoRef = {
 export class Control {
     private static _config: Config | undefined;
     private static _context: ExtensionContext;
-    private static _units: string | undefined;
     private static _version: Version;
 
     // Controllers
@@ -106,30 +103,8 @@ export class Control {
         Logger.log('Loading Hover Controller...');
         context.subscriptions.push((this._hoverController = new GCodeHoverControl()));
 
-        // Units
-        this._units = config.getParam(cfgUnits) ?? defaults.general.units;
-        Logger.log(`Units: ${this._units}`);
-        if (this._units === 'Auto') {
-            // Load Units Monitor
-            context.subscriptions.push((this._unitsController = new GCodeUnitsController()));
-        } else {
-            let disposable: Disposable;
-            // eslint-disable-next-line prefer-const
-            disposable = configuration.onDidChange(e => {
-                if (configuration.changed(e, cfgUnits)) {
-                    this._units = <string>configuration.getParam(cfgUnits);
-                    if (this._units === 'Auto') {
-                        disposable.dispose();
-                        Logger.log(`Units: ${this._units}`);
-                        context.subscriptions.push((this._unitsController = new GCodeUnitsController()));
-                    } else {
-                        return;
-                    }
-                }
-            });
-
-            this._statusBarControl.updateStatusBar(this._units, 'unitsBar');
-        }
+        // Load Units Controller
+        context.subscriptions.push((this._unitsController = new GCodeUnitsController()));
 
         // Load Nav Tree
         Logger.log('Loading Nav Tree...');

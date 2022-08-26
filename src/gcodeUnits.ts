@@ -55,7 +55,11 @@ export class GCodeUnitsController implements Disposable {
         if (configuration.changed(e, cfgUnits)) {
             if ((this._units = configuration.getParam(cfgUnits) ?? defaults.general.units) !== GCodeUnits.Auto) {
                 Logger.log(`Units: ${this._units}`);
+
+                // Set Auto False
                 this._auto = false;
+
+                // Update Statusbar with new Units
                 this._statusbar.updateStatusBar(
                     this._units,
                     this.unitsStatusBar,
@@ -64,8 +68,13 @@ export class GCodeUnitsController implements Disposable {
                     GCommands.ShowGCodeSettings,
                 );
             } else {
+                // Units = Auto
                 Logger.log(`Units: ${this._units}`);
+
+                // Set Auto True
                 this._auto = true;
+
+                // Updates Statusbar with Auto Units
                 this._statusbar.updateStatusBar(
                     this._units,
                     this.unitsStatusBar,
