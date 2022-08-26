@@ -164,9 +164,15 @@ export class CalcApp extends GWebviewApp {
         if (target) {
             const targetView = target.id.split('-')[1];
 
+            // Clear Input Fields
             document.querySelectorAll<HTMLElement>(`#view-${targetView} vscode-text-field`).forEach(input => {
                 const element = input.shadowRoot?.getElementById('control') as HTMLInputElement;
                 element.value = '';
+            });
+
+            // Clear Results Field
+            document.querySelectorAll<HTMLElement>(`#view-${targetView} span.results`).forEach(span => {
+                span.innerHTML = '';
             });
         }
     }
