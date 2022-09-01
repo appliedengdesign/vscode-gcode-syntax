@@ -13,6 +13,7 @@ import { Contexts, WebviewCommands, Webviews, WebviewTitles } from '../../util/c
 import { Logger } from '../../util/logger';
 import { GWebviewView } from '../gWebviewView';
 import { getNonce } from '../helpers';
+import { WebviewMsg } from '../webviewMsg.types';
 
 export class CalcWebviewView extends GWebviewView {
     private _shortId: string;
@@ -27,7 +28,10 @@ export class CalcWebviewView extends GWebviewView {
             void Control.setContext(Contexts.CalcWebviewViewEnabled, true);
         }
 
-        this._disposables.push(configuration.onDidChange(this.onConfigurationChanged, this));
+        this._disposables.push(
+            configuration.onDidChange(this.onConfigurationChanged, this),
+            Control.unitsController.onDidChangeUnits(() => this.changeUnits()),
+        );
     }
 
     dispose() {
@@ -35,6 +39,7 @@ export class CalcWebviewView extends GWebviewView {
     }
 
     private onConfigurationChanged(e: ConfigurationChangeEvent) {
+        // Enable / Disable Calculator Webview
         if (configuration.changed(e, `${this.id.slice(6)}.enabled`)) {
             if (this._enabled) {
                 // Disable
@@ -46,13 +51,11 @@ export class CalcWebviewView extends GWebviewView {
                 void Control.setContext(Contexts.CalcWebviewViewEnabled, true);
             }
 
-            // void this.refresh();
-
             this._enabled = configuration.getParam(`${this.id.slice(6)}.enabled`) ?? defaults.webviews.calc.enabled;
         }
     }
 
-    protected registerCommands(): Disposable[] {
+    protected override registerCommands(): Disposable[] {
         return [
             commands.registerCommand(
                 WebviewCommands.ShowCalcWebview,
@@ -64,7 +67,21 @@ export class CalcWebviewView extends GWebviewView {
         ];
     }
 
-    async getHtml(webview: Webview): Promise<string> {
+    protected override async handleMessage(msg: WebviewMsg): Promise<void> {
+        const type = msg.type;
+
+        switch (type) {
+            case 'getUnits':
+                await this.postMessage({ type: 'changeUnits', payload: Control.unitsController.units });
+
+                break;
+
+            default:
+                return;
+        }
+    }
+
+    protected async getHtml(webview: Webview): Promise<string> {
         const webRootUri = Uri.joinPath(Control.context.extensionUri, 'dist', 'webviews');
         const uri = Uri.joinPath(webRootUri, this._shortId, `${this._shortId}.html`);
         const content = new TextDecoder('utf8').decode(await workspace.fs.readFile(uri));
@@ -109,5 +126,11 @@ export class CalcWebviewView extends GWebviewView {
         });
 
         return Promise.resolve(html);
+    }
+
+    private changeUnits() {
+        if (this._enabled) {
+            void this.postMessage({ type: 'changeUnits', payload: Control.unitsController?.units });
+        }
     }
 }
