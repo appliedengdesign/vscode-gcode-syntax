@@ -4,84 +4,92 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import { ConfigurationChangeEvent, Disposable, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
+import {
+    ConfigurationChangeEvent,
+    Disposable,
+    Event,
+    EventEmitter,
+    TextDocumentChangeEvent,
+    TextEditor,
+    window,
+    workspace,
+} from 'vscode';
 import { Control } from './control';
 import { configuration } from './util/configuration/config';
 import { defaults } from './util/configuration/defaults';
-import { GCommands } from './util/constants';
+import { GCodeUnits, GCommands } from './util/constants';
 import { Logger } from './util/logger';
 import { StatusBar, StatusBarControl } from './util/statusBar';
 
-export const enum GCodeUnits {
-    Inch = 'Inch',
-    MM = 'Metric',
-    Auto = 'Auto',
-    Default = 'Default (Inch)',
-}
+type Units = GCodeUnits.Inch | GCodeUnits.MM | GCodeUnits.Default;
 
-const cfgUnits = 'general.units';
+export const cfgUnits = 'general.units';
 
 export class GCodeUnitsController implements Disposable {
-    private readonly _disposable: Disposable | undefined;
+    private readonly _disposables: Disposable[] = [];
+    private readonly unitsStatusBar: StatusBar = 'unitsBar';
     private _editor: TextEditor | undefined;
     private _statusbar: StatusBarControl;
-    private readonly unitsStatusBar: StatusBar = 'unitsBar';
-    private _units: GCodeUnits;
+    private _units: Units;
     private _auto: boolean;
 
+    private _onDidChangeUnits: EventEmitter<Units> = new EventEmitter<Units>();
+    get onDidChangeUnits(): Event<Units> {
+        return this._onDidChangeUnits.event;
+    }
+
     constructor() {
+        Logger.log('Loading Units Controller...');
+
         this._statusbar = Control.statusBarController;
 
-        this._auto = (this._units = configuration.getParam(cfgUnits) ?? defaults.general.units) === GCodeUnits.Auto;
+        const units = <GCodeUnits>configuration.getParam(cfgUnits) ?? defaults.general.units;
+        if (units === GCodeUnits.Auto) {
+            this._auto = true;
+            this._units = GCodeUnits.Default;
+        } else {
+            this._auto = false;
+            this._units = units;
+        }
 
-        this._statusbar.updateStatusBar(
-            this._units,
-            this.unitsStatusBar,
-            undefined,
-            undefined,
-            GCommands.ShowGCodeSettings,
+        this.updateStatusBar();
+
+        this._disposables.push(
+            configuration.onDidChange(this.onConfigurationChanged, this),
+            window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged()),
+            workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e), this),
         );
-
-        Control.context.subscriptions.push(configuration.onDidChange(this.onConfigurationChanged, this));
-        Control.context.subscriptions.push(window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged()));
-        Control.context.subscriptions.push(workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e), this));
     }
 
     dispose() {
-        this._disposable && this._disposable.dispose();
+        Disposable.from(...this._disposables).dispose();
+    }
+
+    get units(): Units {
+        return this._units;
     }
 
     private onConfigurationChanged(e: ConfigurationChangeEvent) {
         if (configuration.changed(e, cfgUnits)) {
-            if ((this._units = configuration.getParam(cfgUnits) ?? defaults.general.units) !== GCodeUnits.Auto) {
+            const units = <GCodeUnits>configuration.getParam(cfgUnits) ?? defaults.general.units;
+            if (units !== GCodeUnits.Auto) {
+                // Update Units
+                this._units = units;
                 Logger.log(`Units: ${this._units}`);
 
                 // Set Auto False
                 this._auto = false;
 
-                // Update Statusbar with new Units
-                this._statusbar.updateStatusBar(
-                    this._units,
-                    this.unitsStatusBar,
-                    undefined,
-                    undefined,
-                    GCommands.ShowGCodeSettings,
-                );
+                this.updateStatusBar();
+
+                // Fire Units Change Event
+                this._onDidChangeUnits.fire(this._units);
             } else {
                 // Units = Auto
-                Logger.log(`Units: ${this._units}`);
+                Logger.log('Units: Auto');
 
                 // Set Auto True
                 this._auto = true;
-
-                // Updates Statusbar with Auto Units
-                this._statusbar.updateStatusBar(
-                    this._units,
-                    this.unitsStatusBar,
-                    undefined,
-                    undefined,
-                    GCommands.ShowGCodeSettings,
-                );
             }
         }
     }
@@ -92,16 +100,19 @@ export class GCodeUnitsController implements Disposable {
                 const text = this._editor.document.getText();
 
                 // Parse doc for units
-                this._units = this.parseUnits(text);
+                const newUnits = this.parseUnits(text);
 
-                // Update Status Bar
-                this._statusbar.updateStatusBar(
-                    this._units,
-                    this.unitsStatusBar,
-                    undefined,
-                    undefined,
-                    GCommands.ShowGCodeSettings,
-                );
+                if (newUnits === this._units) {
+                    return;
+                } else {
+                    this._units = newUnits;
+
+                    // Update Statusbar
+                    this.updateStatusBar();
+
+                    // Fire Units Change Event
+                    this._onDidChangeUnits.fire(this._units);
+                }
             } else {
                 return;
             }
@@ -112,24 +123,41 @@ export class GCodeUnitsController implements Disposable {
         if ((this._editor = window.activeTextEditor) && this._editor.document.uri.scheme === 'file') {
             if (this._auto) {
                 const text = this._editor.document.getText();
-                // Parse doc for units
-                this._units = this.parseUnits(text);
 
-                // Update Status Bar
-                this._statusbar.updateStatusBar(
-                    this._units,
-                    this.unitsStatusBar,
-                    undefined,
-                    undefined,
-                    GCommands.ShowGCodeSettings,
-                );
+                // Parse doc for units
+                const newUnits = this.parseUnits(text);
+
+                if (newUnits === this._units) {
+                    return;
+                } else {
+                    this._units = newUnits;
+
+                    // Update Statusbar
+                    this.updateStatusBar();
+
+                    // Fire Units Change Event
+                    this._onDidChangeUnits.fire(this._units);
+                }
             } else {
                 return;
             }
         }
     }
 
-    private parseUnits(text: string): GCodeUnits {
+    private updateStatusBar(): void {
+        let tooltip = `${this._units}`;
+        let units = `${this.units}`;
+        if (this._auto && this._units !== GCodeUnits.Default) {
+            this._units === GCodeUnits.Inch
+                ? (tooltip = `${tooltip} (G20 Found)`)
+                : (tooltip = `${tooltip} (G21 Found)`);
+
+            units = `${units} (Auto)`;
+        }
+        this._statusbar.updateStatusBar(units, this.unitsStatusBar, tooltip, undefined, GCommands.ShowGCodeSettings);
+    }
+
+    private parseUnits(text: string): Units {
         const reUnits = /(G20)|(G21)/im;
 
         const units = reUnits.exec(text);
