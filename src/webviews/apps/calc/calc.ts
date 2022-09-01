@@ -5,12 +5,13 @@
 'use strict';
 
 import { GWebviewApp } from '../shared/gWebviewApp';
-import { WebviewMsg } from '../shared/webviewMsg.types';
+import { WebviewMsg } from '../../webviewMsg.types';
 import { ICalcDom, TCalcDom, Units } from './calc.types';
 
 export class CalcApp extends GWebviewApp {
     private _calcDom: ICalcDom = {};
-    private _units: Units = 'Inch';
+    private _clearBtns: NodeListOf<HTMLElement> | undefined;
+    private _units: Units = Units.Default;
 
     constructor() {
         super('CalcApp');
@@ -20,6 +21,9 @@ export class CalcApp extends GWebviewApp {
 
         // Register Button Events
         this.registerBtns();
+
+        // Get Current Units
+        this.getUnits();
     }
 
     private populateDOM(): void {
@@ -66,9 +70,29 @@ export class CalcApp extends GWebviewApp {
     protected onMsgReceived(e: MessageEvent<WebviewMsg>): void {
         const message = e.data;
 
-        if (message.type === 'changeUnits') {
-            this._units = message.payload as Units;
+        switch (message.type) {
+            case 'changeUnits':
+                this._units = message.payload as Units;
+                this.updateUnits();
+                this._clearBtns?.forEach(btn => {
+                    btn.click();
+                });
+
+                break;
+
+            default:
+                return;
         }
+    }
+
+    private getUnits(): void {
+        this.postMessage({ type: 'getUnits' });
+    }
+
+    private updateUnits(): void {
+        document.querySelectorAll<HTMLElement>('span.units').forEach(elem => {
+            elem.innerHTML = `Units: ${this._units}`;
+        });
     }
 
     private registerBtns(): void {
@@ -76,10 +100,10 @@ export class CalcApp extends GWebviewApp {
             this._calcDom[key as keyof ICalcDom]?.btn.addEventListener('click', this.processEvent.bind(this), false);
         });
 
-        const clearBtns = document.querySelectorAll<HTMLElement>('span.clear-btn > vscode-button');
+        this._clearBtns = document.querySelectorAll<HTMLElement>('span.clear-btn > vscode-button');
 
-        if (clearBtns) {
-            clearBtns.forEach(btn => {
+        if (this._clearBtns) {
+            this._clearBtns.forEach(btn => {
                 btn.addEventListener('click', this.clearFields.bind(this), false);
             });
         }
@@ -196,7 +220,7 @@ export class CalcApp extends GWebviewApp {
     }
 
     private calcRPM(sfm: number, toolDia: number, units: Units): number | undefined {
-        if (units === 'Inch') {
+        if (units === Units.Inch || units === Units.Default) {
             return (sfm * 12) / (Math.PI * toolDia);
         } else {
             return (sfm * 1000) / (Math.PI * toolDia);
@@ -204,7 +228,7 @@ export class CalcApp extends GWebviewApp {
     }
 
     private calcSFM(rpm: number, toolDia: number, units: Units): number | undefined {
-        if (units === 'Inch') {
+        if (units === Units.Inch || units === Units.Default) {
             // Calculate SFM for Imperial
             return (Math.PI * toolDia * rpm) / 12;
         } else {
