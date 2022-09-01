@@ -17,13 +17,14 @@ export abstract class GWebviewApp {
 
     constructor(protected readonly appName: string) {
         this._api = acquireVsCodeApi();
+        this.registerEvents();
     }
 
     private registerEvents(): void {
         window.addEventListener('message', this.onMsgReceived.bind(this));
     }
 
-    private postMessage(msg: any): void {
+    protected postMessage(msg: any): void {
         this._api.postMessage(msg);
     }
 
