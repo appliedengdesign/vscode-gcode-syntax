@@ -18,6 +18,7 @@ import {
 } from 'vscode';
 import { Control } from '../control';
 import { Logger } from '../util/logger';
+import { WebviewMsg } from './webviewMsg.types';
 
 export abstract class GWebviewView implements WebviewViewProvider, Disposable {
     protected readonly _disposables: Disposable[] = [];
@@ -28,7 +29,7 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
     constructor(public readonly id: string, title: string) {
         this._title = title;
 
-        this._disposables.push(window.registerWebviewViewProvider(id, this));
+        this._disposables.push(window.registerWebviewViewProvider(id, this), ...(this.registerCommands?.() ?? []));
     }
 
     dispose() {
@@ -86,6 +87,8 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
         webviewView.webview.options = this.getWebviewOptions();
         webviewView.title = this.title;
 
+        this._disposables.push(this._view.webview.onDidReceiveMessage(this.onMessageReceived, this));
+
         await this.refresh();
     }
 
@@ -96,8 +99,8 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
     }
 
     protected abstract getHtml(webview: Webview): Promise<string>;
-
-    protected abstract registerCommands(): Disposable[];
+    protected registerCommands?(): Disposable[];
+    protected handleMessage?(msg: WebviewMsg): void;
 
     protected getWebviewOptions(): WebviewOptions {
         return {
@@ -105,5 +108,21 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
             enableCommandUris: true,
             localResourceRoots: [Uri.joinPath(Control.context.extensionUri)],
         };
+    }
+
+    protected onMessageReceived(msg: WebviewMsg): void {
+        if (msg) {
+            this.handleMessage?.(msg);
+        } else {
+            return;
+        }
+    }
+
+    protected async postMessage(msg: WebviewMsg) {
+        if (this._view) {
+            return await this._view.webview.postMessage(msg);
+        } else {
+            return Promise.resolve(false);
+        }
     }
 }
