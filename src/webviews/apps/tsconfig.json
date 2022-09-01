@@ -9,7 +9,8 @@
         "outDir": "../../"
     },
     "include": [
-        "**/*.ts"
+        "**/*.ts",
+        "../webviewMsg.types.ts"
     ],
     "exclude": [
         "node_modules",
