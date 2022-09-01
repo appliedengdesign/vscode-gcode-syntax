@@ -32,9 +32,9 @@ export class Control {
     private static _version: Version;
 
     // Controllers
-    private static _machineTypeControl: MachineTypeControl | undefined;
+    private static _machineTypeControl: MachineTypeControl;
     private static _statusBarControl: StatusBarControl;
-    private static _unitsController: GCodeUnitsController | undefined;
+    private static _unitsController: GCodeUnitsController;
     private static _stateController: StateControl;
     private static _hoverController: GCodeHoverControl;
 
@@ -192,7 +192,7 @@ export class Control {
         return this._statusBarControl;
     }
 
-    static get gcodeUnitsController() {
+    static get unitsController() {
         return this._unitsController;
     }
 
@@ -206,5 +206,9 @@ export class Control {
 
     static get hoverController() {
         return this._hoverController;
+    }
+
+    static get calcWebviewView() {
+        return this._calcWebviewView;
     }
 }
