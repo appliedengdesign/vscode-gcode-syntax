@@ -77,6 +77,13 @@ export enum Contexts {
     CalcWebviewViewEnabled = 'gcode:webviews:calc:enabled',
 }
 
+export enum GCodeUnits {
+    Auto = 'Auto',
+    Inch = 'Inch',
+    MM = 'Metric',
+    Default = 'Default (Inch)',
+}
+
 export enum GCommands {
     ShowGCodeSettings = 'gcode.showSettings',
     ShowSupportGCode = 'gcode.supportGCode',
