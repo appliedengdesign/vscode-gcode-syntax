@@ -38,4 +38,8 @@ export interface ICalcDom {
 
 export type TCalcDom = ICalcDom[keyof ICalcDom];
 
-export type Units = 'Inch' | 'Metric';
+export enum Units {
+    Inch = 'Inch',
+    MM = 'Metric',
+    Default = 'Default (Inch)',
+}
