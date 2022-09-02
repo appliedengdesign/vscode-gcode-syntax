@@ -12,7 +12,7 @@
     },
     "copyright": "Copyright (c) 2022 Applied Eng. & Design / Mike Centola",
     "engines": {
-        "vscode": "^1.69.0"
+        "vscode": "^1.71.0"
     },
     "categories": [
         "Programming Languages",
@@ -499,7 +499,7 @@
         "@types/glob": "^7.2.0",
         "@types/mocha": "^9.1.1",
         "@types/node": "^18.7.14",
-        "@types/vscode": "^1.69.0",
+        "@types/vscode": "^1.71.0",
         "@typescript-eslint/eslint-plugin": "^5.36.1",
         "@typescript-eslint/parser": "^5.36.1",
         "chai": "^4.3.6",
