@@ -7,6 +7,7 @@
 import {
     commands,
     ConfigurationChangeEvent,
+    Disposable,
     TextDocumentChangeEvent,
     ThemeIcon,
     TreeItemCollapsibleState,
@@ -15,14 +16,13 @@ import {
 import { Control } from '../control';
 import { configuration } from '../util/configuration/config';
 import { defaults } from '../util/configuration/defaults';
-import { constants, Contexts } from '../util/constants';
+import { constants, Contexts, ViewCommands } from '../util/constants';
 import { Logger } from '../util/logger';
 import { Messages } from '../util/messages';
 import { ResourceType } from './nodes/nodes';
 import { StatsNode, StatsType } from './nodes/statsNode';
 import { GCodeRuntimeParser } from './providers/gcodeRuntimeParser';
-import { ViewCommands } from './viewCommands';
-import { GView } from './views';
+import { GView } from './gView';
 
 const StatsViewInfo = {
     ViewId: 'gcode.views.stats',
@@ -45,11 +45,7 @@ export class StatsView extends GView<StatsNode> {
     constructor() {
         super(StatsViewInfo.ViewId, StatsViewInfo.ViewName);
 
-        this._editor = window.activeTextEditor;
-
         this.initialize();
-
-        this.registerCommands();
 
         this._autoRefresh = configuration.getParam(StatsViewInfo.Config.AutoRefresh);
 
@@ -141,19 +137,25 @@ export class StatsView extends GView<StatsNode> {
         }
     }
 
-    protected registerCommands() {
-        // Refresh Command
-        commands.registerCommand(
-            ViewCommands.RefreshStats,
-            () => {
-                if (window.activeTextEditor?.document.languageId === constants.langId) {
-                    void Control.setContext(Contexts.ViewsStatsEnabled, true);
-                }
+    protected registerCommands(): Disposable[] {
+        return [
+            // Refresh Command
+            commands.registerCommand(
+                ViewCommands.RefreshStats,
+                () => {
+                    if (window.activeTextEditor?.document.languageId === constants.langId) {
+                        void Control.setContext(Contexts.ViewsStatsEnabled, true);
+                    }
 
-                void this.refresh();
-            },
-            this,
-        );
+                    // Refresh View
+                    void this.refresh();
+
+                    // Show Stats View
+                    void this.show();
+                },
+                this,
+            ),
+        ];
     }
 
     protected async refresh(element?: StatsNode): Promise<void> {
@@ -222,7 +224,7 @@ export class StatsView extends GView<StatsNode> {
                 this._children.push(
                     new StatsNode(
                         StatsType.RunTime,
-                        `Est Runtime: ${new Date(this._stats.runtime * 1000).toISOString().substr(11, 8)}`,
+                        `Est Runtime: ${new Date(this._stats.runtime * 1000).toISOString().slice(11, 19)}`,
                         undefined,
                         ResourceType.Stats,
                         TreeItemCollapsibleState.None,

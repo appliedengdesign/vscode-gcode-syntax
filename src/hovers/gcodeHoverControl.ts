@@ -28,6 +28,7 @@ export class GCodeHoverControl implements Disposable {
     }
 
     dispose() {
+        this.unregister();
         this._disposable && this._disposable.dispose();
     }
 

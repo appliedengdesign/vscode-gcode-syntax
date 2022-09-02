@@ -6,6 +6,7 @@
 import {
     commands,
     ConfigurationChangeEvent,
+    Disposable,
     Range,
     Selection,
     TextDocumentChangeEvent,
@@ -15,12 +16,11 @@ import {
 import { configuration } from '../util/configuration/config';
 import { StatusBar, StatusBarControl } from '../util/statusBar';
 import { NavTreeNode } from './nodes/navTreeNode';
-import { GView } from './views';
-import { constants, Contexts, PIcon } from '../util/constants';
+import { GView } from './gView';
+import { constants, Contexts, PIcon, ViewCommands } from '../util/constants';
 import { GCodeTreeParser } from './providers/gcodeTreeParser';
 import { Control } from '../control';
 import { Logger } from '../util/logger';
-import { ViewCommands } from './viewCommands';
 import { Messages } from '../util/messages';
 import { defaults } from '../util/configuration/defaults';
 
@@ -49,9 +49,6 @@ export class NavTreeView extends GView<NavTreeNode> {
 
         // Initialize View
         this.initialize();
-
-        // Register View Commands
-        this.registerCommands();
 
         // Initialize StatusBar
         this._statusbar = Control.statusBarController;
@@ -142,30 +139,36 @@ export class NavTreeView extends GView<NavTreeNode> {
         }
     }
 
-    protected registerCommands() {
-        // Refresh Command
-        commands.registerCommand(
-            ViewCommands.RefreshTree,
-            () => {
-                if (this._editor && this._editor.document) {
-                    if (this._editor.document.languageId === constants.langId) {
-                        void Control.setContext(Contexts.ViewsNavTreeEnabled, true);
+    protected registerCommands(): Disposable[] {
+        return [
+            // Refresh Command
+            commands.registerCommand(
+                ViewCommands.RefreshTree,
+                () => {
+                    if (this._editor && this._editor.document) {
+                        if (this._editor.document.languageId === constants.langId) {
+                            void Control.setContext(Contexts.ViewsNavTreeEnabled, true);
+                        }
+
+                        // Refresh View
+                        void this.refresh();
+
+                        // Show Tree View
+                        void this.show();
                     }
+                },
+                this,
+            ),
 
-                    void this.refresh();
-                }
-            },
-            this,
-        );
-
-        // Selection Command
-        commands.registerCommand(
-            ViewCommands.TreeSelect,
-            range => {
-                this.select(range);
-            },
-            this,
-        );
+            // Selection Command
+            commands.registerCommand(
+                ViewCommands.TreeSelect,
+                range => {
+                    this.select(range);
+                },
+                this,
+            ),
+        ];
     }
 
     protected async refresh(element?: NavTreeNode): Promise<void> {

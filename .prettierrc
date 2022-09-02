@@ -1,5 +1,6 @@
 {
     "arrowParens": "avoid",
+    "endOfLine": "lf",
     "singleQuote": true,
     "trailingComma": "all",
     "printWidth": 120,
@@ -10,6 +11,12 @@
             "files": ".prettierrc",
             "options": {
                 "parser": "json"
+            }
+        },
+        {
+            "files": "*.md",
+            "options": {
+                "tabWidth": 2
             }
         }
     ]

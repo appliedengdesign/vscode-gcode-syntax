@@ -5,16 +5,19 @@
 
 'use strict';
 
-import { GCommand } from './base';
-import { Messages } from '../messages';
+import { Disposable } from 'vscode';
 import { GCommands } from '../constants';
+import { GCommand } from './base';
+import * as Cmds from './cmds';
 
-export class ShowSupportGCode extends GCommand {
-    constructor() {
-        super(GCommands.ShowSupportGCode);
-    }
+export function registerCommands(): Disposable[] {
+    const gcmds: GCommand[] = [];
 
-    execute() {
-        return Messages.showSupportGCodeMessage();
-    }
+    Object.values(Cmds).forEach(c => {
+        if (Object.keys(GCommands).includes(c.name)) {
+            gcmds.push(new c());
+        }
+    });
+
+    return gcmds;
 }

@@ -6,12 +6,12 @@
 'use strict';
 
 import { commands } from 'vscode';
-import { GCommand, UtilCommands } from './common';
-import { constants, VSBuiltInCommands } from '../constants';
+import { GCommand } from './base';
+import { constants, GCommands, VSBuiltInCommands } from '../constants';
 
 export class ShowGCodeSettings extends GCommand {
     constructor() {
-        super(UtilCommands.ShowGCodeSettings);
+        super(GCommands.ShowGCodeSettings);
     }
 
     execute() {

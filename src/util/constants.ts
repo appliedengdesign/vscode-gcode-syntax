@@ -57,21 +57,40 @@ export const constants: IConstants = {
             'https://marketplace.visualstudio.com/items?' +
             'itemName=appliedengdesign.vscode-gcode-syntax&ssr=false#review-details',
     },
-};
+} as const;
 
-export const enum PIcon {
+export enum PIcon {
     Alert = ' $(alert) ',
     Check = ' $(check) ',
     Heart = ' $(heart) ',
 }
 
-export const enum VSBuiltInCommands {
+export enum VSBuiltInCommands {
     OpenSettings = 'workbench.action.openSettings',
     SetContext = 'setContext',
 }
 
-export const enum Contexts {
+export enum Contexts {
     MachineType = 'gcode:general:machineType',
     ViewsNavTreeEnabled = 'gcode:views:navTree:enabled',
     ViewsStatsEnabled = 'gcode:views:stats:enabled',
+}
+
+export enum GCommands {
+    ShowGCodeSettings = 'gcode.showSettings',
+    ShowSupportGCode = 'gcode.supportGCode',
+    AddComment = 'gcode.addComment',
+    RemoveComment = 'gcode.removeComment',
+    AddLineNumbers = 'gcode.addLineNumbers',
+    RemoveLineNumbers = 'gcode.removeLineNumbers',
+}
+
+export const enum ViewCommands {
+    RefreshStats = 'gcode.views.stats.refresh',
+    RefreshTree = 'gcode.views.navTree.refresh',
+    TreeSelect = 'gcode.views.navTree.select',
+}
+
+export const enum WebViewCommands {
+    ShowCodesWebview = 'gcode.webviews.codes.show',
 }

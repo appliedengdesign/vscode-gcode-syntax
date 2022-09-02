@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 /* ---------------------------------------------------------------------------------------------
  *  Copyright (c) Applied Eng & Design All rights reserved.
  *  Licensed under the MIT License. See License.md in the project root for license information.
@@ -6,9 +5,9 @@
 
 'use strict';
 
-export * from './addComment';
-export * from './removeComment';
-export * from './showGCodeSettings';
-export * from './showSupportGCode';
-export * from './addLineNumbers';
-export * from './removeLineNumbers';
+export { AddComment } from './addComment';
+export { AddLineNumbers } from './addLineNumbers';
+export { RemoveComment } from './removeComment';
+export { RemoveLineNumbers } from './removeLineNumbers';
+export { ShowGCodeSettings } from './showGCodeSettings';
+export { ShowSupportGCode } from './showSupportGCode';

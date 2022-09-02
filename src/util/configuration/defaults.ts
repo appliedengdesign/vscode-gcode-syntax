@@ -12,6 +12,7 @@ import { LineNumberFrequency } from '../lineNumberer';
 export enum TraceLevel {
     Silent = 'silent',
     Errors = 'errors',
+    Warnings = 'warnings',
     Verbose = 'verbose',
     Debug = 'debug',
 }

@@ -19,11 +19,10 @@ import {
     window,
 } from 'vscode';
 import { configuration } from '../util/configuration/config';
-import { WebViewCommands } from './webviewCommands';
-import { constants } from '../util/constants';
+import { constants, WebViewCommands } from '../util/constants';
 import { Control } from '../control';
 
-export abstract class GWebView implements Disposable {
+export abstract class GWebview implements Disposable {
     protected _disposable: Disposable;
     private _panel: WebviewPanel | undefined;
     private _dPanel: Disposable | undefined;
