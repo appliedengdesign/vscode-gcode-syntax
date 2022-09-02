@@ -14,7 +14,8 @@
                 "--extensionDevelopmentPath=${workspaceFolder}",
                 "${workspaceFolder}/samplenc/sample-colors.nc",
                 "${workspaceFolder}/samplenc/sample-profile.nc",
-                "${workspaceFolder}/samplenc/sample-circular-pocket.nc"
+                "${workspaceFolder}/samplenc/sample-circular-pocket.nc",
+                "${workspaceFolder}/samplenc/sample-mill-metric.nc"
             ],
             "cwd": "${workspaceFolder}",
             "outFiles": [
