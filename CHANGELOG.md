@@ -2,6 +2,30 @@
 
 All changes to G-Code Language Extension will be documented here.
 
+## v0.7.5 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.4)
+
+### Fixes
+
+- Fixed typo in G01 tooltip
+- Updated dependencies
+- Added Laser/EDM/Swiss to machine type configuration (to match gcode-reference)
+
+### Other
+
+- Updated CodeQL Analysis to v2
+- Updated prettier config
+- Updated module to ES2021
+- Changed usage of substr to slice
+- Added sample to extension debug launch
+- Fixed Mocha test
+- Added node modules refresh script
+- Renamed `views.ts` to `gView.ts`
+- Renamed `webviews.ts` to `gWebview.ts`
+- Fixed stale action settings
+- Added lock older closed issues
+- Added greetings automation
+- Updated README
+
 ## v0.7.4 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.4)
 
 ### Other
