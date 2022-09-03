@@ -21,6 +21,10 @@ To contribute to [VSCode GCode Syntax](https://github.com/appliedengdesign/vscod
 - [Changing a commit message](https://help.github.com/articles/changing-a-commit-message/)
 - [How to squash commits](https://help.github.com/articles/about-pull-request-merges/)
 
+Search open/closed issues before submitting any code changes because someone may have pushed the same code before.
+
+Please create an issue _before_ creating your pull request.
+
 ### Branches
 
 Create a local working branch that is specific to the scope of the changes that you want to make and then submit a pull request when your changes are ready. Each branch you create should be as specific as possible to streamline work flow and to reduce the possibility of merge conflicts. For instance, consider creating a branch to work on documentation or to fix a typo.
@@ -48,6 +52,12 @@ To lint the code as you make changes you can install the [ESLint](https://market
 If this is your first contribution to GCode Reference, please give yourself credit by adding yourself to the _Contributors_ section of the [README](README.md) in the following format:
 
 - `Your Name ([@<your-github-username>(https://github.com/<your-github-username)]) - [contributions](https://github.com/appliedengdesign/vscode-gcode-syntax/commits?author=<your-github-username>`
+
+### Signing Your Commits
+
+This project requires that commits are GPG signed. This ensures that YOU are really the author of your commit, and the code is REALLY what you wrote.
+
+Check out this article: [How (and why) to sign Git commits](https://withblue.ink/2020/05/17/how-and-why-to-sign-git-commits.html)
 
 ### Authoring Tools
 
