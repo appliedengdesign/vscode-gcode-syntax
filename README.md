@@ -131,6 +131,7 @@ Please visit our [GitHub Issues](https://github.com/appliedengdesign/vscode-gcod
 
 - Add more snippets
 - Add additional tree items.
+- Machining Calculator
 - More Statistics
 - G-Code Debugging
 - Backplotter
@@ -141,7 +142,7 @@ Visit our [projects page](https://github.com/appliedengdesign/vscode-gcode-synta
 
 ## Changelog
 
-Latest Version: v0.7.4
+Latest Version: v0.7.5
 
 Please refer to our [CHANGELOG](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CHANGELOG.md) doc.
 
@@ -150,6 +151,12 @@ Please refer to our [CHANGELOG](https://github.com/appliedengdesign/vscode-gcode
 If you work like to help contribute to the code or this project, please fork away and submit pull requests!
 
 For more information on contributing, please refer to the [CONTRIBUTING](https://github.com/appliedengdesign/vscode-gcode-syntax/blob/master/CONTRIBUTING.md) doc.
+
+### Contributors
+
+- Mike Centola ([@mikecentola](https://github.com/mikecentola)) - [contributions](https://github.com/appliedengdesign/vscode-gcode-syntax/commits?author=mikecentola)
+- Zach Allaun ([@zachallaun](https://github.com/zachallaun)) - [contributions](https://github.com/appliedengdesign/vscode-gcode-syntax/commits?author=zachallaun)
+- Patrick Connolly ([@patcon](https://github.com/patcon)) - [contributions](https://github.com/appliedengdesign/vscode-gcode-syntax/commits?author=patcon)
 
 ## About Applied Eng & Design
 
