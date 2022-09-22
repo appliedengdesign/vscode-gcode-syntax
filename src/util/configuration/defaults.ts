@@ -7,7 +7,7 @@
 
 import { StatusBarAlignment } from 'vscode';
 import { GCodeUnits } from '../../gcodeUnits';
-import { LineNumberFrequency } from '../lineNumberer';
+import { LineNumbererOptions, LineNumberFrequency } from '../lineNumberer';
 
 export enum TraceLevel {
     Silent = 'silent',
@@ -35,12 +35,7 @@ export interface GCodeConfiguration {
         outputLevel: TraceLevel;
     };
 
-    lineNumberer: {
-        addSpaceAfter: boolean;
-        frequency: LineNumberFrequency;
-        ignoreBlank: boolean;
-        ignoreProgramNumbers: boolean;
-    };
+    lineNumberer: LineNumbererOptions;
 
     views: {
         maxAutoRefresh: number;
@@ -74,9 +69,16 @@ export const defaults: GCodeConfiguration = {
     },
     lineNumberer: {
         addSpaceAfter: true,
+        defaultIncrement: 10,
+        defaultStart: 10,
+        enableQuickPick: true,
         frequency: LineNumberFrequency.EveryLine,
         ignoreBlank: true,
+        ignoreComments: true,
+        ignoreExtra: [],
         ignoreProgramNumbers: true,
+        matchLineNumber: false,
+        showProgress: true,
     },
     views: {
         maxAutoRefresh: 10000,
