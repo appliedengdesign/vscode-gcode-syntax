@@ -5,6 +5,8 @@
 
 'use strict';
 
+import { configuration } from '../configuration/config';
+import { defaults } from '../configuration/defaults';
 import { GQuickPick } from './common';
 
 interface State {
@@ -16,11 +18,6 @@ interface State {
 }
 
 const title = 'Line Number Options';
-
-const defaults = {
-    start: 10,
-    increment: 10,
-};
 
 export class LineNumbersInput extends GQuickPick {
     private readonly _state;
@@ -42,7 +39,9 @@ export class LineNumbersInput extends GQuickPick {
             title,
             step: 1,
             totalSteps: 2,
-            value: this._state.start?.toString() || defaults.start.toString(),
+            value: (
+                configuration.getParam<number>('lineNumberer.defaultStart') ?? defaults.lineNumberer.defaultStart
+            ).toString(),
             prompt: 'Choose Start Number',
             validate: this.validate,
             shouldResume: this.shouldResume,
@@ -56,7 +55,10 @@ export class LineNumbersInput extends GQuickPick {
             title,
             step: 2,
             totalSteps: 2,
-            value: this._state.increment?.toString() || defaults.increment.toString(),
+            value: (
+                configuration.getParam<number>('lineNumberer.defaultIncrement') ??
+                defaults.lineNumberer.defaultIncrement
+            ).toString(),
             prompt: 'Choose Increment Number',
             validate: this.validate,
             shouldResume: this.shouldResume,
