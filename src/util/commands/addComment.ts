@@ -7,6 +7,7 @@
 
 import { Range, window } from 'vscode';
 import { constants, GCommands } from '../constants';
+import { Messages } from '../messages';
 import { GCommand } from './base';
 
 export class AddComment extends GCommand {
@@ -14,7 +15,7 @@ export class AddComment extends GCommand {
         super(GCommands.AddComment);
     }
 
-    execute() {
+    async execute() {
         const editor = window.activeTextEditor;
         let replace = '';
 
@@ -34,9 +35,11 @@ export class AddComment extends GCommand {
                 replace += `(${lines[i]})${i + 1 === lines.length ? '' : '\n'}`;
             }
 
-            void editor.edit(editBuilder => {
+            await editor.edit(editBuilder => {
                 editBuilder.replace(select, replace);
             });
+        } else {
+            await Messages.showErrorMessage('Editor does not contain G-Code');
         }
     }
 }
