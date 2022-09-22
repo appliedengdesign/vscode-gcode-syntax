@@ -4,8 +4,11 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import { Progress, ProgressLocation, Range, TextEditor, window } from 'vscode';
+import { ProgressLocation, Range, TextEditor, TextEditorEdit, window } from 'vscode';
+import { configuration } from './configuration/config';
+import { defaults } from './configuration/defaults';
 import { constants } from './constants';
+import { Messages } from './messages';
 
 export enum LineNumberFrequency {
     EveryLine = 'Every Line',
@@ -13,245 +16,212 @@ export enum LineNumberFrequency {
 }
 
 export type LineNumbererOptions = {
-    addSpaceAfter?: boolean;
-    frequency?: LineNumberFrequency;
-    ignoreComments?: boolean;
-    ignoreBlank?: boolean;
-    ignoreProgramNumbers?: boolean;
-};
-
-type ProgressInfo = {
-    message?: string | undefined;
-    increment?: number | undefined;
+    addSpaceAfter: boolean;
+    defaultStart: number;
+    defaultIncrement: number;
+    enableQuickPick: boolean;
+    frequency: LineNumberFrequency;
+    ignoreBlank: boolean;
+    ignoreComments: boolean;
+    ignoreExtra: Array<string>;
+    ignoreProgramNumbers: boolean;
+    matchLineNumber: boolean;
+    showProgress: boolean;
 };
 
 export class LineNumberer {
     private _editor: TextEditor | undefined;
-    private _beforeText: string = '';
+    private _opts: LineNumbererOptions;
 
     constructor() {
         this._editor = window.activeTextEditor;
+
+        this._opts = configuration.getParam('lineNumberer') ?? defaults.lineNumberer;
     }
 
-    async addNumbers(
-        start: number,
-        increment: number,
-        showProgress: boolean,
-        options?: LineNumbererOptions,
-    ): Promise<boolean> {
-        if (
-            this._editor &&
-            this._editor.document &&
-            this._editor.document.uri.scheme === 'file' &&
-            this._editor.document.languageId === constants.langId
-        ) {
-            if (!this._editor.selection.isEmpty) {
-                const select = new Range(this._editor.selection.start, this._editor.selection.end);
-                this._beforeText = this._editor.document.getText(select);
-            } else {
-                this._beforeText = this._editor.document.getText();
-            }
-        }
-        // Remove any numbers first
-        const newtext = this._removeNumbers(this._beforeText);
-        if (showProgress) {
-            await window.withProgress(
+    async addNumbers(start?: number, increment?: number): Promise<boolean> {
+        await window
+            .withProgress(
                 {
-                    location: ProgressLocation.Notification,
+                    location: ProgressLocation.Window,
                     title: 'Adding Line Numbers',
-                    cancellable: true,
+                    cancellable: false,
                 },
-                (progress, token) => {
-                    token.onCancellationRequested(() => {
-                        return this._updateTextEditor(this._beforeText);
-                    });
+                async progress => {
+                    progress.report({ increment: 0 });
+                    if (
+                        this._editor &&
+                        this._editor.document &&
+                        this._editor.document.uri.scheme === 'file' &&
+                        this._editor.document.languageId === constants.langId
+                    ) {
+                        await this._editor
+                            .edit(
+                                this._addNumbers(
+                                    start ??
+                                        configuration.getParam('lineNumberer.defaultStart') ??
+                                        defaults.lineNumberer.defaultStart,
+                                    increment ??
+                                        configuration.getParam('lineNumberer.defaultIncrement') ??
+                                        defaults.lineNumberer.defaultIncrement,
+                                ),
+                            )
+                            .then(
+                                done => {
+                                    progress.report({ increment: 100, message: 'Done' });
 
-                    progress.report({ increment: 0, message: 'Adding Line Numbers...' });
-                    return this._addNumbers(newtext, start, increment, progress, options).then(replace => {
-                        progress.report({ increment: 100, message: 'Updating Text.' });
-                        return Promise.resolve(this._updateTextEditor(replace));
-                    });
+                                    return done;
+                                },
+                                reason => {
+                                    void Messages.showErrorMessage(`Error Adding Line Numbers\n${<string>reason}`);
+                                },
+                            );
+                    } else {
+                        void Messages.showErrorMessage('Editor does not contain G-Code');
+                        return false;
+                    }
+
+                    return;
+                },
+            )
+            .then(
+                done => {
+                    return done;
+                },
+                reason => {
+                    void Messages.showErrorMessage(reason);
+                    return false;
                 },
             );
-        } else {
-            return this._addNumbers(newtext, start, increment, undefined, options).then(replace => {
-                return Promise.resolve(this._updateTextEditor(replace));
-            });
-        }
 
         return false;
     }
 
-    private async _addNumbers(
-        text: string,
-        start: number,
-        increment: number,
-        progress?: Progress<ProgressInfo>,
-        options?: LineNumbererOptions,
-    ): Promise<string> {
-        let replace = '';
-        let curNum = start;
-        const space = options?.addSpaceAfter ?? true ? ' ' : '';
-        const lines = text.match(/.*(?:\r\n|\r|\n)/g) || [];
+    private _addNumbers(start: number, increment: number): (editBuilder: TextEditorEdit) => void {
+        return editBuilder => {
+            if (
+                this._editor &&
+                this._editor.document &&
+                this._editor.document.uri.scheme === 'file' &&
+                this._editor.document.languageId === constants.langId
+            ) {
+                let curNum = start;
 
-        for (let i = 0; i < lines.length; ++i) {
-            lines[i] = lines[i].replace(/\r?\n|\r/g, '');
-            const line = lines[i].trim();
+                for (let i = 0; i < this._editor.document.lineCount; i++) {
+                    const line = this._editor.document.lineAt(i);
 
-            if ((options?.frequency ?? LineNumberFrequency.EveryLine) === LineNumberFrequency.EveryLine) {
-                if (line.length === 0) {
-                    if (options?.ignoreBlank ?? true) {
-                        replace += `${line}${i + 1 === lines.length ? '' : '\n'}`;
-                        if (progress) {
-                            progress.report({ increment: Math.floor(i / lines.length) });
+                    if (line.text) {
+                        // Test for Blank Line
+                        if (line.text.length === 0 && this._opts.ignoreBlank) {
+                            continue;
                         }
-                        continue;
-                    } else {
-                        replace += `N${curNum}${space}`;
+
+                        // Test For Comments
+                        if (/^\s*\(.*\)\s*$|^\s*;.*/.test(line.text) && this._opts.ignoreComments) {
+                            continue;
+                        }
+
+                        // Test for Program Numbers
+                        if (/(^[oO])(\d+)/.test(line.text) && this._opts.ignoreProgramNumbers) {
+                            continue;
+                        }
+
+                        // Test For Extra
+                        if (this._opts.ignoreExtra.some(rx => new RegExp(rx).test(line.text))) {
+                            continue;
+                        }
+
+                        if (this._opts.frequency === LineNumberFrequency.AtToolChanges && !/(M0?6)/.test(line.text)) {
+                            continue;
+                        }
+
+                        editBuilder.replace(
+                            new Range(i, 0, i, line.text.length),
+                            this._opts.matchLineNumber
+                                ? `N${i * increment + start}${this._opts.addSpaceAfter ? ' ' : ''}${line.text.replace(
+                                      /^N\d*\s*/i,
+                                      '',
+                                  )}`
+                                : `N${curNum}${this._opts.addSpaceAfter ? ' ' : ''}${line.text.replace(
+                                      /^N\d*\s*/i,
+                                      '',
+                                  )}`,
+                        );
+
                         curNum += increment;
-                        if (progress) {
-                            progress.report({ increment: Math.floor(i / lines.length) });
-                        }
-                        continue;
                     }
-                }
-
-                const re = /\(|\)/;
-                if (re.test(line)) {
-                    if (options?.ignoreComments ?? true) {
-                        replace += `${line}${i + 1 === lines.length ? '' : '\n'}`;
-                        if (progress) {
-                            progress.report({ increment: Math.floor(i / lines.length) });
-                        }
-                        continue;
-                    } else {
-                        replace += `N${curNum}${space}${line}${i + 1 === lines.length ? '' : '\n'}`;
-                        curNum += increment;
-                        if (progress) {
-                            progress.report({ increment: Math.floor(i / lines.length) });
-                        }
-                        continue;
-                    }
-                }
-
-                const re1 = /(^[oO])(\d+)/;
-                if (re1.test(line)) {
-                    if (options?.ignoreProgramNumbers ?? true) {
-                        replace += `${line}${i + 1 === lines.length ? '' : '\n'}`;
-                        if (progress) {
-                            progress.report({ increment: Math.floor(i / lines.length) });
-                        }
-                        continue;
-                    } else {
-                        replace += `N${curNum}${space}${line}${i + 1 === lines.length ? '' : '\n'}`;
-                        curNum += increment;
-                        if (progress) {
-                            progress.report({ increment: Math.floor(i / lines.length) });
-                        }
-                        continue;
-                    }
-                }
-
-                replace += `N${curNum}${space}${line}${i + 1 === lines.length ? '' : '\n'}`;
-                curNum += increment;
-                if (progress) {
-                    progress.report({ increment: Math.floor(i / lines.length) });
-                }
-            } else {
-                const re = /(M0?6)/;
-
-                if (re.test(line)) {
-                    replace += `N${curNum}${space}${line}${i + 1 === lines.length ? '' : '\n'}`;
-                    curNum += increment;
-                    if (progress) {
-                        progress.report({ increment: Math.floor(i / lines.length) });
-                    }
-                    continue;
-                } else {
-                    replace += `${line}${i + 1 === lines.length ? '' : '\n'}`;
-                    curNum += increment;
-                    if (progress) {
-                        progress.report({ increment: Math.floor(i / lines.length) });
-                    }
-                    continue;
                 }
             }
-        }
-
-        return Promise.resolve(replace);
+        };
     }
 
-    async removeNumbers(showProgress: boolean = false): Promise<boolean> {
-        if (
-            this._editor &&
-            this._editor.document &&
-            this._editor.document.uri.scheme === 'file' &&
-            this._editor.document.languageId === constants.langId
-        ) {
-            if (!this._editor.selection.isEmpty) {
-                const select = new Range(this._editor.selection.start, this._editor.selection.end);
-                this._beforeText = this._editor.document.getText(select);
-            } else {
-                this._beforeText = this._editor.document.getText();
-            }
-        }
-
-        if (showProgress) {
-            await window.withProgress(
+    async removeNumbers(): Promise<boolean> {
+        await window
+            .withProgress(
                 {
-                    location: ProgressLocation.Notification,
+                    location: ProgressLocation.Window,
                     title: 'Removing Line Numbers',
-                    cancellable: true,
+                    cancellable: false,
                 },
-                (progress, token) => {
-                    token.onCancellationRequested(() => {
-                        return this._updateTextEditor(this._beforeText);
-                    });
+                async progress => {
+                    progress.report({ increment: 0 });
+                    if (
+                        this._editor &&
+                        this._editor.document &&
+                        this._editor.document.uri.scheme === 'file' &&
+                        this._editor.document.languageId === constants.langId
+                    ) {
+                        await this._editor.edit(this._removeNumbers()).then(
+                            done => {
+                                progress.report({ increment: 100, message: 'Done' });
 
-                    progress.report({ increment: 0, message: 'Removing Line Numbers...' });
+                                return done;
+                            },
+                            reason => {
+                                void Messages.showErrorMessage(`Error Removing Line Numbers\n${<string>reason}`);
+                            },
+                        );
+                    } else {
+                        void Messages.showErrorMessage('Editor does not contain G-Code');
+                        return false;
+                    }
 
-                    const replace = this._removeNumbers(this._beforeText);
-                    progress.report({ increment: 100, message: 'Updating Text.' });
-
-                    return this._updateTextEditor(replace);
+                    return;
+                },
+            )
+            .then(
+                done => {
+                    return done;
+                },
+                reason => {
+                    void Messages.showErrorMessage(reason);
+                    return false;
                 },
             );
-        } else {
-            const replace = this._removeNumbers(this._beforeText);
-            return this._updateTextEditor(replace);
-        }
-
         return false;
     }
 
-    private _removeNumbers(replace: string): string {
-        return replace.replace(new RegExp(/(^[nN])(\d+)/gim), '');
-    }
+    private _removeNumbers(): (editBuilder: TextEditorEdit) => void {
+        return editBuilder => {
+            if (
+                this._editor &&
+                this._editor.document &&
+                this._editor.document.uri.scheme === 'file' &&
+                this._editor.document.languageId === constants.langId
+            ) {
+                for (let i = 0; i < this._editor.document.lineCount; i++) {
+                    const line = this._editor.document.lineAt(i);
 
-    private async _updateTextEditor(text: string): Promise<boolean> {
-        const len = this._beforeText.length;
+                    if (line.text) {
+                        const rem = /^N\d*\s*/i;
 
-        let rng: Range;
-
-        if (this._editor && this._editor.document) {
-            if (!this._editor.selection.isEmpty) {
-                rng = new Range(this._editor.selection.start, this._editor.selection.end);
-            } else {
-                rng = new Range(this._editor.document.positionAt(0), this._editor.document.positionAt(len - 1));
-            }
-
-            return Promise.resolve(
-                this._editor.edit(editBuilder => {
-                    if (this._editor && this._editor.document) {
-                        editBuilder.replace(rng, text);
-
-                        this._beforeText = '';
+                        if (rem.test(line.text)) {
+                            const newLine = line.text.replace(rem, '');
+                            editBuilder.replace(new Range(i, 0, i, line.text.length), newLine);
+                        }
                     }
-                }),
-            );
-        } else {
-            this._beforeText = '';
-            return false;
-        }
+                }
+            }
+        };
     }
 }
