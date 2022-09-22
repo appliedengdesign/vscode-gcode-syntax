@@ -9,6 +9,12 @@ import { env, MessageItem, Uri, window } from 'vscode';
 import { constants } from './constants';
 import { Version } from './version';
 
+enum MessageType {
+    Info,
+    Warn,
+    Error,
+}
+
 export class Messages {
     static async showSupportGCodeMessage() {
         const actions: MessageItem[] = [
@@ -17,9 +23,9 @@ export class Messages {
             { title: 'Subscribe to our YouTube' },
         ];
 
-        const result = await Messages.showMessage(
-            'info',
-            'G-Code Syntax is offered to everyone for free. If you find it useful, please consider' +
+        const result = await Messages._showMessage(
+            MessageType.Info,
+            'G-Code Syntax is offered to everyone for free. If you find it useful, please consider ' +
                 '[supporting](https://github.com/sponsors/appliedengdesign) it. Thank you! ❤',
             ...actions,
         );
@@ -38,8 +44,8 @@ export class Messages {
     static async showWhatsNewMessage(ver: Version) {
         const actions: MessageItem[] = [{ title: "What's New" }, { title: '❤' }];
 
-        const result = await Messages.showMessage(
-            'info',
+        const result = await Messages._showMessage(
+            MessageType.Info,
             `G-Code Syntax has been updated to v${ver.getVersionAsString()} - Check out what's new!`,
             ...actions,
         );
@@ -58,8 +64,8 @@ export class Messages {
 
         const actions: MessageItem[] = [{ title: 'Continue' }, { title: 'Abort' }];
 
-        const result = await Messages.showMessage(
-            'warn',
+        const result = await Messages._showMessage(
+            MessageType.Warn,
             'File size is above 10K lines. Tree / Stats refresh may not work.',
             ...actions,
         );
@@ -75,23 +81,27 @@ export class Messages {
         }
     }
 
-    private static async showMessage(
-        type: 'info' | 'warn' | 'error',
+    static async showErrorMessage(msg: string) {
+        await this._showMessage(MessageType.Error, msg);
+    }
+
+    private static async _showMessage(
+        type: MessageType,
         msg: string,
         ...actions: MessageItem[]
     ): Promise<MessageItem | undefined> {
         let result: MessageItem | undefined = undefined;
 
         switch (type) {
-            case 'info':
+            case MessageType.Info:
                 result = await window.showInformationMessage(msg, ...actions);
                 break;
 
-            case 'warn':
+            case MessageType.Warn:
                 result = await window.showWarningMessage(msg, ...actions);
                 break;
 
-            case 'error':
+            case MessageType.Error:
                 result = await window.showErrorMessage(msg, ...actions);
         }
 
