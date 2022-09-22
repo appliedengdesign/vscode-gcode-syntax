@@ -16,6 +16,6 @@ export class RemoveLineNumbers extends GCommand {
 
     async execute() {
         const ln = new LineNumberer();
-        await ln.removeNumbers(true);
+        await ln.removeNumbers();
     }
 }
