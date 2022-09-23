@@ -7,6 +7,7 @@
 import { ExtensionContext } from 'vscode';
 import { constants } from './constants';
 import { LocalStorageService, StorageLocations } from './localStorageService';
+import { Logger } from './logger';
 import { Version } from './version';
 
 export interface IState extends Record<string, unknown> {
@@ -24,6 +25,7 @@ export class StateControl {
     private _storageManager: LocalStorageService;
 
     constructor(context: ExtensionContext) {
+        Logger.log('Starting Local Storage Service...');
         this._storageManager = new LocalStorageService(context);
         this._state = this.getState();
     }
@@ -36,7 +38,7 @@ export class StateControl {
         await this._storageManager.deleteValue(constants.configId, StorageLocations.Global);
     }
 
-    private async writeState(): Promise<void> {
+    private async _writeState(): Promise<void> {
         await this._storageManager.setValue<IState>(constants.configId, this._state, StorageLocations.Global);
     }
 
@@ -55,6 +57,6 @@ export class StateControl {
         this._state.previousVersion = this._state.version;
         this._state.version = newVer.getVersionAsString();
 
-        await this.writeState();
+        await this._writeState();
     }
 }
