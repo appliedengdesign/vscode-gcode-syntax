@@ -2,7 +2,26 @@
 
 All changes to G-Code Language Extension will be documented here.
 
-## v0.7.5 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.4)
+## v0.7.6 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.6)
+
+### New Features
+
+- Added additional configuration options for the Line Numberer
+
+### Fixes
+
+- Fixed issue where commands were not working [#47](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/47)
+- Fixed regex for detecting comments when numbering
+- Moved line numbering progress to lower statusbar
+- Refactored Line Numberer code to use vscode editBuilder
+
+### Other
+
+- Added additional logging on initializtion
+- Updated README
+- Updated dependencies
+
+## v0.7.5 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.5)
 
 ### Fixes
 
