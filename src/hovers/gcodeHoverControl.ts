@@ -22,7 +22,7 @@ export class GCodeHoverControl implements Disposable {
         this._enabled = <boolean>configuration.getParam('general.hovers.enabled');
 
         if (this._enabled) {
-            Logger.log('Loading Hover Controller...');
+            Logger.log('Hovers: Enabled');
             this.register(window.activeTextEditor);
         }
     }
@@ -36,11 +36,11 @@ export class GCodeHoverControl implements Disposable {
         if (configuration.changed(e, 'general.hovers.enabled')) {
             if (this._enabled) {
                 // Disable and Dispose
-                Logger.log('Disabling Hover Controller...');
+                Logger.log('Hovers: Disabled');
                 this.unregister();
             } else {
                 // Enable
-                Logger.log('Enabling Hover Controller...');
+                Logger.log('Hovers: Enabled');
                 this.register(window.activeTextEditor);
             }
         }
