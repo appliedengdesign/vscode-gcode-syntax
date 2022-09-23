@@ -16,6 +16,8 @@ export function activate(context: ExtensionContext) {
     Logger.initialize(context);
     Logger.enable();
 
+    Logger.log('Initializing G-Code...');
+
     // Initialize Controller
     Control.initialize(context, configuration);
 
