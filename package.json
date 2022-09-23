@@ -556,6 +556,6 @@
         "webpack-cli": "^4.10.0"
     },
     "dependencies": {
-        "@appliedengdesign/gcode-reference": "^0.0.6"
+        "@appliedengdesign/gcode-reference": "^0.0.7"
     }
 }
