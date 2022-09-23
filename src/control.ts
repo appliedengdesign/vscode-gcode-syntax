@@ -20,7 +20,7 @@ import { CodesWebview } from './webviews/codesWebview';
 import { MachineTypeControl } from './util/machineType';
 import { GCodeHoverControl } from './hovers/gcodeHoverControl';
 import { defaults } from './util/configuration/defaults';
-import { registerCommands } from './util/commands/functions';
+import { registerCommands } from './util/commands';
 
 const cfgUnits = 'general.units';
 const cfgAutoRef = {
@@ -48,28 +48,26 @@ export class Control {
     // Webviews
     private static _codesWebview: CodesWebview | undefined;
 
-    private static async checkVersion() {
-        const gcodeVersion = new Version(constants.extension.version);
-
+    private static async _checkVersion() {
         const prevVer = this._stateController.getVersion();
 
-        const newVer = gcodeVersion.compareWith(prevVer.getVersion()) === 1 ? true : false;
+        const newVer = this._version.compareWith(prevVer.getVersion()) === 1 ? true : false;
 
         if (newVer) {
             // Extension has been updated
 
             // Update globalState version
             Logger.log('Updating...');
-            void this._stateController.updateVer(gcodeVersion);
+            await this._stateController.updateVer(this._version);
 
-            Logger.log(`G-Code upgraded from ${prevVer.getVersionAsString()} to ${gcodeVersion.getVersionAsString()}`);
-            await this.showWhatsNew(gcodeVersion);
+            Logger.log(`G-Code upgraded from ${prevVer.getVersionAsString()} to ${this._version.getVersionAsString()}`);
+            await this._showWhatsNew(this._version);
         } else {
             return;
         }
     }
 
-    private static async showWhatsNew(ver: Version) {
+    private static async _showWhatsNew(ver: Version) {
         // Show Whats New Message
         await Messages.showWhatsNewMessage(ver);
     }
@@ -79,23 +77,33 @@ export class Control {
         // Initialize G-Code Extension
         this._context = context;
         this._config = config;
+        this._version = new Version(constants.extension.version);
 
         // Initialze Configuration
+        Logger.log('Loading Configuration...');
         Config.initialize(this._context, this._config);
 
+        // Load State Controller
+        Logger.log('Loading State Controller...');
+        this._stateController = new StateControl(context);
+
+        // Check Version
+        Logger.log('Checking Version...');
+        void this._checkVersion();
+
         // Register Commands
+        Logger.log('Registering Commands...');
         context.subscriptions.push(...registerCommands());
 
         // Load StatusBars
         context.subscriptions.push((this._statusBarControl = new StatusBarControl()));
 
         // Load Machine Type
+        Logger.log('Loading Machine Type Controller...');
         context.subscriptions.push((this._machineTypeControl = new MachineTypeControl()));
 
-        // Load State Controller
-        this._stateController = new StateControl(context);
-
         // Load Hover Controller
+        Logger.log('Loading Hover Controller...');
         context.subscriptions.push((this._hoverController = new GCodeHoverControl()));
 
         // Units
@@ -125,7 +133,6 @@ export class Control {
 
         // Load Nav Tree
         Logger.log('Loading Nav Tree...');
-
         context.subscriptions.push((this._navTree = new NavTreeView()));
 
         Logger.log(
@@ -147,11 +154,10 @@ export class Control {
             GCommands.ShowSupportGCode,
         );
 
-        // Check Version
-        void this.checkVersion();
-
         // Set Up Webviews
         context.subscriptions.push((this._codesWebview = new CodesWebview()));
+
+        Logger.log('Done Initializing.');
     }
 
     static terminate() {
@@ -184,6 +190,10 @@ export class Control {
 
     static get config() {
         return this._config;
+    }
+
+    static get version() {
+        return this._version;
     }
 
     static get machineType() {
