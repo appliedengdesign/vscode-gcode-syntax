@@ -239,6 +239,24 @@
                     "markdownDescription": "Add Space After Line Number",
                     "scope": "window"
                 },
+                "gcode.lineNumberer.defaultIncrement": {
+                    "type": "number",
+                    "default": 10,
+                    "markdownDescription": "Default Line Numberer Increment",
+                    "scope": "window"
+                },
+                "gcode.lineNumberer.defaultStart": {
+                    "type": "number",
+                    "default": 10,
+                    "markdownDescription": "Default Line Numberer Start",
+                    "scope": "window"
+                },
+                "gcode.lineNumbere.enableQuickPick": {
+                    "type": "boolean",
+                    "default": true,
+                    "markdownDescription": "Enable or Disable Input for Line Numberer (Will use above defaults).",
+                    "scope": "window"
+                },
                 "gcode.lineNumberer.frequency": {
                     "type": "string",
                     "default": "Every Line",
@@ -264,10 +282,27 @@
                     "markdownDescription": "Ignore Comments when Numbering",
                     "scope": "window"
                 },
+                "gcode.lineNumberer.ignoreExtra": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [
+                        "%"
+                    ],
+                    "markdownDescription": "Additional characters to ignore (Beginning of Line)",
+                    "scope": "window"
+                },
                 "gcode.lineNumberer.ignoreProgramNumbers": {
                     "type": "boolean",
                     "default": true,
                     "markdownDescription": "Ignore program numbers, e.g. `O12345`",
+                    "scope": "window"
+                },
+                "gcode.lineNumberer.matchLineNumber": {
+                    "type": "boolean",
+                    "default": false,
+                    "markdownDescription": "When numbering, match N number to file's line number.",
                     "scope": "window"
                 },
                 "gcode.views.maxAutoRefresh": {

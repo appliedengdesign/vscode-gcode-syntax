@@ -112,10 +112,15 @@ G-Code Syntax is customizable and provides many configuration settings to allow 
 | `gcode.general.units`                     | Choose the units for the file. Options are Auto, Inch or Metric                        |
 | `gcode.general.outputLevel`               | Configure Output level for debugging purposes                                          |
 | `gcode.lineNumberer.addSpaceAfter`        | Add space after line number                                                            |
+| `gcode.lineNumberer.defaultIncrement`     | Default Line Numberer Increment                                                        |
+| `gcode.lineNumberer.defaultStart`         | Default Line Numberer Start                                                            |
+| `gcode.lineNumberer.enableQuickPick`      | Enable or Disable Input for the Line Numberer (Will use above defaults)                |
 | `gcode.lineNumberer.frequency`            | Frequency of line number additions (Every Line or at Tool Changes)                     |
 | `gcode.lineNumberer.ignoreBlank`          | Ignore Blank lines when numbering                                                      |
 | `gcode.lineNumberer.ignoreComments`       | Ignore Comments when numbering                                                         |
+| `gcode.lineNumberer.ignoreExtra`          | Additional characters to ignore (Beginning of Line, Default is %)                      |
 | `gcode.lineNumberer.ignoreProgramNumbers` | Ignore Program numbers, e.g. `O12345`                                                  |
+| `gcode.lineNumberer.matchLineNumber`      | When numbering, match the N number to file's line number. (Default is off)             |
 | `gcode.views.maxAutoRefresh`              | Value for limiting the autoRefresh maximum lines                                       |
 | `gcode.views.navTree.autoRefresh`         | Tree auto-refreshes as changes are made to the g-code. ( Disabled by default )         |
 | `gcode.views.stats.autoRefresh`           | Auto-refresh the stats view when changes are made to the g-code. (Disabled by default) |
