@@ -12,7 +12,7 @@ import { StatusBar, StatusBarControl } from './statusBar';
 import { Control } from '../control';
 import { GCommands } from './constants';
 
-export class MachineTypeControl implements Disposable {
+export class MachineTypeController implements Disposable {
     private readonly _dispoable: Disposable | undefined;
     private _machineType: MachineTypes | undefined;
     private _statusbar: StatusBarControl;

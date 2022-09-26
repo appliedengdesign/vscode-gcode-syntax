@@ -16,7 +16,7 @@ import { constants, Contexts, GCommands, PIcon, VSBuiltInCommands } from './util
 import { Version } from './util/version';
 import { Messages } from './util/messages';
 import { StateControl } from './util/stateControl';
-import { MachineTypeControl } from './util/machineType';
+import { MachineTypeController } from './util/machineTypeController';
 import { GCodeHoverControl } from './hovers/gcodeHoverControl';
 import { registerCommands } from './util/commands';
 import { CalcWebviewView } from './webviews/calc/calcWebviewView';
@@ -32,7 +32,7 @@ export class Control {
     private static _version: Version;
 
     // Controllers
-    private static _machineTypeControl: MachineTypeControl;
+    private static _machineTypeController: MachineTypeController;
     private static _statusBarControl: StatusBarControl;
     private static _unitsController: GCodeUnitsController;
     private static _stateController: StateControl;
@@ -97,7 +97,7 @@ export class Control {
 
         // Load Machine Type
         Logger.log('Loading Machine Type Controller...');
-        context.subscriptions.push((this._machineTypeControl = new MachineTypeControl()));
+        context.subscriptions.push((this._machineTypeController = new MachineTypeController()));
 
         // Load Hover Controller
         Logger.log('Loading Hover Controller...');
@@ -147,7 +147,7 @@ export class Control {
         // Dispose Controllers
         this._hoverController.dispose();
         this._unitsController?.dispose();
-        this._machineTypeControl?.dispose();
+        this._machineTypeController?.dispose();
         this._statusBarControl?.dispose();
     }
 
@@ -201,7 +201,7 @@ export class Control {
     }
 
     static get machineTypeController() {
-        return this._machineTypeControl;
+        return this._machineTypeController;
     }
 
     static get hoverController() {
