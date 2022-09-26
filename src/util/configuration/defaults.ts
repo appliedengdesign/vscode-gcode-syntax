@@ -7,7 +7,7 @@
 
 import { StatusBarAlignment } from 'vscode';
 import { GCodeUnits } from '../constants';
-import { LineNumberFrequency } from '../lineNumberer';
+import { LineNumbererOptions, LineNumberFrequency } from '../lineNumberer';
 
 export enum TraceLevel {
     Silent = 'silent',
