@@ -29,8 +29,8 @@ export class CalcWebviewView extends GWebviewView {
         }
 
         this._disposables.push(
-            configuration.onDidChange(this.onConfigurationChanged, this),
-            Control.unitsController.onDidChangeUnits(() => this.changeUnits()),
+            configuration.onDidChange(this._onConfigurationChanged, this),
+            Control.unitsController.onDidChangeUnits(() => this._changeUnits()),
         );
     }
 
@@ -38,7 +38,7 @@ export class CalcWebviewView extends GWebviewView {
         super.dispose();
     }
 
-    private onConfigurationChanged(e: ConfigurationChangeEvent) {
+    private _onConfigurationChanged(e: ConfigurationChangeEvent) {
         // Enable / Disable Calculator Webview
         if (configuration.changed(e, `${this.id.slice(6)}.enabled`)) {
             if (this._enabled) {
@@ -128,9 +128,9 @@ export class CalcWebviewView extends GWebviewView {
         return Promise.resolve(html);
     }
 
-    private changeUnits() {
+    private _changeUnits() {
         if (this._enabled) {
-            void this.postMessage({ type: 'changeUnits', payload: Control.unitsController?.units });
+            void this.postMessage({ type: 'changeUnits', payload: Control.unitsController.units });
         }
     }
 }
