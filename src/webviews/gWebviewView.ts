@@ -101,6 +101,7 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
     protected abstract getHtml(webview: Webview): Promise<string>;
     protected registerCommands?(): Disposable[];
     protected handleMessage?(msg: WebviewMsg): void;
+    protected bootstrap?(): WebviewMsg;
 
     protected getWebviewOptions(): WebviewOptions {
         return {

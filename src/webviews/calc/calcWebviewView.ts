@@ -31,10 +31,12 @@ export class CalcWebviewView extends GWebviewView {
         this._disposables.push(
             configuration.onDidChange(this._onConfigurationChanged, this),
             Control.unitsController.onDidChangeUnits(() => this._changeUnits()),
+            Control.machineTypeController.onDidChangeMachineType(() => this._changeMachineType()),
         );
     }
 
     dispose() {
+        Disposable.from(...this._disposables);
         super.dispose();
     }
 
@@ -76,9 +78,24 @@ export class CalcWebviewView extends GWebviewView {
 
                 break;
 
+            case 'getMachineType':
+                await this.postMessage({
+                    type: 'changeMachineType',
+                    payload: Control.machineTypeController.machineType,
+                });
+
+                break;
+
             default:
                 return;
         }
+    }
+
+    protected override bootstrap(): WebviewMsg {
+        return {
+            type: 'bootstrap',
+            payload: { units: Control.unitsController.units, machineType: Control.machineTypeController.machineType },
+        };
     }
 
     protected async getHtml(webview: Webview): Promise<string> {
@@ -90,6 +107,8 @@ export class CalcWebviewView extends GWebviewView {
         const cspNonce = getNonce();
 
         const root = webview.asWebviewUri(Control.context.extensionUri).toString();
+
+        const bootstrap = this.bootstrap();
 
         // vscode-webview-ui-toolkit
         const toolkitUri = webview.asWebviewUri(
@@ -103,7 +122,7 @@ export class CalcWebviewView extends GWebviewView {
             ),
         );
 
-        const html = content.replace(/{(cspNonce|cspSource|root|title|toolkit)}/g, (_substring, token) => {
+        const html = content.replace(/{(bootstrap|cspNonce|cspSource|root|title|toolkit)}/g, (_substring, token) => {
             switch (token) {
                 case 'cspNonce':
                     return cspNonce.toString();
@@ -120,6 +139,11 @@ export class CalcWebviewView extends GWebviewView {
                 case 'toolkit':
                     return `<script nonce="${cspNonce}" type="module" src="${toolkitUri.toString()}"></script>`;
 
+                case 'bootstrap':
+                    return `<script type="text/javascript" nonce="${cspNonce}">
+                        const __BOOTSTRAP__ = ${JSON.stringify(bootstrap)};
+                        </script>`;
+
                 default:
                     return '';
             }
@@ -128,9 +152,15 @@ export class CalcWebviewView extends GWebviewView {
         return Promise.resolve(html);
     }
 
-    private _changeUnits() {
+    private async _changeUnits() {
         if (this._enabled) {
-            void this.postMessage({ type: 'changeUnits', payload: Control.unitsController.units });
+            await this.postMessage({ type: 'changeUnits', payload: Control.unitsController.units });
+        }
+    }
+
+    private async _changeMachineType() {
+        if (this._enabled) {
+            await this.postMessage({ type: 'changeMachineType', payload: Control.machineTypeController.machineType });
         }
     }
 }
