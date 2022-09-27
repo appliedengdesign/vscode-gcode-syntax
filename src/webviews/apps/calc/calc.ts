@@ -6,27 +6,33 @@
 
 import { GWebviewApp } from '../shared/gWebviewApp';
 import { WebviewMsg } from '../../webviewMsg.types';
-import { ICalcDom, TCalcDom, Units } from './calc.types';
+import { calcBootstrap, ICalcDom, TCalcDom, Units } from './calc.types';
+import { MachineTypes } from '@appliedengdesign/gcode-reference/dist/types';
 
 export class CalcApp extends GWebviewApp {
     private _calcDom: ICalcDom = {};
     private _clearBtns: NodeListOf<HTMLElement> | undefined;
+    private _machineType: MachineTypes = MachineTypes.Mill;
     private _units: Units = Units.Default;
 
     constructor() {
         super('CalcApp');
 
         // Populate DOM
-        this.populateDOM();
+        this._populateDOM();
 
         // Register Button Events
-        this.registerBtns();
+        this._registerBtns();
 
-        // Get Current Units
-        this.getUnits();
+        // Load Units & MachineType from Bootstrap
+        if (this.bootstrap) {
+            this._machineType = (this.bootstrap.payload as calcBootstrap).machineType;
+            this._units = (this.bootstrap.payload as calcBootstrap).units;
+            this._updateUnits();
+        }
     }
 
-    private populateDOM(): void {
+    private _populateDOM(): void {
         // Populate RPM Calculator
         this._calcDom.rpm = {
             btn: document.getElementById('rpm-calc-btn') as HTMLElement,
@@ -73,7 +79,7 @@ export class CalcApp extends GWebviewApp {
         switch (message.type) {
             case 'changeUnits':
                 this._units = message.payload as Units;
-                this.updateUnits();
+                this._updateUnits();
                 this._clearBtns?.forEach(btn => {
                     btn.click();
                 });
@@ -85,31 +91,27 @@ export class CalcApp extends GWebviewApp {
         }
     }
 
-    private getUnits(): void {
-        this.postMessage({ type: 'getUnits' });
-    }
-
-    private updateUnits(): void {
+    private _updateUnits(): void {
         document.querySelectorAll<HTMLElement>('span.units').forEach(elem => {
             elem.innerHTML = `Units: ${this._units}`;
         });
     }
 
-    private registerBtns(): void {
+    private _registerBtns(): void {
         Object.keys(this._calcDom).forEach(key => {
-            this._calcDom[key as keyof ICalcDom]?.btn.addEventListener('click', this.processEvent.bind(this), false);
+            this._calcDom[key as keyof ICalcDom]?.btn.addEventListener('click', this._processEvent.bind(this), false);
         });
 
         this._clearBtns = document.querySelectorAll<HTMLElement>('span.clear-btn > vscode-button');
 
         if (this._clearBtns) {
             this._clearBtns.forEach(btn => {
-                btn.addEventListener('click', this.clearFields.bind(this), false);
+                btn.addEventListener('click', this._clearFields.bind(this), false);
             });
         }
     }
 
-    private processEvent(e: MouseEvent): void {
+    private _processEvent(e: MouseEvent): void {
         const target = e.target as HTMLButtonElement;
         let result: number | undefined;
 
@@ -123,9 +125,9 @@ export class CalcApp extends GWebviewApp {
                         this._calcDom.rpm.sfm.value = sfm ? sfm.toString() : '';
                         this._calcDom.rpm.toolDia.value = toolDia ? sfm.toString() : '';
 
-                        result = this.calcRPM(sfm, toolDia, this._units);
+                        result = this._calcRPM(sfm, toolDia, this._units);
 
-                        this.displayResults(result, this._calcDom.rpm);
+                        this._displayResults(result, this._calcDom.rpm);
                     }
                     break;
                 }
@@ -138,9 +140,9 @@ export class CalcApp extends GWebviewApp {
                         this._calcDom.sfm.rpm.value = rpm ? rpm.toString() : '';
                         this._calcDom.sfm.toolDia.value = toolDia ? toolDia.toString() : '';
 
-                        result = this.calcSFM(rpm, toolDia, this._units);
+                        result = this._calcSFM(rpm, toolDia, this._units);
 
-                        this.displayResults(result, this._calcDom.sfm);
+                        this._displayResults(result, this._calcDom.sfm);
                     }
                     break;
                 }
@@ -155,9 +157,9 @@ export class CalcApp extends GWebviewApp {
                         this._calcDom.feedrate.numFlutes.value = numFlutes ? numFlutes.toString() : '';
                         this._calcDom.feedrate.chipLoad.value = chipLoad ? chipLoad.toString() : '';
 
-                        result = this.calcFeedRate(rpm, numFlutes, chipLoad);
+                        result = this._calcFeedRate(rpm, numFlutes, chipLoad);
 
-                        this.displayResults(result, this._calcDom.feedrate);
+                        this._displayResults(result, this._calcDom.feedrate);
                     }
                     break;
                 }
@@ -172,9 +174,9 @@ export class CalcApp extends GWebviewApp {
                         this._calcDom.chipLoad.rpm.value = rpm ? rpm.toString() : '';
                         this._calcDom.chipLoad.numFlutes.value = numFlutes ? numFlutes.toString() : '';
 
-                        result = this.calcChipLoad(ipm, rpm, numFlutes);
+                        result = this._calcChipLoad(ipm, rpm, numFlutes);
 
-                        this.displayResults(result, this._calcDom.chipLoad);
+                        this._displayResults(result, this._calcDom.chipLoad);
                     }
                     break;
                 }
@@ -182,7 +184,7 @@ export class CalcApp extends GWebviewApp {
         }
     }
 
-    private clearFields(e: MouseEvent): void {
+    private _clearFields(e: MouseEvent): void {
         const target = e.target as HTMLButtonElement;
 
         if (target) {
@@ -201,7 +203,7 @@ export class CalcApp extends GWebviewApp {
         }
     }
 
-    private displayResults(result: number | undefined, target: TCalcDom): void {
+    private _displayResults(result: number | undefined, target: TCalcDom): void {
         if (result && result !== Number.POSITIVE_INFINITY) {
             // Precision is 2 decimals or 5 for Chip Load
             const precision = target === this._calcDom.chipLoad ? 5 : 2;
@@ -219,7 +221,7 @@ export class CalcApp extends GWebviewApp {
         }
     }
 
-    private calcRPM(sfm: number, toolDia: number, units: Units): number | undefined {
+    private _calcRPM(sfm: number, toolDia: number, units: Units): number | undefined {
         if (units === Units.Inch || units === Units.Default) {
             return (sfm * 12) / (Math.PI * toolDia);
         } else {
@@ -227,7 +229,7 @@ export class CalcApp extends GWebviewApp {
         }
     }
 
-    private calcSFM(rpm: number, toolDia: number, units: Units): number | undefined {
+    private _calcSFM(rpm: number, toolDia: number, units: Units): number | undefined {
         if (units === Units.Inch || units === Units.Default) {
             // Calculate SFM for Imperial
             return (Math.PI * toolDia * rpm) / 12;
@@ -237,11 +239,11 @@ export class CalcApp extends GWebviewApp {
         }
     }
 
-    private calcFeedRate(rpm: number, numFlutes: number, feedPerTooth: number): number | undefined {
+    private _calcFeedRate(rpm: number, numFlutes: number, feedPerTooth: number): number | undefined {
         return rpm * feedPerTooth * numFlutes;
     }
 
-    private calcChipLoad(feedRate: number, rpm: number, numFlutes: number): number | undefined {
+    private _calcChipLoad(feedRate: number, rpm: number, numFlutes: number): number | undefined {
         return feedRate / rpm / numFlutes;
     }
 }

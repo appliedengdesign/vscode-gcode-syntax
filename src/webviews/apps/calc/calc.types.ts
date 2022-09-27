@@ -4,6 +4,8 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
+import { MachineTypes } from '@appliedengdesign/gcode-reference/dist/types';
+
 export interface ICalcDom {
     rpm?: {
         btn: HTMLElement;
@@ -37,6 +39,11 @@ export interface ICalcDom {
 }
 
 export type TCalcDom = ICalcDom[keyof ICalcDom];
+
+export interface calcBootstrap {
+    machineType: MachineTypes;
+    units: Units;
+}
 
 export enum Units {
     Inch = 'Inch',
