@@ -6,13 +6,12 @@
 
 import { GWebviewApp } from '../shared/gWebviewApp';
 import { WebviewMsg } from '../../webviewMsg.types';
-import { calcBootstrap, ICalcDom, TCalcDom, Units } from './calc.types';
-import { MachineTypes } from '@appliedengdesign/gcode-reference/dist/types';
+import { calcBootstrap, ICalcDom, MachineType, MachineTypes, TCalcDom, Units } from './calc.types';
 
 export class CalcApp extends GWebviewApp {
     private _calcDom: ICalcDom = {};
     private _clearBtns: NodeListOf<HTMLElement> | undefined;
-    private _machineType: MachineTypes = MachineTypes.Mill;
+    private _machineType: MachineType = MachineTypes.Mill;
     private _units: Units = Units.Default;
 
     constructor() {

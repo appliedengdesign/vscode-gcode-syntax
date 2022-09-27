@@ -4,8 +4,6 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import { MachineTypes } from '@appliedengdesign/gcode-reference/dist/types';
-
 export interface ICalcDom {
     rpm?: {
         btn: HTMLElement;
@@ -40,13 +38,24 @@ export interface ICalcDom {
 
 export type TCalcDom = ICalcDom[keyof ICalcDom];
 
-export interface calcBootstrap {
-    machineType: MachineTypes;
-    units: Units;
+export enum MachineTypes {
+    EDM = 'edm',
+    Mill = 'mill',
+    Lathe = 'lathe',
+    Laser = 'laser',
+    Printer = 'printer',
+    Swiss = 'swiss',
 }
+
+export type MachineType = MachineTypes;
 
 export enum Units {
     Inch = 'Inch',
     MM = 'Metric',
     Default = 'Default (Inch)',
+}
+
+export interface calcBootstrap {
+    machineType: MachineTypes;
+    units: Units;
 }
