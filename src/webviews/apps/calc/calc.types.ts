@@ -7,12 +7,12 @@
 export interface ICalcDom {
     rpm?: {
         btn: HTMLElement;
-        sfm: HTMLInputElement;
+        speed: HTMLInputElement;
         toolDia: HTMLInputElement;
         results: HTMLSpanElement;
     };
 
-    sfm?: {
+    speed?: {
         btn: HTMLElement;
         rpm: HTMLInputElement;
         toolDia: HTMLInputElement;

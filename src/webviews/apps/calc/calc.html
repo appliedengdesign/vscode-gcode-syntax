@@ -14,18 +14,18 @@
                     <section id="rpm" class="calculator">
                         <h3>RPM</h3>
                         <vscode-divider role="separator"></vscode-divider>
-                        <vscode-text-field id="rpm-sfm" placeholder="Enter SFM" size="6">SFM</vscode-text-field>
+                        <vscode-text-field id="rpm-speed" placeholder="Enter Speed" size="6">Cutting Speed</vscode-text-field>
                         <vscode-text-field id="rpm-tool-dia" placeholder="Enter Tool Dia" size="6">Tool Diameter</vscode-text-field>
                         <label class="results">RPM</label><span id="rpm-results" class="results"></span>
                         <vscode-button id="rpm-calc-btn">Calculate</vscode-button>
                     </section>
-                    <section id="sfm" class="calculator">
-                        <h3>SFM</h3>
+                    <section id="Cutting Speed" class="calculator">
+                        <h3>Cutting Speed</h3>
                         <vscode-divider role="separator"></vscode-divider>
-                        <vscode-text-field id="sfm-rpm" placeholder="Enter SFM" size="6">RPM</vscode-text-field>
-                        <vscode-text-field id="sfm-tool-dia" placeholder="Enter Tool Dia" size="6">Tool Diameter</vscode-text-field>
-                        <label class="results">SFM</label><span id="sfm-results" class="results"></span>
-                        <vscode-button id="sfm-calc-btn">Calculate</vscode-button>
+                        <vscode-text-field id="speed-rpm" placeholder="Enter RPM" size="6">RPM</vscode-text-field>
+                        <vscode-text-field id="speed-tool-dia" placeholder="Enter Tool Dia" size="6">Tool Diameter</vscode-text-field>
+                        <label class="results">Cutting Speed</label><span id="speed-results" class="results"></span>
+                        <vscode-button id="speed-calc-btn">Calculate</vscode-button>
                     </section>
                 </section>
                 <section class="row">
@@ -44,14 +44,14 @@
                         <vscode-divider role="separator"></vscode-divider>
                         <vscode-text-field id="fr-rpm" placeholder="Enter RPM" size="6">RPM</vscode-text-field>
                         <vscode-text-field id="fr-num-flutes" placeholder="Enter # Flutes" size="6"># of Flutes</vscode-text-field>
-                        <vscode-text-field id="fr-chip-load" placeholder="Enter IPT" size="6">Load / Tooth</vscode-text-field>
+                        <vscode-text-field id="fr-chip-load" placeholder="Enter FPT" size="6">Feed / Tooth</vscode-text-field>
                         <label class="results">Feedrate</label><span id="fr-results" class="results"></span>
                         <vscode-button id="fr-calc-btn">Calculate</vscode-button>
                     </section>
                     <section id="chip-load" class="calculator">
                         <h3>Chip Load</h3>
                         <vscode-divider role="separator"></vscode-divider>
-                        <vscode-text-field id="cl-ipm" placeholder="Enter IPM" size="6">IPM</vscode-text-field>
+                        <vscode-text-field id="cl-feedrate" placeholder="Enter Feedrate" size="6">Feedrate</vscode-text-field>
                         <vscode-text-field id="cl-rpm" placeholder="Enter RPM" size="6">RPM</vscode-text-field>
                         <vscode-text-field id="cl-num-flutes" placeholder="Enter # Flutes" size="6"># of Flutes</vscode-text-field>
                         <label class="results">Chip Load</label><span id="cl-results" class="results"></span>
@@ -76,6 +76,14 @@
                         <label class="results">Metal Removal Rate</label><span id="mrr-results" class="results"></span>
                         <vscode-button id="mrr-calc-btn">Calculate</vscode-button>
                     </section>
+                </section>
+                <section class="row">
+                    <span class="clear-btn">
+                        <vscode-button id="view-3-clear">Clear Fields</vscode-button>
+                    </span>
+                </section>
+                <section class="row">
+                    <span class="units"><a href="#">Units: </a></span>
                 </section>
             </vscode-panel-view>
         </vscode-panels>

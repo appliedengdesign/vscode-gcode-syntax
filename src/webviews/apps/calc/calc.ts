@@ -35,17 +35,19 @@ export class CalcApp extends GWebviewApp {
         // Populate RPM Calculator
         this._calcDom.rpm = {
             btn: document.getElementById('rpm-calc-btn') as HTMLElement,
-            sfm: document.getElementById('rpm-sfm')?.shadowRoot?.getElementById('control') as HTMLInputElement,
+            speed: document.getElementById('rpm-speed')?.shadowRoot?.getElementById('control') as HTMLInputElement,
             toolDia: document.getElementById('rpm-tool-dia')?.shadowRoot?.getElementById('control') as HTMLInputElement,
             results: document.getElementById('rpm-results') as HTMLSpanElement,
         };
 
         // Populate SFM Calculator
-        this._calcDom.sfm = {
-            btn: document.getElementById('sfm-calc-btn') as HTMLElement,
-            rpm: document.getElementById('sfm-rpm')?.shadowRoot?.getElementById('control') as HTMLInputElement,
-            toolDia: document.getElementById('sfm-tool-dia')?.shadowRoot?.getElementById('control') as HTMLInputElement,
-            results: document.getElementById('sfm-results') as HTMLSpanElement,
+        this._calcDom.speed = {
+            btn: document.getElementById('speed-calc-btn') as HTMLElement,
+            rpm: document.getElementById('speed-rpm')?.shadowRoot?.getElementById('control') as HTMLInputElement,
+            toolDia: document
+                .getElementById('speed-tool-dia')
+                ?.shadowRoot?.getElementById('control') as HTMLInputElement,
+            results: document.getElementById('speed-results') as HTMLSpanElement,
         };
 
         // Populate Feedrate Calculator
@@ -64,7 +66,7 @@ export class CalcApp extends GWebviewApp {
         // Populate Chipload Calculator
         this._calcDom.chipLoad = {
             btn: document.getElementById('cl-calc-btn') as HTMLElement,
-            feedRate: document.getElementById('cl-ipm')?.shadowRoot?.getElementById('control') as HTMLInputElement,
+            feedRate: document.getElementById('cl-feedrate')?.shadowRoot?.getElementById('control') as HTMLInputElement,
             rpm: document.getElementById('cl-rpm')?.shadowRoot?.getElementById('control') as HTMLInputElement,
             numFlutes: document
                 .getElementById('cl-num-flutes')
@@ -128,30 +130,30 @@ export class CalcApp extends GWebviewApp {
             switch (target.id) {
                 case 'rpm-calc-btn': {
                     if (this._calcDom.rpm) {
-                        const sfm = Math.abs(Number(this._calcDom.rpm.sfm.value));
+                        const sfm = Math.abs(Number(this._calcDom.rpm.speed.value));
                         const toolDia = Math.abs(Number(this._calcDom.rpm.toolDia.value));
 
-                        this._calcDom.rpm.sfm.value = sfm ? sfm.toString() : '';
+                        this._calcDom.rpm.speed.value = sfm ? sfm.toString() : '';
                         this._calcDom.rpm.toolDia.value = toolDia ? sfm.toString() : '';
 
-                        result = this._calcRPM(sfm, toolDia, this._units);
+                        result = this._calcRPM(sfm, toolDia);
 
                         this._displayResults(result, this._calcDom.rpm);
                     }
                     break;
                 }
 
-                case 'sfm-calc-btn': {
-                    if (this._calcDom.sfm) {
-                        const rpm = Math.abs(Number(this._calcDom.sfm.rpm.value));
-                        const toolDia = Math.abs(Number(this._calcDom.sfm.toolDia.value));
+                case 'speed-calc-btn': {
+                    if (this._calcDom.speed) {
+                        const rpm = Math.abs(Number(this._calcDom.speed.rpm.value));
+                        const toolDia = Math.abs(Number(this._calcDom.speed.toolDia.value));
 
-                        this._calcDom.sfm.rpm.value = rpm ? rpm.toString() : '';
-                        this._calcDom.sfm.toolDia.value = toolDia ? toolDia.toString() : '';
+                        this._calcDom.speed.rpm.value = rpm ? rpm.toString() : '';
+                        this._calcDom.speed.toolDia.value = toolDia ? toolDia.toString() : '';
 
-                        result = this._calcSFM(rpm, toolDia, this._units);
+                        result = this._calcSFM(rpm, toolDia);
 
-                        this._displayResults(result, this._calcDom.sfm);
+                        this._displayResults(result, this._calcDom.speed);
                     }
                     break;
                 }
@@ -204,6 +206,7 @@ export class CalcApp extends GWebviewApp {
 
                         this._displayResults(result, this._calcDom.mrr);
                     }
+                    break;
                 }
             }
         }
@@ -230,12 +233,63 @@ export class CalcApp extends GWebviewApp {
 
     private _displayResults(result: number | undefined, target: TCalcDom): void {
         if (result && result !== Number.POSITIVE_INFINITY) {
-            // Precision is 2 decimals or 5 for Chip Load
-            const precision = target === this._calcDom.chipLoad ? 5 : 2;
-
             if (target) {
                 target.results.classList.remove('error');
-                target.results.innerHTML = result.toFixed(precision);
+
+                // Precision is 2 decimals or 4 for Chip Load
+                const precision = target === this._calcDom.chipLoad ? 4 : 2;
+                let units = '';
+
+                // Assign units
+                switch (target) {
+                    case this._calcDom.rpm:
+                        {
+                            units = '[RPM]';
+                        }
+                        break;
+
+                    case this._calcDom.speed:
+                        {
+                            if (this._units === Units.Inch || this._units === Units.Default) {
+                                units = '[SFM]';
+                            } else {
+                                units = '[m/min]';
+                            }
+                        }
+                        break;
+
+                    case this._calcDom.feedrate:
+                        {
+                            if (this._units === Units.Inch || this._units === Units.Default) {
+                                units = '[in/min]';
+                            } else {
+                                units = '[mm/min]';
+                            }
+                        }
+                        break;
+
+                    case this._calcDom.chipLoad:
+                        {
+                            if (this._units === Units.Inch || this._units === Units.Default) {
+                                units = '[in]';
+                            } else {
+                                units = '[mm]';
+                            }
+                        }
+                        break;
+
+                    case this._calcDom.mrr:
+                        {
+                            if (this._units === Units.Inch || this._units === Units.Default) {
+                                units = '[in<sup>3</sup>/min]';
+                            } else {
+                                result /= 100;
+                                units = '[cm<sup>3</sup>/min]';
+                            }
+                        }
+                        break;
+                }
+                target.results.innerHTML = `${result.toFixed(precision)} <sub>${units}</sub>`;
             }
         } else {
             // Answer is NaN or Infinity
@@ -246,16 +300,16 @@ export class CalcApp extends GWebviewApp {
         }
     }
 
-    private _calcRPM(sfm: number, toolDia: number, units: Units): number | undefined {
-        if (units === Units.Inch || units === Units.Default) {
+    private _calcRPM(sfm: number, toolDia: number): number | undefined {
+        if (this._units === Units.Inch || this._units === Units.Default) {
             return (sfm * 12) / (Math.PI * toolDia);
         } else {
             return (sfm * 1000) / (Math.PI * toolDia);
         }
     }
 
-    private _calcSFM(rpm: number, toolDia: number, units: Units): number | undefined {
-        if (units === Units.Inch || units === Units.Default) {
+    private _calcSFM(rpm: number, toolDia: number): number | undefined {
+        if (this._units === Units.Inch || this._units === Units.Default) {
             // Calculate SFM for Imperial
             return (Math.PI * toolDia * rpm) / 12;
         } else {
