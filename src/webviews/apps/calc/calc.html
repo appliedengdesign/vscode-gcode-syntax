@@ -7,6 +7,7 @@
         <vscode-panels aria-label="with Complex Content">
             <vscode-panel-tab id="tab-1">SPEEDS</vscode-panel-tab>
             <vscode-panel-tab id="tab-2">FEEDS</vscode-panel-tab>
+            <vscode-panel-tab id="tab-3">MRR</vscode-panel-tab>
 
             <vscode-panel-view id="view-1">
                 <section class="row">
@@ -66,8 +67,18 @@
                     <span class="units"></span>
                 </section>
             </vscode-panel-view>
+            <vscode-panel-view id="view-3">
+                <section class="row">
+                    <section id="mrr" class="calculator">                        
+                        <vscode-text-field id="mrr-ap" placeholder="Axial Depth of Cut" size="15">A<sub>p</sub> - Axial Depth of Cut</vscode-text-field>
+                        <vscode-text-field id="mrr-ae" placeholder="Radial Depth of Cut" size="15">A<sub>e</sub> - Radial Depth of Cut</vscode-text-field>
+                        <vscode-text-field id="mrr-fr" placeholder="Feedrate" size="15">Feedrate</vscode-text-field>
+                        <label class="results">Metal Removal Rate</label><span id="mrr-results" class="results"></span>
+                        <vscode-button id="mrr-calc-btn">Calculate</vscode-button>
+                    </section>
+                </section>
+            </vscode-panel-view>
         </vscode-panels>
-
     </div>
     {bootstrap}
 </body>

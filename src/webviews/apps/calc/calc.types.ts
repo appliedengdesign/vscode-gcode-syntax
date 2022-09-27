@@ -29,9 +29,17 @@ export interface ICalcDom {
 
     chipLoad?: {
         btn: HTMLElement;
-        ipm: HTMLInputElement;
+        feedRate: HTMLInputElement;
         rpm: HTMLInputElement;
         numFlutes: HTMLInputElement;
+        results: HTMLSpanElement;
+    };
+
+    mrr?: {
+        btn: HTMLElement;
+        axialDepth: HTMLInputElement;
+        radialDepth: HTMLInputElement;
+        feedRate: HTMLInputElement;
         results: HTMLSpanElement;
     };
 }

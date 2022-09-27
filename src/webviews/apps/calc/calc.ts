@@ -61,14 +61,24 @@ export class CalcApp extends GWebviewApp {
             results: document.getElementById('fr-results') as HTMLSpanElement,
         };
 
+        // Populate Chipload Calculator
         this._calcDom.chipLoad = {
             btn: document.getElementById('cl-calc-btn') as HTMLElement,
-            ipm: document.getElementById('cl-ipm')?.shadowRoot?.getElementById('control') as HTMLInputElement,
+            feedRate: document.getElementById('cl-ipm')?.shadowRoot?.getElementById('control') as HTMLInputElement,
             rpm: document.getElementById('cl-rpm')?.shadowRoot?.getElementById('control') as HTMLInputElement,
             numFlutes: document
                 .getElementById('cl-num-flutes')
                 ?.shadowRoot?.getElementById('control') as HTMLInputElement,
             results: document.getElementById('cl-results') as HTMLSpanElement,
+        };
+
+        // Populate MRR Calculator
+        this._calcDom.mrr = {
+            btn: document.getElementById('mrr-calc-btn') as HTMLElement,
+            axialDepth: document.getElementById('mrr-ap')?.shadowRoot?.getElementById('control') as HTMLInputElement,
+            radialDepth: document.getElementById('mrr-ae')?.shadowRoot?.getElementById('control') as HTMLInputElement,
+            feedRate: document.getElementById('mrr-fr')?.shadowRoot?.getElementById('control') as HTMLInputElement,
+            results: document.getElementById('mrr-results') as HTMLSpanElement,
         };
     }
 
@@ -165,19 +175,35 @@ export class CalcApp extends GWebviewApp {
 
                 case 'cl-calc-btn': {
                     if (this._calcDom.chipLoad) {
-                        const ipm = Math.abs(Number(this._calcDom.chipLoad.ipm.value));
+                        const feedRate = Math.abs(Number(this._calcDom.chipLoad.feedRate.value));
                         const rpm = Math.abs(Number(this._calcDom.chipLoad.rpm.value));
                         const numFlutes = Math.abs(Number(this._calcDom.chipLoad.numFlutes.value));
 
-                        this._calcDom.chipLoad.ipm.value = ipm ? ipm.toString() : '';
+                        this._calcDom.chipLoad.feedRate.value = feedRate ? feedRate.toString() : '';
                         this._calcDom.chipLoad.rpm.value = rpm ? rpm.toString() : '';
                         this._calcDom.chipLoad.numFlutes.value = numFlutes ? numFlutes.toString() : '';
 
-                        result = this._calcChipLoad(ipm, rpm, numFlutes);
+                        result = this._calcChipLoad(feedRate, rpm, numFlutes);
 
                         this._displayResults(result, this._calcDom.chipLoad);
                     }
                     break;
+                }
+
+                case 'mrr-calc-btn': {
+                    if (this._calcDom.mrr) {
+                        const axialDepth = Math.abs(Number(this._calcDom.mrr.axialDepth.value));
+                        const radialDepth = Math.abs(Number(this._calcDom.mrr.radialDepth.value));
+                        const feedRate = Math.abs(Number(this._calcDom.mrr.feedRate.value));
+
+                        this._calcDom.mrr.axialDepth.value = axialDepth ? axialDepth.toString() : '';
+                        this._calcDom.mrr.radialDepth.value = radialDepth ? radialDepth.toString() : '';
+                        this._calcDom.mrr.feedRate.value = feedRate ? feedRate.toString() : '';
+
+                        result = this._calcMRR(axialDepth, radialDepth, feedRate);
+
+                        this._displayResults(result, this._calcDom.mrr);
+                    }
                 }
             }
         }
@@ -244,6 +270,10 @@ export class CalcApp extends GWebviewApp {
 
     private _calcChipLoad(feedRate: number, rpm: number, numFlutes: number): number | undefined {
         return feedRate / rpm / numFlutes;
+    }
+
+    private _calcMRR(axialDepth: number, radialDepth: number, feedRate: number): number | undefined {
+        return feedRate * radialDepth * axialDepth;
     }
 }
 
