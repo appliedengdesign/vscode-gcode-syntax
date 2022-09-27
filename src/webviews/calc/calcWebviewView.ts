@@ -69,28 +69,6 @@ export class CalcWebviewView extends GWebviewView {
         ];
     }
 
-    protected override async handleMessage(msg: WebviewMsg): Promise<void> {
-        const type = msg.type;
-
-        switch (type) {
-            case 'getUnits':
-                await this.postMessage({ type: 'changeUnits', payload: Control.unitsController.units });
-
-                break;
-
-            case 'getMachineType':
-                await this.postMessage({
-                    type: 'changeMachineType',
-                    payload: Control.machineTypeController.machineType,
-                });
-
-                break;
-
-            default:
-                return;
-        }
-    }
-
     protected override bootstrap(): WebviewMsg {
         return {
             type: 'bootstrap',
