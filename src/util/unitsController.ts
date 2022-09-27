@@ -14,18 +14,18 @@ import {
     window,
     workspace,
 } from 'vscode';
-import { Control } from './control';
-import { configuration } from './util/configuration/config';
-import { defaults } from './util/configuration/defaults';
-import { GCodeUnits, GCommands } from './util/constants';
-import { Logger } from './util/logger';
-import { StatusBar, StatusBarControl } from './util/statusBar';
+import { Control } from '../control';
+import { configuration } from './configuration/config';
+import { defaults } from './configuration/defaults';
+import { GCodeUnits, GCommands } from './constants';
+import { Logger } from './logger';
+import { StatusBar, StatusBarControl } from './statusBar';
 
 type Units = GCodeUnits.Inch | GCodeUnits.MM | GCodeUnits.Default;
 
 export const cfgUnits = 'general.units';
 
-export class GCodeUnitsController implements Disposable {
+export class UnitsController implements Disposable {
     private readonly _disposables: Disposable[] = [];
     private readonly unitsStatusBar: StatusBar = 'unitsBar';
     private _editor: TextEditor | undefined;

@@ -10,7 +10,7 @@ import { Config, configuration } from './util/configuration/config';
 import { Logger } from './util/logger';
 import { StatusBarControl } from './util/statusBar';
 import { NavTreeView } from './views/navTreeView';
-import { GCodeUnitsController } from './gcodeUnits';
+import { UnitsController } from './util/unitsController';
 import { StatsView } from './views/statsView';
 import { constants, Contexts, GCommands, PIcon, VSBuiltInCommands } from './util/constants';
 import { Version } from './util/version';
@@ -34,7 +34,7 @@ export class Control {
     // Controllers
     private static _machineTypeController: MachineTypeController;
     private static _statusBarControl: StatusBarControl;
-    private static _unitsController: GCodeUnitsController;
+    private static _unitsController: UnitsController;
     private static _stateController: StateControl;
     private static _hoverController: GCodeHoverControl;
 
@@ -104,7 +104,7 @@ export class Control {
         context.subscriptions.push((this._hoverController = new GCodeHoverControl()));
 
         // Load Units Controller
-        context.subscriptions.push((this._unitsController = new GCodeUnitsController()));
+        context.subscriptions.push((this._unitsController = new UnitsController()));
 
         // Load Nav Tree
         Logger.log('Loading Nav Tree...');
