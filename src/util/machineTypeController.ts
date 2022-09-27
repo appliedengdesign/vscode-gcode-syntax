@@ -15,7 +15,7 @@ import { defaults } from './configuration/defaults';
 
 export class MachineTypeController implements Disposable {
     private readonly _dispoables: Disposable[] = [];
-    private _machineType: MachineTypes | undefined;
+    private _machineType: MachineType | undefined;
     private _statusbar: StatusBarControl;
     private readonly mtypeStatusBar: StatusBar = 'machineTypeBar';
     private _gReference: GReference;
