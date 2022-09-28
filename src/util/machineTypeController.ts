@@ -88,6 +88,9 @@ export class MachineTypeController implements Disposable {
 
         // Update GReference
         this._gReference.setType(this._machineType);
+
+        // Fire Event
+        this._onDidChangeMachineType.fire(this._machineType);
     }
 
     get gReference() {
