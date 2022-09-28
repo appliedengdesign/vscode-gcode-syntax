@@ -12,14 +12,14 @@
 section {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-
+    justify-content: start;
     padding: 1em;
 }
 
 section.row {
     flex-direction: row;
     flex: none;
+    justify-content: center;
     padding: 0;
 }
 
@@ -68,14 +68,18 @@ span.results {
     padding: 5px;
 }
 
-#mrr-results {
-    width: 130px;
-}
-
 section.calculator > vscode-button {
     margin-top: 1rem;
 }
 
 .error {
     color: var(--vscode-errorForeground);
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+#finish .label {
+    padding-bottom: 3.5px;
 }

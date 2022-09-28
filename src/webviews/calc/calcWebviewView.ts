@@ -4,6 +4,7 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
+import { MachineType, MachineTypes } from '@appliedengdesign/gcode-reference';
 import { TextDecoder } from 'util';
 import { commands, ConfigurationChangeEvent, Disposable, Uri, Webview, workspace } from 'vscode';
 import { Control } from '../../control';
@@ -17,21 +18,36 @@ import { WebviewMsg } from '../webviewMsg.types';
 
 export class CalcWebviewView extends GWebviewView {
     private _shortId: string;
+    private _machineType: MachineType;
 
     constructor() {
-        super(Webviews.CalcWebviewView, WebviewTitles.CalcWebviewView);
+        const title = `${WebviewTitles.CalcWebviewView} (${
+            Control.machineTypeController.machineType.toString() ?? ''
+        })`;
+
+        super(Webviews.CalcWebviewView, title);
 
         this._shortId = this.id.split('.').pop() ?? '';
+        this._machineType = Control.machineTypeController.machineType;
 
         if ((this._enabled = configuration.getParam(`${this.id.slice(6)}.enabled`) ?? defaults.webviews.calc.enabled)) {
             Logger.log('Loading Calculator...');
-            void Control.setContext(Contexts.CalcWebviewViewEnabled, true);
+
+            if (
+                this._machineType === MachineTypes.Mill ||
+                this._machineType === MachineTypes.Lathe ||
+                this._machineType === MachineTypes.Swiss
+            ) {
+                void Control.setContext(Contexts.CalcWebviewViewEnabled, true);
+            } else {
+                void Control.setContext(Contexts.CalcWebviewViewEnabled, false);
+            }
         }
 
         this._disposables.push(
             configuration.onDidChange(this._onConfigurationChanged, this),
-            Control.unitsController.onDidChangeUnits(() => this._changeUnits()),
-            Control.machineTypeController.onDidChangeMachineType(() => this._changeMachineType()),
+            Control.unitsController.onDidChangeUnits(this._changeUnits, this),
+            Control.machineTypeController.onDidChangeMachineType(this._changeMachineType, this),
         );
     }
 
@@ -136,9 +152,24 @@ export class CalcWebviewView extends GWebviewView {
         }
     }
 
-    private async _changeMachineType() {
-        if (this._enabled) {
-            await this.postMessage({ type: 'changeMachineType', payload: Control.machineTypeController.machineType });
+    private async _changeMachineType(e: MachineType) {
+        this._machineType = e;
+
+        if (
+            this._machineType === MachineTypes.Mill ||
+            this._machineType === MachineTypes.Lathe ||
+            this._machineType === MachineTypes.Swiss
+        ) {
+            if (this._enabled) {
+                void Control.setContext(Contexts.CalcWebviewViewEnabled, true);
+                this.title = `${WebviewTitles.CalcWebviewView} (${this._machineType.toString()})`;
+                await this.postMessage({
+                    type: 'changeMachineType',
+                    payload: Control.machineTypeController.machineType,
+                });
+            }
+        } else {
+            void Control.setContext(Contexts.CalcWebviewViewEnabled, false);
         }
     }
 }

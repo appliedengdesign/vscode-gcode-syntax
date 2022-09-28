@@ -28,6 +28,7 @@ export class CalcApp extends GWebviewApp {
             this._machineType = (this.bootstrap.payload as calcBootstrap).machineType;
             this._units = (this.bootstrap.payload as calcBootstrap).units;
             this._updateUnits();
+            this._updateMachineType();
         }
     }
 
@@ -82,6 +83,16 @@ export class CalcApp extends GWebviewApp {
             feedRate: document.getElementById('mrr-fr')?.shadowRoot?.getElementById('control') as HTMLInputElement,
             results: document.getElementById('mrr-results') as HTMLSpanElement,
         };
+
+        // Populate Finish Calculator
+        this._calcDom.finish = {
+            btn: document.getElementById('finish-btn') as HTMLElement,
+            radius: document.getElementById('finish-radius')?.shadowRoot?.getElementById('control') as HTMLInputElement,
+            feedRate: document
+                .getElementById('finish-feedrate')
+                ?.shadowRoot?.getElementById('control') as HTMLInputElement,
+            results: document.getElementById('finish-results') as HTMLSpanElement,
+        };
     }
 
     protected onMsgReceived(e: MessageEvent<WebviewMsg>): void {
@@ -89,12 +100,20 @@ export class CalcApp extends GWebviewApp {
 
         switch (message.type) {
             case 'changeUnits':
-                this._units = message.payload as Units;
-                this._updateUnits();
-                this._clearBtns?.forEach(btn => {
-                    btn.click();
-                });
+                {
+                    this._units = message.payload as Units;
+                    this._updateUnits();
+                    this._clearBtns?.forEach(btn => {
+                        btn.click();
+                    });
+                }
+                break;
 
+            case 'changeMachineType':
+                {
+                    this._machineType = message.payload as MachineType;
+                    this._updateMachineType();
+                }
                 break;
 
             default:
@@ -106,6 +125,121 @@ export class CalcApp extends GWebviewApp {
         document.querySelectorAll<HTMLElement>('span.units').forEach(elem => {
             elem.innerHTML = `Units: ${this._units}`;
         });
+    }
+
+    private _updateMachineType(): void {
+        // Clear Fields
+        this._clearFields();
+
+        switch (this._machineType) {
+            case MachineTypes.Mill:
+                {
+                    // Hide Surface Finish Calculator
+                    const finishSection = document.getElementById('finish')?.parentElement as HTMLElement;
+                    if (finishSection) {
+                        finishSection.style.display = 'none';
+                    }
+
+                    const mrrTab = document.getElementById('tab-3') as HTMLElement;
+                    if (mrrTab) {
+                        mrrTab.innerHTML = 'MRR';
+                    }
+
+                    // Show Feeds Tab
+                    const tab = document.getElementById('tab-2') as HTMLElement;
+                    const tabView = document.getElementById('view-2') as HTMLElement;
+                    if (tab && tabView) {
+                        tab.style.display = '';
+                        tabView.style.display = '';
+                    }
+
+                    // Update Diameter -> Tool Dia
+                    const rpmDiaField = document.getElementById('rpm-tool-dia') as HTMLElement;
+                    if (rpmDiaField) {
+                        rpmDiaField.setAttribute('placeholder', 'Enter Tool Dia');
+                        rpmDiaField.innerHTML = 'Diameter';
+                    }
+
+                    const speedDiaField = document.getElementById('speed-tool-dia') as HTMLElement;
+                    if (speedDiaField) {
+                        speedDiaField.setAttribute('placeholder', 'Enter Tool Dia');
+                        speedDiaField.innerHTML = 'Diameter';
+                    }
+
+                    // Update MRR Calculator
+                    const mrrDepth = document.getElementById('mrr-ap') as HTMLElement;
+                    if (mrrDepth) {
+                        mrrDepth.setAttribute('placeholder', 'Axial Depth of Cut');
+                        mrrDepth.innerHTML = 'A<sub>p</sub> - Axial Depth of Cut';
+                    }
+
+                    const mrrSpeed = document.getElementById('mrr-ae') as HTMLElement;
+                    if (mrrSpeed) {
+                        mrrSpeed.setAttribute('placeholder', 'Radial Depth of Cut');
+                        mrrSpeed.innerHTML = 'A<sub>e</sub> - Radial Depth of Cut';
+                    }
+                }
+                break;
+
+            case MachineTypes.Lathe:
+            case MachineTypes.Swiss:
+                {
+                    // Focus Speeds Tab
+                    const speedsTab = document.getElementById('tab-1') as HTMLElement;
+                    if (speedsTab) {
+                        speedsTab.click();
+                    }
+
+                    // Hide Feeds Tab
+                    const tab = document.getElementById('tab-2') as HTMLElement;
+                    const tabView = document.getElementById('view-2') as HTMLElement;
+                    if (tab && tabView) {
+                        tab.style.display = 'none';
+                        tabView.style.display = 'none';
+                    }
+
+                    // Update Tool Dia -> Diameter
+                    const rpmDiaField = document.getElementById('rpm-tool-dia') as HTMLElement;
+                    if (rpmDiaField) {
+                        rpmDiaField.setAttribute('placeholder', 'Enter Dia');
+                        rpmDiaField.innerHTML = 'Diameter';
+                    }
+
+                    const speedDiaField = document.getElementById('speed-tool-dia') as HTMLElement;
+                    if (speedDiaField) {
+                        speedDiaField.setAttribute('placeholder', 'Enter Dia');
+                        speedDiaField.innerHTML = 'Diameter';
+                    }
+
+                    // Update MRR Calculator
+                    const mrrDepth = document.getElementById('mrr-ap') as HTMLElement;
+                    if (mrrDepth) {
+                        mrrDepth.setAttribute('placeholder', 'Depth of Cut');
+                        mrrDepth.innerHTML = 'Depth of Cut';
+                    }
+
+                    const mrrSpeed = document.getElementById('mrr-ae') as HTMLElement;
+                    if (mrrSpeed) {
+                        mrrSpeed.setAttribute('placeholder', 'Enter Cutting Speed');
+                        mrrSpeed.innerHTML = 'Cutting Speed';
+                    }
+
+                    // Show Surface Finish Calculator
+                    const finishSection = document.getElementById('finish')?.parentElement as HTMLElement;
+                    if (finishSection) {
+                        finishSection.style.display = '';
+                    }
+
+                    const mrrTab = document.getElementById('tab-3') as HTMLElement;
+                    if (mrrTab) {
+                        mrrTab.innerHTML = 'MRR / SF';
+                    }
+                }
+                break;
+
+            default:
+                return;
+        }
     }
 
     private _registerBtns(): void {
@@ -128,104 +262,137 @@ export class CalcApp extends GWebviewApp {
 
         if (target) {
             switch (target.id) {
-                case 'rpm-calc-btn': {
-                    if (this._calcDom.rpm) {
-                        const sfm = Math.abs(Number(this._calcDom.rpm.speed.value));
-                        const toolDia = Math.abs(Number(this._calcDom.rpm.toolDia.value));
+                case 'rpm-calc-btn':
+                    {
+                        if (this._calcDom.rpm) {
+                            const sfm = Math.abs(Number(this._calcDom.rpm.speed.value));
+                            const toolDia = Math.abs(Number(this._calcDom.rpm.toolDia.value));
 
-                        this._calcDom.rpm.speed.value = sfm ? sfm.toString() : '';
-                        this._calcDom.rpm.toolDia.value = toolDia ? sfm.toString() : '';
+                            this._calcDom.rpm.speed.value = sfm ? sfm.toString() : '';
+                            this._calcDom.rpm.toolDia.value = toolDia ? sfm.toString() : '';
 
-                        result = this._calcRPM(sfm, toolDia);
+                            result = this._calcRPM(sfm, toolDia);
 
-                        this._displayResults(result, this._calcDom.rpm);
+                            this._displayResults(result, this._calcDom.rpm);
+                        }
                     }
                     break;
-                }
 
-                case 'speed-calc-btn': {
-                    if (this._calcDom.speed) {
-                        const rpm = Math.abs(Number(this._calcDom.speed.rpm.value));
-                        const toolDia = Math.abs(Number(this._calcDom.speed.toolDia.value));
+                case 'speed-calc-btn':
+                    {
+                        if (this._calcDom.speed) {
+                            const rpm = Math.abs(Number(this._calcDom.speed.rpm.value));
+                            const toolDia = Math.abs(Number(this._calcDom.speed.toolDia.value));
 
-                        this._calcDom.speed.rpm.value = rpm ? rpm.toString() : '';
-                        this._calcDom.speed.toolDia.value = toolDia ? toolDia.toString() : '';
+                            this._calcDom.speed.rpm.value = rpm ? rpm.toString() : '';
+                            this._calcDom.speed.toolDia.value = toolDia ? toolDia.toString() : '';
 
-                        result = this._calcSFM(rpm, toolDia);
+                            result = this._calcSFM(rpm, toolDia);
 
-                        this._displayResults(result, this._calcDom.speed);
+                            this._displayResults(result, this._calcDom.speed);
+                        }
                     }
                     break;
-                }
 
-                case 'fr-calc-btn': {
-                    if (this._calcDom.feedrate) {
-                        const rpm = Math.abs(Number(this._calcDom.feedrate.rpm.value));
-                        const numFlutes = Math.abs(Number(this._calcDom.feedrate.numFlutes.value));
-                        const chipLoad = Math.abs(Number(this._calcDom.feedrate.chipLoad.value));
+                case 'fr-calc-btn':
+                    {
+                        if (this._calcDom.feedrate) {
+                            const rpm = Math.abs(Number(this._calcDom.feedrate.rpm.value));
+                            const numFlutes = Math.abs(Number(this._calcDom.feedrate.numFlutes.value));
+                            const chipLoad = Math.abs(Number(this._calcDom.feedrate.chipLoad.value));
 
-                        this._calcDom.feedrate.rpm.value = rpm ? rpm.toString() : '';
-                        this._calcDom.feedrate.numFlutes.value = numFlutes ? numFlutes.toString() : '';
-                        this._calcDom.feedrate.chipLoad.value = chipLoad ? chipLoad.toString() : '';
+                            this._calcDom.feedrate.rpm.value = rpm ? rpm.toString() : '';
+                            this._calcDom.feedrate.numFlutes.value = numFlutes ? numFlutes.toString() : '';
+                            this._calcDom.feedrate.chipLoad.value = chipLoad ? chipLoad.toString() : '';
 
-                        result = this._calcFeedRate(rpm, numFlutes, chipLoad);
+                            result = this._calcFeedRate(rpm, numFlutes, chipLoad);
 
-                        this._displayResults(result, this._calcDom.feedrate);
+                            this._displayResults(result, this._calcDom.feedrate);
+                        }
                     }
                     break;
-                }
 
-                case 'cl-calc-btn': {
-                    if (this._calcDom.chipLoad) {
-                        const feedRate = Math.abs(Number(this._calcDom.chipLoad.feedRate.value));
-                        const rpm = Math.abs(Number(this._calcDom.chipLoad.rpm.value));
-                        const numFlutes = Math.abs(Number(this._calcDom.chipLoad.numFlutes.value));
+                case 'cl-calc-btn':
+                    {
+                        if (this._calcDom.chipLoad) {
+                            const feedRate = Math.abs(Number(this._calcDom.chipLoad.feedRate.value));
+                            const rpm = Math.abs(Number(this._calcDom.chipLoad.rpm.value));
+                            const numFlutes = Math.abs(Number(this._calcDom.chipLoad.numFlutes.value));
 
-                        this._calcDom.chipLoad.feedRate.value = feedRate ? feedRate.toString() : '';
-                        this._calcDom.chipLoad.rpm.value = rpm ? rpm.toString() : '';
-                        this._calcDom.chipLoad.numFlutes.value = numFlutes ? numFlutes.toString() : '';
+                            this._calcDom.chipLoad.feedRate.value = feedRate ? feedRate.toString() : '';
+                            this._calcDom.chipLoad.rpm.value = rpm ? rpm.toString() : '';
+                            this._calcDom.chipLoad.numFlutes.value = numFlutes ? numFlutes.toString() : '';
 
-                        result = this._calcChipLoad(feedRate, rpm, numFlutes);
+                            result = this._calcChipLoad(feedRate, rpm, numFlutes);
 
-                        this._displayResults(result, this._calcDom.chipLoad);
+                            this._displayResults(result, this._calcDom.chipLoad);
+                        }
                     }
                     break;
-                }
 
-                case 'mrr-calc-btn': {
-                    if (this._calcDom.mrr) {
-                        const axialDepth = Math.abs(Number(this._calcDom.mrr.axialDepth.value));
-                        const radialDepth = Math.abs(Number(this._calcDom.mrr.radialDepth.value));
-                        const feedRate = Math.abs(Number(this._calcDom.mrr.feedRate.value));
+                case 'mrr-calc-btn':
+                    {
+                        if (this._calcDom.mrr) {
+                            const axialDepth = Math.abs(Number(this._calcDom.mrr.axialDepth.value));
+                            const radialDepth = Math.abs(Number(this._calcDom.mrr.radialDepth.value));
+                            const feedRate = Math.abs(Number(this._calcDom.mrr.feedRate.value));
 
-                        this._calcDom.mrr.axialDepth.value = axialDepth ? axialDepth.toString() : '';
-                        this._calcDom.mrr.radialDepth.value = radialDepth ? radialDepth.toString() : '';
-                        this._calcDom.mrr.feedRate.value = feedRate ? feedRate.toString() : '';
+                            this._calcDom.mrr.axialDepth.value = axialDepth ? axialDepth.toString() : '';
+                            this._calcDom.mrr.radialDepth.value = radialDepth ? radialDepth.toString() : '';
+                            this._calcDom.mrr.feedRate.value = feedRate ? feedRate.toString() : '';
 
-                        result = this._calcMRR(axialDepth, radialDepth, feedRate);
+                            result = this._calcMRR(axialDepth, radialDepth, feedRate);
 
-                        this._displayResults(result, this._calcDom.mrr);
+                            this._displayResults(result, this._calcDom.mrr);
+                        }
                     }
                     break;
-                }
+
+                case 'finish-btn':
+                    {
+                        if (this._calcDom.finish) {
+                            const radius = Math.abs(Number(this._calcDom.finish.radius.value));
+                            const feedRate = Math.abs(Number(this._calcDom.finish.feedRate.value));
+
+                            this._calcDom.finish.radius.value = radius ? radius.toString() : '';
+                            this._calcDom.finish.feedRate.value = feedRate ? feedRate.toString() : '';
+
+                            result = this._calcSurfaceFinish(radius, feedRate);
+
+                            this._displayResults(result, this._calcDom.finish);
+                        }
+                    }
+                    break;
             }
         }
     }
 
-    private _clearFields(e: MouseEvent): void {
-        const target = e.target as HTMLButtonElement;
+    private _clearFields(e?: MouseEvent): void {
+        if (e) {
+            const target = e.target as HTMLButtonElement;
 
-        if (target) {
-            const targetView = target.id.split('-')[1];
+            if (target) {
+                const targetView = target.id.split('-')[1];
 
-            // Clear Input Fields
-            document.querySelectorAll<HTMLElement>(`#view-${targetView} vscode-text-field`).forEach(input => {
+                // Clear Input Fields
+                document.querySelectorAll<HTMLElement>(`#view-${targetView} vscode-text-field`).forEach(input => {
+                    const element = input.shadowRoot?.getElementById('control') as HTMLInputElement;
+                    element.value = '';
+                });
+
+                // Clear Results Field
+                document.querySelectorAll<HTMLElement>(`#view-${targetView} span.results`).forEach(span => {
+                    span.innerHTML = '';
+                });
+            }
+        } else {
+            // Clear All Fields
+            document.querySelectorAll<HTMLElement>('vscode-text-field').forEach(input => {
                 const element = input.shadowRoot?.getElementById('control') as HTMLInputElement;
                 element.value = '';
             });
 
-            // Clear Results Field
-            document.querySelectorAll<HTMLElement>(`#view-${targetView} span.results`).forEach(span => {
+            document.querySelectorAll<HTMLElement>('span.results').forEach(span => {
                 span.innerHTML = '';
             });
         }
@@ -236,8 +403,8 @@ export class CalcApp extends GWebviewApp {
             if (target) {
                 target.results.classList.remove('error');
 
-                // Precision is 2 decimals or 4 for Chip Load
-                const precision = target === this._calcDom.chipLoad ? 4 : 2;
+                // Set Precision to 2 for > 1 or 4 or < 1
+                const precision = target !== this._calcDom.mrr && result < 1 ? 4 : 2;
                 let units = '';
 
                 // Assign units
@@ -250,41 +417,50 @@ export class CalcApp extends GWebviewApp {
 
                     case this._calcDom.speed:
                         {
-                            if (this._units === Units.Inch || this._units === Units.Default) {
-                                units = '[SFM]';
-                            } else {
+                            if (this._units === Units.MM) {
                                 units = '[m/min]';
+                            } else {
+                                units = '[SFM]';
                             }
                         }
                         break;
 
                     case this._calcDom.feedrate:
                         {
-                            if (this._units === Units.Inch || this._units === Units.Default) {
-                                units = '[in/min]';
-                            } else {
+                            if (this._units === Units.MM) {
                                 units = '[mm/min]';
+                            } else {
+                                units = '[in/min]';
                             }
                         }
                         break;
 
                     case this._calcDom.chipLoad:
                         {
-                            if (this._units === Units.Inch || this._units === Units.Default) {
-                                units = '[in]';
-                            } else {
+                            if (this._units === Units.MM) {
                                 units = '[mm]';
+                            } else {
+                                units = '[in]';
                             }
                         }
                         break;
 
                     case this._calcDom.mrr:
                         {
-                            if (this._units === Units.Inch || this._units === Units.Default) {
-                                units = '[in<sup>3</sup>/min]';
-                            } else {
-                                result /= 100;
+                            if (this._units === Units.MM) {
                                 units = '[cm<sup>3</sup>/min]';
+                            } else {
+                                units = '[mm<sup>3</sup>/min]';
+                            }
+                        }
+                        break;
+
+                    case this._calcDom.finish:
+                        {
+                            if (this._units === Units.MM) {
+                                units = '[μ]';
+                            } else {
+                                units = '[μ in]';
                             }
                         }
                         break;
@@ -301,20 +477,20 @@ export class CalcApp extends GWebviewApp {
     }
 
     private _calcRPM(sfm: number, toolDia: number): number | undefined {
-        if (this._units === Units.Inch || this._units === Units.Default) {
-            return (sfm * 12) / (Math.PI * toolDia);
+        const rpm = sfm / (Math.PI * toolDia);
+        if (this._units === Units.MM) {
+            return rpm * 1000;
         } else {
-            return (sfm * 1000) / (Math.PI * toolDia);
+            return rpm * 12;
         }
     }
 
     private _calcSFM(rpm: number, toolDia: number): number | undefined {
-        if (this._units === Units.Inch || this._units === Units.Default) {
-            // Calculate SFM for Imperial
-            return (Math.PI * toolDia * rpm) / 12;
+        const sfm = Math.PI * toolDia * rpm;
+        if (this._units === Units.MM) {
+            return sfm / 1000;
         } else {
-            // Calculate SFM for Metric
-            return (Math.PI * toolDia * rpm) / 1000;
+            return sfm / 12;
         }
     }
 
@@ -327,7 +503,27 @@ export class CalcApp extends GWebviewApp {
     }
 
     private _calcMRR(axialDepth: number, radialDepth: number, feedRate: number): number | undefined {
-        return feedRate * radialDepth * axialDepth;
+        const mrr = feedRate * radialDepth * axialDepth;
+
+        if (this._machineType === MachineTypes.Lathe || this._machineType === MachineTypes.Swiss) {
+            if (this._units === Units.MM) {
+                return mrr;
+            } else {
+                return mrr * 12;
+            }
+        } else {
+            return mrr;
+        }
+    }
+
+    private _calcSurfaceFinish(radius: number, feedRate: number): number | undefined {
+        const finish = Math.pow(feedRate, 2) / radius;
+
+        if (this._units === Units.MM) {
+            return finish * 46;
+        } else {
+            return finish * 31675;
+        }
     }
 }
 

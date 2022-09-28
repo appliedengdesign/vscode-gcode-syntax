@@ -42,6 +42,13 @@ export interface ICalcDom {
         feedRate: HTMLInputElement;
         results: HTMLSpanElement;
     };
+
+    finish?: {
+        btn: HTMLElement;
+        radius: HTMLInputElement;
+        feedRate: HTMLInputElement;
+        results: HTMLSpanElement;
+    };
 }
 
 export type TCalcDom = ICalcDom[keyof ICalcDom];

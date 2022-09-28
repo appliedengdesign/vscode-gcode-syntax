@@ -70,13 +70,22 @@
             <vscode-panel-view id="view-3">
                 <section class="row">
                     <section id="mrr" class="calculator">
-                        <h3>Metal Removal Rate</h3>
+                        <h3>Metal Removal</h3>
                         <vscode-divider role="separator"></vscode-divider>
-                        <vscode-text-field id="mrr-ap" placeholder="Axial Depth of Cut" size="15">A<sub>p</sub> - Axial Depth of Cut</vscode-text-field>
-                        <vscode-text-field id="mrr-ae" placeholder="Radial Depth of Cut" size="15">A<sub>e</sub> - Radial Depth of Cut</vscode-text-field>
-                        <vscode-text-field id="mrr-fr" placeholder="Enter Feedrate" size="15">Feedrate</vscode-text-field>
-                        <label class="results">Metal Removal Rate</label><span id="mrr-results" class="results"></span>
+                        <vscode-text-field id="mrr-ap" placeholder="Axial DoC" size="6">A<sub>p</sub> - Axial Depth of Cut</vscode-text-field>
+                        <vscode-text-field id="mrr-ae" placeholder="Radial DoC" size="6">A<sub>e</sub> - Radial Depth of Cut</vscode-text-field>
+                        <vscode-text-field id="mrr-fr" placeholder="Enter Feedrate" size="6">Feedrate</vscode-text-field>
+                        <label class="results">Metal Removal</label><span id="mrr-results" class="results"></span>
                         <vscode-button id="mrr-calc-btn">Calculate</vscode-button>
+                    </section>
+                    <section id="finish" class="calculator">
+                        <h3>Surface Finish</h3>
+                        <vscode-divider role="separator"></vscode-divider>
+                        <vscode-text-field id="finish-radius" placeholder="Enter Radius" size="6">Corner Radius</vscode-text-field>
+                        <vscode-text-field id="finish-feedrate" placeholder="Enter Feedrate" size="6">Feedrate</vscode-text-field>
+                        <vscode-text-field class="hidden" size="6" disabled>Hidden</vscode-text-field>
+                        <label class="results">Surface Finish</label><span id="finish-results" class="results"></span>
+                        <vscode-button id="finish-btn">Calculate</vscode-button>
                     </section>
                 </section>
                 <section class="row">
