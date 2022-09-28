@@ -59,7 +59,8 @@
     "activationEvents": [
         "onLanguage:gcode",
         "onView:gcode.gcodeTree",
-        "onView:gcode.gcodeStats"
+        "onView:gcode.gcodeStats",
+        "onView:gcode.webviews.calc"
     ],
     "capabilities": {
         "virtualWorkspaces": true
