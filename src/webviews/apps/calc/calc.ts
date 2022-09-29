@@ -134,10 +134,16 @@ export class CalcApp extends GWebviewApp {
         switch (this._machineType) {
             case MachineTypes.Mill:
                 {
+                    // Focus Speeds Tab
+                    const speedsTab = document.getElementById('tab-1') as HTMLElement;
+                    if (speedsTab) {
+                        speedsTab.click();
+                    }
+
                     // Hide Surface Finish Calculator
-                    const finishSection = document.getElementById('finish')?.parentElement as HTMLElement;
+                    const finishSection = document.getElementById('finish') as HTMLElement;
                     if (finishSection) {
-                        finishSection.style.display = 'none';
+                        finishSection.style.visibility = 'hidden';
                     }
 
                     const mrrTab = document.getElementById('tab-3') as HTMLElement;
@@ -169,14 +175,14 @@ export class CalcApp extends GWebviewApp {
                     // Update MRR Calculator
                     const mrrDepth = document.getElementById('mrr-ap') as HTMLElement;
                     if (mrrDepth) {
-                        mrrDepth.setAttribute('placeholder', 'Axial Depth of Cut');
-                        mrrDepth.innerHTML = 'A<sub>p</sub> - Axial Depth of Cut';
+                        mrrDepth.setAttribute('placeholder', 'Axial DoC');
+                        mrrDepth.innerHTML = 'A<sub>p</sub> - Axial DoC';
                     }
 
                     const mrrSpeed = document.getElementById('mrr-ae') as HTMLElement;
                     if (mrrSpeed) {
-                        mrrSpeed.setAttribute('placeholder', 'Radial Depth of Cut');
-                        mrrSpeed.innerHTML = 'A<sub>e</sub> - Radial Depth of Cut';
+                        mrrSpeed.setAttribute('placeholder', 'Radial DoC');
+                        mrrSpeed.innerHTML = 'A<sub>e</sub> - Radial DoC';
                     }
                 }
                 break;
@@ -220,14 +226,14 @@ export class CalcApp extends GWebviewApp {
 
                     const mrrSpeed = document.getElementById('mrr-ae') as HTMLElement;
                     if (mrrSpeed) {
-                        mrrSpeed.setAttribute('placeholder', 'Enter Cutting Speed');
+                        mrrSpeed.setAttribute('placeholder', `Enter ${this._units === Units.MM ? 'SMM' : 'SFM'}`);
                         mrrSpeed.innerHTML = 'Cutting Speed';
                     }
 
                     // Show Surface Finish Calculator
-                    const finishSection = document.getElementById('finish')?.parentElement as HTMLElement;
+                    const finishSection = document.getElementById('finish') as HTMLElement;
                     if (finishSection) {
-                        finishSection.style.display = '';
+                        finishSection.style.visibility = '';
                     }
 
                     const mrrTab = document.getElementById('tab-3') as HTMLElement;
