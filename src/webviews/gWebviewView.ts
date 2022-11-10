@@ -24,6 +24,7 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
     protected readonly _disposables: Disposable[] = [];
     protected _enabled: boolean | undefined;
     private _view: WebviewView | undefined;
+    private _disposableView: Disposable | undefined;
     private _title: string;
 
     constructor(public readonly id: string, title: string) {
@@ -34,6 +35,7 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
 
     dispose() {
         Disposable.from(...this._disposables).dispose();
+        this._disposableView?.dispose();
     }
 
     isEnabled(): boolean {
@@ -87,7 +89,11 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
         webviewView.webview.options = this.getWebviewOptions();
         webviewView.title = this.title;
 
-        this._disposables.push(this._view.webview.onDidReceiveMessage(this.onMessageReceived, this));
+        this._disposableView = Disposable.from(
+            this._view.onDidDispose(this.onViewDisposed, this),
+            this._view.onDidChangeVisibility(this.onViewVisabilityChanged, this),
+            this._view.webview.onDidReceiveMessage(this.onMessageReceived, this),
+        );
 
         await this.refresh();
     }
@@ -124,6 +130,20 @@ export abstract class GWebviewView implements WebviewViewProvider, Disposable {
             return await this._view.webview.postMessage(msg);
         } else {
             return Promise.resolve(false);
+        }
+    }
+
+    private onViewDisposed() {
+        this._disposableView?.dispose();
+        this._disposableView = undefined;
+        this._view = undefined;
+    }
+
+    private async onViewVisabilityChanged() {
+        const visable = this.visible;
+
+        if (visable) {
+            await this.refresh();
         }
     }
 }

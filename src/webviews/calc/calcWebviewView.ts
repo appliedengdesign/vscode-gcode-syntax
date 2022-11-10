@@ -51,11 +51,6 @@ export class CalcWebviewView extends GWebviewView {
         );
     }
 
-    dispose() {
-        Disposable.from(...this._disposables);
-        super.dispose();
-    }
-
     private _onConfigurationChanged(e: ConfigurationChangeEvent) {
         // Enable / Disable Calculator Webview
         if (configuration.changed(e, `${this.id.slice(6)}.enabled`)) {
