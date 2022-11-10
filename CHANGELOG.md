@@ -2,6 +2,17 @@
 
 All changes to G-Code Language Extension will be documented here.
 
+## v0.7.7 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.7)
+
+### Fixes
+
+- Fixed syntax highlighting issue with ABC codes [#53](https://github.com/appliedengdesign/vscode-gcode-syntax/issues/53)
+
+### Other
+
+- Updated dependencies
+- Updated VSCode engines to 1.73.0
+
 ## v0.7.6 [#](https://github.com/appliedengdesign/vscode-gcode-syntax/releases/tag/v0.7.6)
 
 ### New Features
