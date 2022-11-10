@@ -171,7 +171,7 @@
                     "name": "invalid.gcode"
                 },
                 {
-                    "match": "([aAbBcC])\\s?(\\-*\\d?\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]))",
+                    "match": "([aAbBcC])\\s?(\\-*\\d*\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]))",
                     "name": "constant.character.escape.gcode"
                 }
             ]
