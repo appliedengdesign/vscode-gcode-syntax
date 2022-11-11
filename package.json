@@ -59,7 +59,8 @@
     "activationEvents": [
         "onLanguage:gcode",
         "onView:gcode.gcodeTree",
-        "onView:gcode.gcodeStats"
+        "onView:gcode.gcodeStats",
+        "onView:gcode.webviews.calc"
     ],
     "capabilities": {
         "virtualWorkspaces": true
@@ -152,185 +153,205 @@
                 "path": "./snippets/general-snippets.json"
             }
         ],
-        "configuration": {
-            "type": "object",
-            "title": "G-Code",
-            "properties": {
-                "gcode.general.machineType": {
-                    "type": "string",
-                    "default": "Mill",
-                    "enum": [
-                        "Mill",
-                        "Lathe",
-                        "3D Printer",
-                        "Swiss",
-                        "Laser",
-                        "EDM"
-                    ],
-                    "enumDescriptions": [
-                        "Configure G-Code Extension for CNC Mill",
-                        "Configure G-Code Extension for CNC Lathe",
-                        "Configure G-Code Extension for 3D Printers",
-                        "Configure G-Code Extension for Swiss-style Lathes",
-                        "Configure G-Code Extension for Laser Machine Tools",
-                        "Configure G-Code Extension for EDM"
-                    ],
-                    "markdownDescription": "Configure G-Code Extension for a Specific Machine Type",
-                    "scope": "window"
-                },
-                "gcode.general.hovers.enabled": {
-                    "type": "boolean",
-                    "default": true,
-                    "markdownDescription": "Enable G-Code Hovers",
-                    "scope": "window"
-                },
-                "gcode.general.statusBars.enabled": {
-                    "type": "boolean",
-                    "default": true,
-                    "markdownDescription": "Enable G-Code Statusbars",
-                    "scope": "window"
-                },
-                "gcode.general.statusBars.alignment": {
-                    "type": "string",
-                    "default": "Left",
-                    "enum": [
-                        "Left",
-                        "Right"
-                    ],
-                    "enumDescriptions": [
-                        "Aligns to the left",
-                        "Aligns to the right"
-                    ],
-                    "markdownDescription": "Specifies status bars alignment",
-                    "scope": "window"
-                },
-                "gcode.general.units": {
-                    "type": "string",
-                    "default": "Auto",
-                    "enum": [
-                        "Auto",
-                        "Inch",
-                        "Metric"
-                    ],
-                    "markdownDescription": "Configure Units for G-Code Files. Choose Auto to have G-Code parse for ```G20/G21```"
-                },
-                "gcode.general.outputLevel": {
-                    "type": "string",
-                    "default": "verbose",
-                    "enum": [
-                        "silent",
-                        "errors",
-                        "warnings",
-                        "verbose",
-                        "debug"
-                    ],
-                    "enumDescriptions": [
-                        "No Output",
-                        "Outputs only Errors",
-                        "Outputs all errors, warnings and messages",
-                        "Outputs Everything for Debugging Purposes"
-                    ],
-                    "markdownDescription": "Specifies how much output will be sent to the G-Code Output Channel.",
-                    "scope": "window"
-                },
-                "gcode.lineNumberer.addSpaceAfter": {
-                    "type": "boolean",
-                    "default": true,
-                    "markdownDescription": "Add Space After Line Number",
-                    "scope": "window"
-                },
-                "gcode.lineNumberer.defaultIncrement": {
-                    "type": "number",
-                    "default": 10,
-                    "markdownDescription": "Default Line Numberer Increment",
-                    "scope": "window"
-                },
-                "gcode.lineNumberer.defaultStart": {
-                    "type": "number",
-                    "default": 10,
-                    "markdownDescription": "Default Line Numberer Start",
-                    "scope": "window"
-                },
-                "gcode.lineNumbere.enableQuickPick": {
-                    "type": "boolean",
-                    "default": true,
-                    "markdownDescription": "Enable or Disable Input for Line Numberer (Will use above defaults).",
-                    "scope": "window"
-                },
-                "gcode.lineNumberer.frequency": {
-                    "type": "string",
-                    "default": "Every Line",
-                    "enum": [
-                        "Every Line",
-                        "At Tool Changes"
-                    ],
-                    "enumDescriptions": [
-                        "Line Number at Every Line",
-                        "Line Number only at Tool Changes"
-                    ],
-                    "markdownDescription": "Specify Frequency of Line Numbering"
-                },
-                "gcode.lineNumberer.ignoreBlank": {
-                    "type": "boolean",
-                    "default": true,
-                    "markdownDescription": "Ignore Blank Lines when Numbering",
-                    "scope": "window"
-                },
-                "gcode.lineNumberer.ignoreComments": {
-                    "type": "boolean",
-                    "default": true,
-                    "markdownDescription": "Ignore Comments when Numbering",
-                    "scope": "window"
-                },
-                "gcode.lineNumberer.ignoreExtra": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
+        "configuration": [
+            {
+                "title": "General",
+                "order": 0,
+                "properties": {
+                    "gcode.general.machineType": {
+                        "type": "string",
+                        "default": "Mill",
+                        "enum": [
+                            "Mill",
+                            "Lathe",
+                            "3D Printer",
+                            "Swiss",
+                            "Laser",
+                            "EDM"
+                        ],
+                        "enumDescriptions": [
+                            "Configure G-Code Extension for CNC Mill",
+                            "Configure G-Code Extension for CNC Lathe",
+                            "Configure G-Code Extension for 3D Printers",
+                            "Configure G-Code Extension for Swiss-style Lathes",
+                            "Configure G-Code Extension for Laser Machine Tools",
+                            "Configure G-Code Extension for EDM"
+                        ],
+                        "markdownDescription": "Configure G-Code Extension for a Specific Machine Type",
+                        "scope": "window"
                     },
-                    "default": [
-                        "%"
-                    ],
-                    "markdownDescription": "Additional characters to ignore (Beginning of Line)",
-                    "scope": "window"
-                },
-                "gcode.lineNumberer.ignoreProgramNumbers": {
-                    "type": "boolean",
-                    "default": true,
-                    "markdownDescription": "Ignore program numbers, e.g. `O12345`",
-                    "scope": "window"
-                },
-                "gcode.lineNumberer.matchLineNumber": {
-                    "type": "boolean",
-                    "default": false,
-                    "markdownDescription": "When numbering, match N number to file's line number.",
-                    "scope": "window"
-                },
-                "gcode.views.maxAutoRefresh": {
-                    "type": "integer",
-                    "default": "10000",
-                    "markdownDescription": "Maximum Number of Lines in Editor to allow Auto Refresh",
-                    "scope": "window"
-                },
-                "gcode.views.navTree.autoRefresh": {
-                    "type": "boolean",
-                    "default": true,
-                    "markdownDescription": "Enable G-Code Tree Auto Refresh",
-                    "scope": "window"
-                },
-                "gcode.views.stats.autoRefresh": {
-                    "type": "boolean",
-                    "default": false,
-                    "markdownDescription": "Enable G-Code Stats Auto Refresh",
-                    "scope": "window"
-                },
-                "gcode.webviews.enabled": {
-                    "type": "boolean",
-                    "default": true,
-                    "markdownDescription": "Enable or Disable WebViews",
-                    "scope": "window"
+                    "gcode.general.hovers.enabled": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Enable G-Code Hovers",
+                        "scope": "window"
+                    },
+                    "gcode.general.statusBars.enabled": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Enable G-Code Statusbars",
+                        "scope": "window"
+                    },
+                    "gcode.general.statusBars.alignment": {
+                        "type": "string",
+                        "default": "Left",
+                        "enum": [
+                            "Left",
+                            "Right"
+                        ],
+                        "enumDescriptions": [
+                            "Aligns to the left",
+                            "Aligns to the right"
+                        ],
+                        "markdownDescription": "Specifies status bars alignment",
+                        "scope": "window"
+                    },
+                    "gcode.general.units": {
+                        "type": "string",
+                        "default": "Auto",
+                        "enum": [
+                            "Auto",
+                            "Inch",
+                            "Metric"
+                        ],
+                        "markdownDescription": "Configure Units for G-Code Files. Choose Auto to have G-Code parse for ```G20/G21```"
+                    },
+                    "gcode.general.outputLevel": {
+                        "type": "string",
+                        "default": "verbose",
+                        "enum": [
+                            "silent",
+                            "errors",
+                            "warnings",
+                            "verbose",
+                            "debug"
+                        ],
+                        "enumDescriptions": [
+                            "No Output",
+                            "Outputs only Errors",
+                            "Outputs all errors, warnings and messages",
+                            "Outputs Everything for Debugging Purposes"
+                        ],
+                        "markdownDescription": "Specifies how much output will be sent to the G-Code Output Channel.",
+                        "scope": "window"
+                    }
+                }
+            },
+            {
+                "title": "Line Numberer",
+                "order": 10,
+                "properties": {
+                    "gcode.lineNumberer.addSpaceAfter": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Add Space After Line Number",
+                        "scope": "window"
+                    },
+                    "gcode.lineNumberer.defaultIncrement": {
+                        "type": "number",
+                        "default": 10,
+                        "markdownDescription": "Default Line Numberer Increment",
+                        "scope": "window"
+                    },
+                    "gcode.lineNumberer.defaultStart": {
+                        "type": "number",
+                        "default": 10,
+                        "markdownDescription": "Default Line Numberer Start",
+                        "scope": "window"
+                    },
+                    "gcode.lineNumbere.enableQuickPick": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Enable or Disable Input for Line Numberer (Will use above defaults).",
+                        "scope": "window"
+                    },
+                    "gcode.lineNumberer.frequency": {
+                        "type": "string",
+                        "default": "Every Line",
+                        "enum": [
+                            "Every Line",
+                            "At Tool Changes"
+                        ],
+                        "enumDescriptions": [
+                            "Line Number at Every Line",
+                            "Line Number only at Tool Changes"
+                        ],
+                        "markdownDescription": "Specify Frequency of Line Numbering"
+                    },
+                    "gcode.lineNumberer.ignoreBlank": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Ignore Blank Lines when Numbering",
+                        "scope": "window"
+                    },
+                    "gcode.lineNumberer.ignoreComments": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Ignore Comments when Numbering",
+                        "scope": "window"
+                    },
+                    "gcode.lineNumberer.ignoreExtra": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "default": [
+                            "%"
+                        ],
+                        "markdownDescription": "Additional characters to ignore (Beginning of Line)",
+                        "scope": "window"
+                    },
+                    "gcode.lineNumberer.ignoreProgramNumbers": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Ignore program numbers, e.g. `O12345`",
+                        "scope": "window"
+                    },
+                    "gcode.lineNumberer.matchLineNumber": {
+                        "type": "boolean",
+                        "default": false,
+                        "markdownDescription": "When numbering, match N number to file's line number.",
+                        "scope": "window"
+                    }
+                }
+            },
+            {
+                "title": "Views",
+                "order": 20,
+                "properties": {
+                    "gcode.views.maxAutoRefresh": {
+                        "type": "integer",
+                        "default": "10000",
+                        "markdownDescription": "Maximum Number of Lines in Editor to allow Auto Refresh",
+                        "scope": "window"
+                    },
+                    "gcode.views.navTree.autoRefresh": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Enable G-Code Tree Auto Refresh",
+                        "scope": "window"
+                    },
+                    "gcode.views.stats.autoRefresh": {
+                        "type": "boolean",
+                        "default": false,
+                        "markdownDescription": "Enable G-Code Stats Auto Refresh",
+                        "scope": "window"
+                    }
+                }
+            },
+            {
+                "title": "Webviews",
+                "order": 30,
+                "properties": {
+                    "gcode.webviews.calc.enabled": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Enable Machining Calculator",
+                        "scope": "window"
+                    }
                 }
             }
-        },
+        ],
         "viewsContainers": {
             "activitybar": [
                 {
@@ -343,14 +364,24 @@
         "views": {
             "gcode": [
                 {
+                    "type": "tree",
                     "id": "gcode.views.navTree",
                     "name": "Tree",
                     "contextualTitle": "G-Code"
                 },
                 {
+                    "type": "tree",
                     "id": "gcode.views.stats",
                     "name": "Stats",
                     "contextualTitle": "G-Code"
+                },
+                {
+                    "type": "webview",
+                    "id": "gcode.webviews.calc",
+                    "name": "Machining Calculator",
+                    "contextualTitle": "G-Code",
+                    "visibility": "collapsed",
+                    "when": "gcode:webviews:calc:enabled"
                 }
             ]
         },
@@ -416,6 +447,10 @@
                 {
                     "command": "gcode.views.stats.refresh",
                     "when": "editorLangId == gcode"
+                },
+                {
+                    "command": "gcode.webviews.calc.show",
+                    "when": "editorLangId == gcode"
                 }
             ],
             "editor/context": [
@@ -437,6 +472,38 @@
                 {
                     "when": "editorLangId == gcode",
                     "command": "gcode.removeComment",
+                    "group": "gcode"
+                },
+                {
+                    "when": "editorLangId == gcode && gcode:webviews:calc:enabled",
+                    "command": "gcode.webviews.calc.show",
+                    "group": "gcode"
+                },
+                {
+                    "when": "editorLangId == gcode",
+                    "command": "gcode.showSettings",
+                    "group": "gcode"
+                }
+            ],
+            "editor/title/context": [
+                {
+                    "when": "editorLangId == gcode",
+                    "command": "gcode.views.navTree.refresh",
+                    "group": "gcode"
+                },
+                {
+                    "when": "editorLangId == gcode",
+                    "command": "gcode.views.stats.refresh",
+                    "group": "gcode"
+                },
+                {
+                    "when": "editorLangId == gcode",
+                    "command": "gcode.addLineNumbers",
+                    "group": "gcode"
+                },
+                {
+                    "when": "editorLangId == gcode",
+                    "command": "gcode.removeLineNumbers",
                     "group": "gcode"
                 },
                 {
@@ -494,11 +561,6 @@
                 "category": "G-Code"
             },
             {
-                "command": "gcode.webviews.codes.show",
-                "title": "G-Code: Show Code Reference",
-                "category": "G-Code"
-            },
-            {
                 "command": "gcode.addLineNumbers",
                 "title": "G-Code: Add Line Numbers",
                 "category": "G-Code"
@@ -507,18 +569,30 @@
                 "command": "gcode.removeLineNumbers",
                 "title": "G-Code: Remove Line Numbers",
                 "category": "G-Code"
+            },
+            {
+                "command": "gcode.webviews.codes.show",
+                "title": "G-Code: Show Code Reference",
+                "category": "G-Code"
+            },
+            {
+                "command": "gcode.webviews.calc.show",
+                "title": "G-Code: Show Calculator",
+                "category": "G-Code"
             }
         ]
     },
     "scripts": {
         "analyze:bundle": "webpack --env analyzeBundle",
-        "build": "webpack -mode development",
-        "bundle": "webpack --mode production",
+        "build": "webpack --mode development",
+        "build:extension": "webpack --mode development --config-name extension",
+        "build:webviews": "webpack --mode development --config-name webviews",
+        "bundle": "npm run clean && webpack --mode production --devtool hidden-source-map",
         "clean": "shx rm -rf out/* && rm -rf dist/*",
         "compile": "tsc -p ./",
         "lint": "eslint --ext .ts src/**/*.ts --cache",
-        "watch": "tsc -watch -p ./",
         "pack": "vsce package",
+        "package": "npm run clean && webpack --mode production --devtool hidden-source-map",
         "pretest": "npm run compile",
         "pretty": "prettier --config .prettierrc --loglevel warn .",
         "pub": "vsce publish",
@@ -526,8 +600,7 @@
         "test": "node ./out/test/runTests.js",
         "test:unit": "SET TS_NODE_PROJECT=./tsconfig.tests.json && mocha -r ts-node/register test/unit/*.test.ts",
         "vscode:prepublish": "npm run bundle",
-        "webpack": "webpack --mode development",
-        "webpack-dev": "webpack --mode development --watch"
+        "watch": "webpack --watch -mode deveopment"
     },
     "devDependencies": {
         "@types/chai": "^4.3.4",
@@ -538,14 +611,21 @@
         "@typescript-eslint/eslint-plugin": "^5.42.1",
         "@typescript-eslint/parser": "^5.42.1",
         "chai": "^4.3.7",
+        "copy-webpack-plugin": "^11.0.0",
+        "csp-html-webpack-plugin": "^5.1.0",
+        "css-loader": "^6.7.1",
         "eslint": "^8.27.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-import": "^2.26.0",
         "eslint-plugin-prettier": "^4.2.1",
-        "fork-ts-checker-webpack-plugin": "^7.2.13",
+        "eslint-webpack-plugin": "^3.2.0",
         "glob": "^8.0.3",
+        "html-loader": "^4.2.0",
+        "mini-css-extract-plugin": "^2.6.1",
         "mocha": "^10.1.0",
         "prettier": "^2.7.1",
+        "sass": "^1.54.0",
+        "sass-loader": "^13.0.2",
         "shx": "^0.3.4",
         "ts-loader": "^9.4.1",
         "ts-node": "^10.9.1",
@@ -556,6 +636,7 @@
         "webpack-cli": "^4.10.0"
     },
     "dependencies": {
-        "@appliedengdesign/gcode-reference": "^0.0.8"
+        "@appliedengdesign/gcode-reference": "^0.0.8",
+        "@vscode/webview-ui-toolkit": "^1.0.0"
     }
 }

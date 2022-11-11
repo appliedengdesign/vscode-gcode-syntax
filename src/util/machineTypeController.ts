@@ -4,48 +4,49 @@
  * -------------------------------------------------------------------------------------------- */
 'use strict';
 
-import { ConfigurationChangeEvent, Disposable, Event, EventEmitter, workspace } from 'vscode';
-import { GReference, MachineTypes } from '@appliedengdesign/gcode-reference';
+import { ConfigurationChangeEvent, Disposable, Event, EventEmitter } from 'vscode';
+import { GReference, MachineType, MachineTypes } from '@appliedengdesign/gcode-reference';
 import { configuration } from './configuration/config';
 import { Logger } from './logger';
 import { StatusBar, StatusBarControl } from './statusBar';
 import { Control } from '../control';
 import { GCommands } from './constants';
+import { defaults } from './configuration/defaults';
 
-export class MachineTypeControl implements Disposable {
-    private readonly _dispoable: Disposable | undefined;
-    private _machineType: MachineTypes | undefined;
+export class MachineTypeController implements Disposable {
+    private readonly _dispoables: Disposable[] = [];
+    private _machineType: MachineType = defaults.general.machineType;
     private _statusbar: StatusBarControl;
     private readonly mtypeStatusBar: StatusBar = 'machineTypeBar';
     private _gReference: GReference;
 
-    private _onDidChange = new EventEmitter<ConfigurationChangeEvent>();
-    get onDidChange(): Event<ConfigurationChangeEvent> {
-        return this._onDidChange.event;
+    private _onDidChangeMachineType: EventEmitter<MachineType> = new EventEmitter<MachineType>();
+    get onDidChangeMachineType(): Event<MachineType> {
+        return this._onDidChangeMachineType.event;
     }
 
     constructor() {
         this._statusbar = Control.statusBarController;
         this._gReference = new GReference();
-        this.update();
+        this._update();
 
-        this._dispoable = Disposable.from(workspace.onDidChangeConfiguration(this.onConfigurationChanged, this));
+        this._dispoables.push(configuration.onDidChange(this._onConfigurationChanged, this));
     }
 
     dispose() {
-        this._dispoable && this._dispoable.dispose();
+        Disposable.from(...this._dispoables).dispose();
     }
 
-    private onConfigurationChanged(e: ConfigurationChangeEvent) {
+    private _onConfigurationChanged(e: ConfigurationChangeEvent) {
         if (configuration.changed(e, 'general.machineType')) {
-            this.update();
+            this._update();
         } else {
             return;
         }
     }
 
-    private update() {
-        const cfgMachineType = <string>configuration.getParam('general.machineType');
+    private _update() {
+        const cfgMachineType = <string>configuration.getParam('general.machineType') ?? defaults.general.machineType;
         Logger.log(`Machine Type: ${cfgMachineType}`);
         switch (cfgMachineType) {
             case 'Mill':
@@ -76,6 +77,7 @@ export class MachineTypeControl implements Disposable {
                 return;
         }
 
+        // Update Status Bar
         this._statusbar.updateStatusBar(
             cfgMachineType,
             this.mtypeStatusBar,
@@ -84,10 +86,18 @@ export class MachineTypeControl implements Disposable {
             GCommands.ShowGCodeSettings,
         );
 
+        // Update GReference
         this._gReference.setType(this._machineType);
+
+        // Fire Event
+        this._onDidChangeMachineType.fire(this._machineType);
     }
 
     get gReference() {
         return this._gReference;
+    }
+
+    get machineType() {
+        return this._machineType;
     }
 }

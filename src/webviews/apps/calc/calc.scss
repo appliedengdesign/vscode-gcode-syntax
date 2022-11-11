@@ -1,0 +1,86 @@
+@import '../shared/scss/reset';
+@import '../shared/scss/vscode';
+@import '../shared/scss/base';
+
+.container {
+    display: flex;
+    justify-content: center;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    padding: 1em;
+}
+
+section.row {
+    flex-direction: row;
+    flex: none;
+    justify-content: center;
+    padding: 0;
+}
+
+h3 {
+    border: none;
+    font-weight: 600;
+    margin-top: 0;
+    white-space: nowrap;
+}
+
+vscode-text-field,
+vscode-button {
+    margin: 0.5rem 0;
+}
+
+vscode-panel-view {
+    flex-wrap: wrap;
+    flex-direction: column;
+    padding: 0;
+}
+
+vscode-text-field.results {
+    font-style: italic;
+}
+
+span.clear-btn {
+    margin-top: 1rem;
+}
+
+span.units {
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+label.results {
+    font-style: italic;
+    margin-top: 1rem;
+    margin-bottom: 2px;
+}
+
+span.results {
+    border: 1px solid var(--vscode-inputValidation-infoBorder);
+    background: transparent;
+    width: 90px;
+    height: 20px;
+    padding: 5px;
+}
+
+section.calculator > vscode-button {
+    margin-top: 1rem;
+}
+
+.error {
+    color: var(--vscode-errorForeground);
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+#finish .label {
+    padding-bottom: 3.5px;
+}

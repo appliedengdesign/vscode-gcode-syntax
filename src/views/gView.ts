@@ -78,10 +78,10 @@ export abstract class GView<TRoot extends ViewNode<NodeTypes>> implements TreeDa
         return this._tree?.visible ?? false;
     }
 
-    protected async show() {
+    protected async show(options?: { preserveFocus?: boolean }) {
         if (!this.visible) {
             try {
-                void (await commands.executeCommand(`${this.id}.focus`));
+                void (await commands.executeCommand(`${this.id}.focus`, options));
             } catch (err) {
                 Logger.error(err, 'Error focusing view');
             }

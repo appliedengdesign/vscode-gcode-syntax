@@ -74,6 +74,14 @@ export enum Contexts {
     MachineType = 'gcode:general:machineType',
     ViewsNavTreeEnabled = 'gcode:views:navTree:enabled',
     ViewsStatsEnabled = 'gcode:views:stats:enabled',
+    CalcWebviewViewEnabled = 'gcode:webviews:calc:enabled',
+}
+
+export enum GCodeUnits {
+    Auto = 'Auto',
+    Inch = 'Inch',
+    MM = 'Metric',
+    Default = 'Default (Inch)',
 }
 
 export enum GCommands {
@@ -85,12 +93,21 @@ export enum GCommands {
     RemoveLineNumbers = 'gcode.removeLineNumbers',
 }
 
-export const enum ViewCommands {
+export enum Webviews {
+    CalcWebviewView = 'gcode.webviews.calc',
+}
+
+export enum WebviewTitles {
+    CalcWebviewView = 'Machining Calculators',
+}
+
+export enum ViewCommands {
     RefreshStats = 'gcode.views.stats.refresh',
     RefreshTree = 'gcode.views.navTree.refresh',
     TreeSelect = 'gcode.views.navTree.select',
 }
 
-export const enum WebViewCommands {
+export enum WebviewCommands {
     ShowCodesWebview = 'gcode.webviews.codes.show',
+    ShowCalcWebview = 'gcode.webviews.calc.show',
 }

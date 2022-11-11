@@ -5,24 +5,22 @@
 
 'use strict';
 
-import { commands, Disposable, ExtensionContext } from 'vscode';
+import { commands, ExtensionContext } from 'vscode';
 import { Config, configuration } from './util/configuration/config';
 import { Logger } from './util/logger';
 import { StatusBarControl } from './util/statusBar';
 import { NavTreeView } from './views/navTreeView';
-import { GCodeUnitsController } from './gcodeUnits';
+import { UnitsController } from './util/unitsController';
 import { StatsView } from './views/statsView';
 import { constants, Contexts, GCommands, PIcon, VSBuiltInCommands } from './util/constants';
 import { Version } from './util/version';
 import { Messages } from './util/messages';
 import { StateControl } from './util/stateControl';
-import { CodesWebview } from './webviews/codesWebview';
-import { MachineTypeControl } from './util/machineType';
+import { MachineTypeController } from './util/machineTypeController';
 import { GCodeHoverControl } from './hovers/gcodeHoverControl';
-import { defaults } from './util/configuration/defaults';
 import { registerCommands } from './util/commands';
+import { CalcWebviewView } from './webviews/calc/calcWebviewView';
 
-const cfgUnits = 'general.units';
 const cfgAutoRef = {
     navTree: 'views.navTree.autoRefresh',
     stats: 'views.stats.autoRefresh',
@@ -31,13 +29,12 @@ const cfgAutoRef = {
 export class Control {
     private static _config: Config | undefined;
     private static _context: ExtensionContext;
-    private static _units: string | undefined;
     private static _version: Version;
 
     // Controllers
-    private static _machineTypeControl: MachineTypeControl | undefined;
+    private static _machineTypeController: MachineTypeController;
     private static _statusBarControl: StatusBarControl;
-    private static _unitsController: GCodeUnitsController | undefined;
+    private static _unitsController: UnitsController;
     private static _stateController: StateControl;
     private static _hoverController: GCodeHoverControl;
 
@@ -46,7 +43,7 @@ export class Control {
     private static _navTree: NavTreeView | undefined;
 
     // Webviews
-    private static _codesWebview: CodesWebview | undefined;
+    private static _calcWebviewView: CalcWebviewView | undefined;
 
     private static async _checkVersion() {
         const prevVer = this._stateController.getVersion();
@@ -100,36 +97,14 @@ export class Control {
 
         // Load Machine Type
         Logger.log('Loading Machine Type Controller...');
-        context.subscriptions.push((this._machineTypeControl = new MachineTypeControl()));
+        context.subscriptions.push((this._machineTypeController = new MachineTypeController()));
 
         // Load Hover Controller
         Logger.log('Loading Hover Controller...');
         context.subscriptions.push((this._hoverController = new GCodeHoverControl()));
 
-        // Units
-        this._units = config.getParam(cfgUnits) ?? defaults.general.units;
-        Logger.log(`Units: ${this._units}`);
-        if (this._units === 'Auto') {
-            // Load Units Monitor
-            context.subscriptions.push((this._unitsController = new GCodeUnitsController()));
-        } else {
-            let disposable: Disposable;
-            // eslint-disable-next-line prefer-const
-            disposable = configuration.onDidChange(e => {
-                if (configuration.changed(e, cfgUnits)) {
-                    this._units = <string>configuration.getParam(cfgUnits);
-                    if (this._units === 'Auto') {
-                        disposable.dispose();
-                        Logger.log(`Units: ${this._units}`);
-                        context.subscriptions.push((this._unitsController = new GCodeUnitsController()));
-                    } else {
-                        return;
-                    }
-                }
-            });
-
-            this._statusBarControl.updateStatusBar(this._units, 'unitsBar');
-        }
+        // Load Units Controller
+        context.subscriptions.push((this._unitsController = new UnitsController()));
 
         // Load Nav Tree
         Logger.log('Loading Nav Tree...');
@@ -154,8 +129,8 @@ export class Control {
             GCommands.ShowSupportGCode,
         );
 
-        // Set Up Webviews
-        context.subscriptions.push((this._codesWebview = new CodesWebview()));
+        // Webviews
+        context.subscriptions.push((this._calcWebviewView = new CalcWebviewView()));
 
         Logger.log('Done Initializing.');
     }
@@ -164,14 +139,15 @@ export class Control {
         Logger.log('Terminating Extension...');
 
         // Dispose Views
-        this._codesWebview?.dispose();
+        this._calcWebviewView?.dispose();
         this._statsView?.dispose();
         this._statsView?.dispose();
+        this._navTree?.dispose();
 
         // Dispose Controllers
         this._hoverController.dispose();
         this._unitsController?.dispose();
-        this._machineTypeControl?.dispose();
+        this._machineTypeController?.dispose();
         this._statusBarControl?.dispose();
     }
 
@@ -196,10 +172,6 @@ export class Control {
         return this._version;
     }
 
-    static get machineType() {
-        return this._machineTypeControl;
-    }
-
     static get navTree() {
         if (this._navTree === undefined) {
             this._context.subscriptions.push((this._navTree = new NavTreeView()));
@@ -220,11 +192,23 @@ export class Control {
         return this._statusBarControl;
     }
 
-    static get gcodeUnitsController() {
+    static get unitsController() {
         return this._unitsController;
     }
 
     static get stateController() {
         return this._stateController;
+    }
+
+    static get machineTypeController() {
+        return this._machineTypeController;
+    }
+
+    static get hoverController() {
+        return this._hoverController;
+    }
+
+    static get calcWebviewView() {
+        return this._calcWebviewView;
     }
 }

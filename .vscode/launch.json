@@ -1,9 +1,8 @@
-// A launch configuration that launches the extension inside a new window
 {
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run G-Code (Sandbox) - Samples",
+            "name": "Run G-Code (Sandbox)",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
@@ -23,39 +22,9 @@
             ],
             "presentation": {
                 "hidden": false,
-                "group": "Launch Extension",
+                "group": "1_run",
                 "order": 1
             },
-            "preLaunchTask": "npm: webpack",
-            "skipFiles": [
-                "<node_internals>/**",
-                "**/node_modules/**",
-                "**/resources/app/out/vs/**"
-            ],
-            "smartStep": true,
-            "sourceMaps": true,
-            "trace": true,
-        },
-        {
-            "name": "Run G-Code (Sandbox)",
-            "type": "extensionHost",
-            "request": "launch",
-            "runtimeExecutable": "${execPath}",
-            "args": [
-                "--disable-extensions",
-                "--trace-depreciation",
-                "--extensionDevelopmentPath=${workspaceFolder}"
-            ],
-            "cwd": "${workspaceFolder}",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
-            ],
-            "presentation": {
-                "hidden": false,
-                "group": "Launch Extension",
-                "order": 2
-            },
-            "preLaunchTask": "npm: webpack",
             "skipFiles": [
                 "<node_internals>/**",
                 "**/node_modules/**",
@@ -72,43 +41,123 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--trace-depreciation",
-                "--extensionDevelopmentPath=${workspaceFolder}"
+                "--trace-warnings",
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "${workspaceFolder}/samplenc/sample-colors.nc",
+                "${workspaceFolder}/samplenc/sample-profile.nc",
+                "${workspaceFolder}/samplenc/sample-circular-pocket.nc"
             ],
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
             "presentation": {
                 "hidden": false,
-                "group": "Launch Extension",
-                "order": 3
+                "group": "1_run",
+                "order": 2
             },
-            "preLaunchTask": "npm: webpack",
             "skipFiles": [
                 "<node_internals>/**",
-                "**/node_modules/**"
+                "**/node_modules/**",
+                "**/resources/app/out/vs/**"
             ],
             "smartStep": true,
             "sourceMaps": true,
             "trace": true
         },
         {
-            "name": "Run G-Code As Web Extension",
+            "name": "Build & Run G-Code (Sandbox)",
             "type": "extensionHost",
-            "debugWebWorkerHost": true,
             "request": "launch",
+            "runtimeExecutable": "${execPath}",
             "args": [
+                "--disable-extensions",
+                "--trace-warnings",
+                "--trace-depreciation",
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionDevelopmentKind=web"
+                "${workspaceFolder}/samplenc/sample-colors.nc",
+                "${workspaceFolder}/samplenc/sample-profile.nc",
+                "${workspaceFolder}/samplenc/sample-circular-pocket.nc"
+            ],
+            "cwd": "${workspaceFolder}",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "presentation": {
+                "hidden": false,
+                "group": "2_build_launch",
+                "order": 1
+            },
+            "preLaunchTask": "npm: build",
+            "skipFiles": [
+                "<node_internals>/**",
+                "**/node_modules/**",
+                "**/resources/app/out/vs/**"
+            ],
+            "smartStep": true,
+            "sourceMaps": true,
+            "trace": true
+        },
+        {
+            "name": "Build & Run G-Code (Full)",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--trace-depreciation",
+                "--trace-warnings",
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "${workspaceFolder}/samplenc/sample-colors.nc",
+                "${workspaceFolder}/samplenc/sample-profile.nc",
+                "${workspaceFolder}/samplenc/sample-circular-pocket.nc"
             ],
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
-            "preLaunchTask": "npm: webpack",
             "presentation": {
                 "hidden": false,
-                "group": "Web Extension",
-                "order": 1
-            }
+                "group": "2_build_launch",
+                "order": 2
+            },
+            "preLaunchTask": "npm: build",
+            "skipFiles": [
+                "<node_internals>/**",
+                "**/node_modules/**",
+                "**/resources/app/out/vs/**"
+            ],
+            "smartStep": true,
+            "sourceMaps": true,
+            "trace": true
+        },
+        {
+            "name": "Build & Run G-Code (Full/Production)",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--trace-depreciation",
+                "--trace-warnings",
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "${workspaceFolder}/samplenc/sample-colors.nc",
+                "${workspaceFolder}/samplenc/sample-profile.nc",
+                "${workspaceFolder}/samplenc/sample-circular-pocket.nc"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "presentation": {
+                "hidden": false,
+                "group": "2_build_launch",
+                "order": 3
+            },
+            "preLaunchTask": "npm: bundle",
+            "skipFiles": [
+                "<node_internals>/**",
+                "**/node_modules/**",
+                "**/resources/app/out/vs/**"
+            ],
+            "smartStep": true,
+            "sourceMaps": true,
+            "trace": true
         },
         {
             "name": "G-Code Mocha Unit Tests",
@@ -127,11 +176,12 @@
             ],
             "skipFiles": [
                 "<node_internals>/**",
-                "**/node_modules/**"
+                "**/node_modules/**",
+                "**/resources/app/out/vs/**"
             ],
             "presentation": {
                 "hidden": false,
-                "group": "Testing",
+                "group": "3_test",
                 "order": 1
             },
             "env": {

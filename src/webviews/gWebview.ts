@@ -7,8 +7,6 @@
 'use strict';
 
 import {
-    commands,
-    ConfigurationChangeEvent,
     Disposable,
     Uri,
     ViewColumn,
@@ -18,39 +16,28 @@ import {
     WebviewPanelOnDidChangeViewStateEvent,
     window,
 } from 'vscode';
-import { configuration } from '../util/configuration/config';
-import { constants, WebViewCommands } from '../util/constants';
+import { constants, WebviewCommands } from '../util/constants';
 import { Control } from '../control';
 
 export abstract class GWebview implements Disposable {
-    protected _disposable: Disposable;
+    protected _disposables: Disposable[] = [];
     private _panel: WebviewPanel | undefined;
     private _dPanel: Disposable | undefined;
-    private _enabled: boolean;
+    private _title: string;
 
     constructor(
         public readonly id: string,
-        public readonly title: string,
-        showCommand: WebViewCommands,
+        title: string,
+        showCommand: WebviewCommands,
         private readonly _column?: ViewColumn,
     ) {
-        this._disposable = Disposable.from(
-            configuration.onDidChange(this.onConfigurationChanged, this),
-            commands.registerCommand(showCommand, this.onShowCommand, this),
-        );
-
-        this._enabled = <boolean>configuration.getParam('webviews.enabled');
-    }
-
-    private onConfigurationChanged(e: ConfigurationChangeEvent) {
-        if (e.affectsConfiguration('webviews.enabled')) {
-            this._enabled = <boolean>configuration.getParam('webviews.enabled');
-        }
+        this._title = title;
+        this._disposables.push(...this.registerCommands());
     }
 
     dispose() {
-        this._disposable && this._disposable.dispose();
-        this._dPanel && this._dPanel.dispose();
+        Disposable.from(...this._disposables).dispose();
+        this._dPanel?.dispose();
     }
 
     hide() {
@@ -61,17 +48,14 @@ export abstract class GWebview implements Disposable {
         return this._panel?.visible ?? false;
     }
 
-    setTitle(title: string) {
-        if (this._panel == null) {
-            return;
-        }
-
-        this._panel.title = title;
+    get title(): string {
+        return this._panel?.title ?? this._title;
     }
 
-    protected onShowCommand() {
-        if (this._enabled) {
-            void this.show(this._column);
+    setTitle(title: string) {
+        this._title = title;
+        if (this._panel) {
+            this._panel.title = title;
         }
     }
 
@@ -86,11 +70,15 @@ export abstract class GWebview implements Disposable {
         }
     }
 
+    protected onShowCommand(): void {
+        void this.show();
+    }
+
     async show(column: ViewColumn = ViewColumn.Beside): Promise<void> {
-        if (this._panel == null) {
+        if (!this._panel) {
             this._panel = window.createWebviewPanel(
                 this.id,
-                this.title,
+                this._title,
                 { viewColumn: column, preserveFocus: false },
                 this.getWebviewOptions(),
             );
@@ -114,68 +102,20 @@ export abstract class GWebview implements Disposable {
         }
     }
 
-    protected abstract getHtml(webview: Webview): Promise<string>;
-
-    private _getHtmlForWebview(webview: Webview, ...opts: string[]) {
-        // CSS styles
-        const stylesReset = webview
-            .asWebviewUri(Uri.joinPath(Control.context.extensionUri, 'resources', 'webviews', 'css', 'reset.css'))
-            .with({ scheme: 'vscode-resource' });
-
-        const stylesMain = webview
-            .asWebviewUri(Uri.joinPath(Control.context.extensionUri, 'resources', 'webviews', 'css', 'vscode.css'))
-            .with({ scheme: 'vscode-resource' });
-
-        const nonce = this.getNonce();
-
-        const scriptUri = webview
-            .asWebviewUri(Uri.joinPath(Control.context.extensionUri, 'resources', 'webviews', 'js', `${opts[0]}.js`))
-            .with({ scheme: 'vscode-resource' });
-
-        return `<!DOCTYPE html>
-                <html lang="en">
-                <head>
-                        <meta charset="utf-8">
-                        <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-                        <meta name="theme-color" content="#333333">
-
-                        <title>${this.title}</title>
-
-                        <link rel="stylesheet" type="text/css" href="${stylesReset}">
-                        <link rel="stylesheet" type="text/css" href="${stylesMain}">
-
-                        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';style-src vscode-resource: 'unsafe-inline' http: https: data:;">
-
-                </head>
-
-                <body>
-                        <noscript>You need to enable JavaScript to run this app.</noscript>
-
-                        <div id="app"></div>
-
-
-                        <script nonce="${nonce} src="${scriptUri}"></script>
-                </body>
-                </html>
-        `;
-    }
-
-    protected getNonce(): string {
-        let text = '';
-
-        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-        for (let i = 0; i < 32; i++) {
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
+    async refresh(): Promise<void> {
+        if (this._panel) {
+            this._panel.webview.html = await this.getHtml(this._panel.webview);
         }
-        return text;
     }
+
+    protected abstract getHtml(webview: Webview): Promise<string>;
+    protected abstract registerCommands(): Disposable[];
 
     private getWebviewOptions(): WebviewOptions {
         return {
             enableScripts: true,
             enableCommandUris: true,
-            localResourceRoots: [Uri.joinPath(Control.context.extensionUri, 'resources', 'webviews')],
+            localResourceRoots: [Uri.joinPath(Control.context.extensionUri)],
         };
     }
 }

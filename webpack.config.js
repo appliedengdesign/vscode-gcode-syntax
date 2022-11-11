@@ -5,21 +5,42 @@
 
 'use strict';
 
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const path = require('path');
-
 // @ts-check
 /** @typedef {import('webpack').Configuration} */
 
+const ESLintPlugin = require('eslint-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CspHtmlPlugin = require('csp-html-webpack-plugin');
+const path = require('path');
+const fs = require('fs');
+
+
+
+
+module.exports = function (env, argv) {
+    const mode = argv.mode || 'none';
+
+    env = {
+        analyzeBundle: false,
+        analyzeDeps: false,
+        ...env,
+    };
+
+    return [
+        getExtensionConfig(mode, env),
+        getWebviewsConfig(mode, env),
+    ];
+};
+
 function getExtensionConfig(mode, env) {
     const plugins = [];
+
     plugins.push(
-        new ForkTsCheckerWebpackPlugin({
-            async: false,
-            // eslint: { enabled: true, files: 'src/**/*.ts', options: { cache: true } },
-            formatter: 'basic',
-        }),
+        new ESLintPlugin({
+            extensions: ['ts']
+        })
     );
 
     if (env.analyzeBundle) {
@@ -30,6 +51,8 @@ function getExtensionConfig(mode, env) {
         name: 'extension',
         mode: mode,
         target: 'node',
+        devtool: 'source-map',
+
         entry: './src/extension.ts',
 
         output: {
@@ -37,10 +60,7 @@ function getExtensionConfig(mode, env) {
             filename: 'extension.js',
             libraryTarget: 'commonjs2',
             devtoolFallbackModuleFilenameTemplate: '../[resource-path]',
-            clean: true,
         },
-
-        devtool: 'source-map',
 
         externals: {
             vscode: 'commonjs vscode',
@@ -49,6 +69,7 @@ function getExtensionConfig(mode, env) {
 
         resolve: {
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+            mainFields: ['browser', 'module', 'main'],
         },
 
         module: {
@@ -68,12 +89,17 @@ function getExtensionConfig(mode, env) {
 
         plugins: plugins,
 
+        infrastructureLogging: {
+            level: 'log',
+        },
+
         stats: {
             preset: 'error-warnings',
             assets: true,
             colors: true,
             env: true,
             errorsCount: true,
+            errorDetails: true,
             warningsCount: true,
             timings: true,
         },
@@ -82,14 +108,193 @@ function getExtensionConfig(mode, env) {
     return config;
 }
 
-module.exports = function (env, argv) {
-    const mode = argv.mode || 'none';
+function getWebviewsConfig(mode, env) {
+    const basePath = path.resolve(__dirname, 'src', 'webviews', 'apps');
+    const outPath = path.resolve(__dirname, 'dist', 'webviews');
+    const plugins = [];
 
-    env = {
-        analyzeBundle: false,
-        analyzeDeps: false,
-        ...env,
+    const entries = getWebviewEntries(basePath);
+
+    plugins.push(
+        new ESLintPlugin({
+            extensions: ['ts']
+        })
+    );
+
+    plugins.push(...getWebviewPlugins(outPath, basePath, entries));
+
+    plugins.push(getCspHtml(mode, env));
+
+    const config = {
+        name: 'webviews',
+        mode: mode,
+        target: 'web',
+        devtool: 'source-map',
+        context: basePath,
+        
+        entry: entries,
+
+        output: {
+            path: path.resolve(__dirname, 'dist', 'webviews'),
+            filename: `[name]/[name][ext]`,
+            publicPath: '{root}/dist/webviews/',
+        },
+
+        plugins: plugins,
+
+        module: {
+            rules: [
+                {
+                    exclude: /\.d.ts$/i,
+                    test: /.tsx?$/,
+                    use: [
+                        {
+                            loader: 'ts-loader',
+                            options: {
+                                configFile: path.resolve(basePath, 'tsconfig.json'),
+                                //transpileOnly: true,
+                            }
+                        },
+                    ],
+                    exclude: /node_modules/,
+                },
+                {
+                    test: /\.s[ca]ss$/i,
+                    use: [
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                            options: {
+                                //esModule: false,
+                            }
+                        },
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                sourceMap: true,
+                                url: false,
+                            },
+                        },
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                sourceMap: true,
+                            }
+                        }
+                    ],
+                    exclude: /node_modules/,
+                },
+                {
+                    test: /\.(woff|woff2|eot|ttf|otf)$/,
+                    type: 'asset/resource',
+                },
+            ],
+        },
+
+        resolve: {
+            extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+        },
+
+        infrastructureLogging: {
+            level: 'log',
+        },
+
+        stats: {
+            preset: 'error-warnings',
+            assets: true,
+            colors: true,
+            env: true,
+            errorsCount: true,
+            errorDetails: true,
+            warningsCount: true,
+            timings: true,
+        },
     };
 
-    return getExtensionConfig(mode, env);
-};
+    return config;
+}
+
+function getWebviewEntries(_path) {
+    // Get Entries from apps path
+    const entries = fs.readdirSync(_path, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .filter(dirent => dirent.name !== 'shared')
+    .map(dirent => dirent.name)
+    .reduce((result, item, index, array) => {
+        // App TS File
+        result[item] = { import: [`./${item}/${item}.ts`, `./${item}/${item}.scss` ], filename: `${item}/${item}.js` };
+
+        return result;
+    }, {});
+    
+    return entries;
+}
+
+function getWebviewPlugins(_outPath, _basePath, entries) {
+    const webviewPlugins = [];
+
+    Object.keys(entries).forEach(entry => {
+        if (entry !== undefined && (/\.s[ca]ss$/).test(entry)) {
+            const name = entry.split('.').shift();
+            if (name) {
+                webviewPlugins.push(
+                    new MiniCssExtractPlugin({
+                        filename: path.join(name, `${name}.css`),
+                        chunkFilename: '[id].css',
+                    })
+                );
+            }   
+
+            return;
+        }
+        webviewPlugins.push(
+            new HtmlWebpackPlugin({
+                template: path.resolve(_basePath, entry, `${entry}.html`),
+                inject: 'head',
+                filename: path.resolve(_outPath, `${entry}`, `${entry}.html`),
+                scriptLoading: 'module',
+            }),
+        );
+
+        webviewPlugins.push(
+            new MiniCssExtractPlugin({
+                filename: `${entry}/${entry}.css`,
+                
+            })
+        );
+
+        return;
+    });
+
+    //console.log(webviewPlugins);
+    //process.exit(1);
+    return webviewPlugins;
+}
+
+function getCspHtml(mode, env) {
+    const cspPlugin = new CspHtmlPlugin(
+        {
+            'default-src': "'none'",
+            'img-src': [ '{cspSource}', 'https:', 'data:' ],
+            'script-src': [ '{cspSource}', "'nonce-{cspNonce}'" ],
+            'style-src': [ '{cspSource}', "'nonce-{cspNonce}'" ],
+            'font-src': [ '{cspSource}' ],
+        },
+        {
+            enabled: true,
+            hashingMethod: 'sha256',
+            hashEnabled: {
+                'script-src': true,
+                'style-src:': true,
+            },
+            nonceEnabled: {
+                'script-src': true,
+                'style-src': true,
+            },
+        },
+    );
+
+    // Override nonce creation
+    cspPlugin.createNonce = () => '{cspNonce}';
+
+    return cspPlugin;
+}
