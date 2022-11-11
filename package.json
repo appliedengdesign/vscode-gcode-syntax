@@ -3,7 +3,7 @@
     "displayName": "G-Code Syntax",
     "shortName": "G-Code",
     "description": "Turn VSCode into a fully capable G-Code editor, including language support & more.",
-    "version": "0.7.6",
+    "version": "0.7.7",
     "license": "MIT",
     "publisher": "appliedengdesign",
     "author": {
@@ -12,7 +12,7 @@
     },
     "copyright": "Copyright (c) 2022 Applied Eng. & Design / Mike Centola",
     "engines": {
-        "vscode": "^1.71.0"
+        "vscode": "^1.73.0"
     },
     "categories": [
         "Programming Languages",
@@ -603,18 +603,18 @@
         "watch": "webpack --watch -mode deveopment"
     },
     "devDependencies": {
-        "@types/chai": "^4.3.3",
+        "@types/chai": "^4.3.4",
         "@types/glob": "^8.0.0",
-        "@types/mocha": "^9.1.1",
-        "@types/node": "^18.7.19",
-        "@types/vscode": "^1.71.0",
-        "@typescript-eslint/eslint-plugin": "^5.38.0",
-        "@typescript-eslint/parser": "^5.38.0",
-        "chai": "^4.3.6",
+        "@types/mocha": "^10.0.0",
+        "@types/node": "^18.11.9",
+        "@types/vscode": "^1.73.0",
+        "@typescript-eslint/eslint-plugin": "^5.42.1",
+        "@typescript-eslint/parser": "^5.42.1",
+        "chai": "^4.3.7",
         "copy-webpack-plugin": "^11.0.0",
         "csp-html-webpack-plugin": "^5.1.0",
         "css-loader": "^6.7.1",
-        "eslint": "^8.23.1",
+        "eslint": "^8.27.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-import": "^2.26.0",
         "eslint-plugin-prettier": "^4.2.1",
@@ -622,21 +622,21 @@
         "glob": "^8.0.3",
         "html-loader": "^4.2.0",
         "mini-css-extract-plugin": "^2.6.1",
-        "mocha": "^10.0.0",
+        "mocha": "^10.1.0",
         "prettier": "^2.7.1",
         "sass": "^1.54.0",
         "sass-loader": "^13.0.2",
         "shx": "^0.3.4",
         "ts-loader": "^9.4.1",
         "ts-node": "^10.9.1",
-        "typescript": "^4.8.3",
+        "typescript": "^4.8.4",
         "vscode-test": "^1.6.1",
-        "webpack": "^5.74.0",
-        "webpack-bundle-analyzer": "^4.6.1",
+        "webpack": "^5.75.0",
+        "webpack-bundle-analyzer": "^4.7.0",
         "webpack-cli": "^4.10.0"
     },
     "dependencies": {
-        "@appliedengdesign/gcode-reference": "^0.0.7",
+        "@appliedengdesign/gcode-reference": "^0.0.8",
         "@vscode/webview-ui-toolkit": "^1.0.0"
     }
 }
